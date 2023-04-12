@@ -1,0 +1,32 @@
+/* General */
+
+:root {
+  --bg: #97999c;
+  --dark: #16171a;
+  --f: bold 24px Atkinson;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #4c4e51;
+    --dark: #000;
+  }
+}
+
+@font-face {
+  font-family: Atkinson;
+  src: url(font/atkinson-bold.ttf) format('truetype');
+  font-weight: bold;
+}
+
+body {
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  margin: 0;
+  overscroll-behavior: none;
+  background: var(--bg);
+  color: var(--dark);
+  font: var(--f);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
