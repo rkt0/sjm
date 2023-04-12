@@ -4,6 +4,7 @@
   --bg: #97999c;
   --dark: #16171a;
   --field-size: 540px;
+  --item-size: 18px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -44,7 +45,23 @@ section {
 /* Gameplay section */
 
 div.gameplay {
+  position: absolute;
   background: #ccc;
   height: var(--field-size);
   width:  var(--field-size);
+}
+
+.item {
+  position: absolute;
+  left: calc(var(--x) - var(--item-size) / 2);
+  top:  calc(var(--y) - var(--item-size) / 2);
+  width:  var(--item-size);
+  height: var(--item-size);
+  border-radius: 50%;
+  background: #000;
+}
+
+.fps-counter {
+  position: relative;
+  left: -360px;
 }
