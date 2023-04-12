@@ -58,7 +58,7 @@ div.gameplay {
   width:  var(--item-size);
   height: var(--item-size);
   border-radius: 50%;
-  background: #000;
+  background: #0021a5;
 }
 
 .fps-counter {
