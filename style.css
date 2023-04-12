@@ -3,7 +3,7 @@
 :root {
   --bg: #97999c;
   --dark: #16171a;
-  --f: bold 24px Atkinson;
+  --field-size: 540px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -25,8 +25,26 @@ body {
   overscroll-behavior: none;
   background: var(--bg);
   color: var(--dark);
-  font: var(--f);
+  font: bold 24px Atkinson;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+}
+
+section {
+  height: 100%;
+  width:  100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Gameplay section */
+
+div.gameplay {
+  background: #ccc;
+  height: var(--field-size);
+  width:  var(--field-size);
 }
