@@ -4,9 +4,9 @@
   --bg: #97999c;
   --dark: #16171a;
   --field-size: 540px;
-  --item-size: 18px;
+  --chipmunk-size: 18px;
   --o: calc(
-    (var(--field-size) - var(--item-size)) / 2
+    (var(--field-size) - var(--chipmunk-size)) / 2
   );
 }
 @media (prefers-color-scheme: dark) {
@@ -54,12 +54,12 @@ div.gameplay {
   width:  var(--field-size);
 }
 
-.item {
+.chipmunk {
   position: absolute;
   left: var(--o);
   top:  var(--o);
-  width:  var(--item-size);
-  height: var(--item-size);
+  width:  var(--chipmunk-size);
+  height: var(--chipmunk-size);
   border-radius: 50%;
   background: #0021a5;
 }

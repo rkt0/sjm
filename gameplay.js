@@ -1,27 +1,22 @@
 import {qs, qsa, ael, aelo} from './utility.js';
 
-const [fSize, iSize] = ['field', 'item'].map(
+const [fSize, cSize] = ['field', 'chipmunk'].map(
   x => parseInt(
     getComputedStyle(qs(':root')).getPropertyValue(
       `--${x}-size`
     )
   )
 );
-const ratio = 1 - iSize / fSize;
-
-// const gravity = 0.05;
-// const bounce = 0.9;
-const gravity = 0;
-const bounce = 1;
+const ratio = 1 - cSize / fSize;
 
 const fpsMeter = {count: 0, time: 0};
 fpsMeter.element = qs('.fps-counter');
 
-const items = [];
+const chipmunks = [];
 for (let i = 0; i < 36; i++) {
   const element = document.createElement('div');
-  element.id = `item-${i}`;
-  element.classList.add('item');
+  element.id = `chipmunk-${i}`;
+  element.classList.add('chipmunk');
   qs('div.gameplay').append(element);
   const position = [];
   for (let j = 0; j < 2; j++) {
@@ -33,29 +28,28 @@ for (let i = 0; i < 36; i++) {
     vSpeed * Math.cos(vAngle), 
     vSpeed * Math.sin(vAngle),
   ];
-  items.push({element, position, velocity});
+  chipmunks.push({element, position, velocity});
 }
 
 let oldTimeStamp, stopped;
 function update(timeStamp) {
   if (! oldTimeStamp) oldTimeStamp = timeStamp;
   const elapsed = (timeStamp - oldTimeStamp) / 1000;
-  for (const item of items) {
-    const {position, velocity} = item;
+  for (const chipmunk of chipmunks) {
+    const {position, velocity} = chipmunk;
     const loc = [];
     for (let d = 0; d < 2; d++) {
       position[d] += velocity[d] * elapsed
       const overage = Math.abs(position[d]) - ratio;
       if (overage > 0) {
-        velocity[d] *= - bounce;
-        position[d] -= overage * (1 + bounce) * 
-            Math.sign(position[d]);
+        velocity[d] *= -1;
+        position[d] -=
+            overage * 2 * Math.sign(position[d]);
       }
       loc[d] = position[d] / 2 * fSize;
     }
-    velocity[1] += gravity;
     const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
-    item.element.style.transform = xf;
+    chipmunk.element.style.transform = xf;
   }
   fpsMeter.count++;
   fpsMeter.time += elapsed;
