@@ -51,11 +51,11 @@ function update(timeStamp) {
         position[d] -= overage * (1 + bounce) * 
             Math.sign(position[d]);
       }
-      loc[d] = (position[d] + 1) / 2 * fSize;
+      loc[d] = position[d] / 2 * fSize;
     }
     velocity[1] += gravity;
-    const e = item.element;
-    e.style = `--x: ${loc[0]}px; --y: ${loc[1]}px;`
+    const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
+    item.element.style.transform = xf;
   }
   fpsMeter.count++;
   fpsMeter.time += elapsed;
