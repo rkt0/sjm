@@ -46,6 +46,7 @@ function initializeChipmunks() {
     chipmunk.position = [1, 0];
     chipmunk.velocity = [0, 0];
     chipmunk.active = false;
+    chipmunk.fleeing = false;
     placeChipmunk(chipmunk);
     chipmunks.push(chipmunk);
   }
@@ -55,9 +56,20 @@ function activateChipmunk() {
   if (i === -1) return;
   const chipmunk = chipmunks[i];
   chipmunk.active = true;
+  chipmunk.fleeing = false;
   chipmunk.position = randomUnitVector();
   chipmunk.velocity = chipmunk.position.map(u => -u);
   placeChipmunk(chipmunk);
+}
+
+let shooPosition;
+function shoo() {
+  for (const c of chipmunks) {
+    if (c.fleeing || ! c.active) continue;
+    for (let d = 0; d < 2; d++) c.velocity[d] *= -1;
+    c.fleeing = true;
+  }
+  shooPosition = null;
 }
 
 const fpsMeter = {count: 0, time: 0};
@@ -86,10 +98,12 @@ function update(timeStamp) {
         velocity[d] = v[d];
       }
       chipmunk.element.classList.add('has-money');
+      chipmunk.fleeing = true;
     }
     placeChipmunk(chipmunk);
     chipmunk.active = Math.hypot(...position) < 1;
   }
+  if (shooPosition) shoo();
   fpsMeter.count++;
   fpsMeter.time += elapsed;
   if (fpsMeter.time > 1) {
@@ -103,10 +117,16 @@ function update(timeStamp) {
   if (! stopped) requestAnimationFrame(update);
 }
 
-ael('body', 'click', () => {
+ael('.fps-counter', 'click', () => {
   stopped = ! stopped;
   oldTimeStamp = null;
   if (! stopped) requestAnimationFrame(update);
+});
+ael('div.gameplay', 'mousedown', e => {
+  const pxOffset = [e.offsetX, e.offsetY];
+  shooPosition = pxOffset.map(
+    u => (u - config.fieldSize / 2) / config.boundary
+  );
 });
 
 initializeChipmunks();
