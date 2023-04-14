@@ -52,6 +52,7 @@ div.gameplay {
   background: #ccc;
   height: var(--field-size);
   width:  var(--field-size);
+  overflow: hidden;
 }
 
 .chipmunk {
