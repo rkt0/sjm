@@ -5,19 +5,19 @@ function qsa(selector, parent = document) {
   return [...parent.querySelectorAll(selector)];
 }
 function ael(x, type, fn) {
+  const element = typeof x === 'object' ? x : qs(x);
   const f = e => {
     e.preventDefault();
-    fn.bind(x)();
+    fn.bind(element, e)();
   }
-  const element = typeof x === 'object' ? x : qs(x);
   element.addEventListener(type, f);
 }
 function aelo(x, type, fn) {
+  const element = typeof x === 'object' ? x : qs(x);
   const f = e => {
     e.preventDefault();
-    fn.bind(x)();
+    fn.bind(element, e)();
   }
-  const element = typeof x === 'object' ? x : qs(x);
   element.addEventListener(type, f, {once: true});
 }
 
