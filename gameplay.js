@@ -52,9 +52,7 @@ function initializeChipmunks() {
 }
 function activateChipmunk() {
   const i = chipmunks.findIndex(c => ! c.active);
-  if (i === -1) {
-    console.log('out of chipmunks'); return;
-  }
+  if (i === -1) return;
   const chipmunk = chipmunks[i];
   chipmunk.active = true;
   chipmunk.position = randomUnitVector();
