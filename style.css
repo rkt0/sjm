@@ -64,6 +64,9 @@ div.gameplay {
   border-radius: 50%;
   background: #0021a5;
 }
+.chipmunk.has-money {
+  background: #fa4616;
+}
 
 .fps-counter {
   position: relative;

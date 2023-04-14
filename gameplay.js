@@ -24,7 +24,7 @@ config.boundary = Math.SQRT1_2 * (
 );
 
 // Generate random unit vector
-function randUnitVector() {
+function randomUnitVector() {
   const angle = Math.random() * 2 * Math.PI;
   return [Math.cos(angle), Math.sin(angle)];
 }
@@ -57,7 +57,7 @@ function activateChipmunk() {
   }
   const chipmunk = chipmunks[i];
   chipmunk.active = true;
-  chipmunk.position = randUnitVector();
+  chipmunk.position = randomUnitVector();
   chipmunk.velocity = chipmunk.position.map(u => -u);
   placeChipmunk(chipmunk);
 }
@@ -75,8 +75,19 @@ function update(timeStamp) {
   for (const chipmunk of chipmunks) {
     if (! chipmunk.active) continue;
     const {position, velocity} = chipmunk;
+    const oldPosition = [...position];
+    let cross = false;
     for (let d = 0; d < 2; d++) {
       position[d] += velocity[d] * elapsed;
+      cross ||= position[d] * oldPosition[d] < 0;
+    }
+    if (cross) {
+      const v = randomUnitVector();
+      for (let d = 0; d < 2; d++) {
+        position[d] = 0;
+        velocity[d] = v[d];
+      }
+      chipmunk.element.classList.add('has-money');
     }
     placeChipmunk(chipmunk);
     chipmunk.active = Math.hypot(...position) < 1;
