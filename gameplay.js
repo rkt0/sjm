@@ -3,6 +3,8 @@ import {qs, qsa, ael, aelo} from './utility.js';
 const config = {
   nChipmunks: 6,
   chipmunkRate: 1,
+  chipmunkSpeed: 0.3,
+  chipmunkFleeSpeed: 0.6,
 };
 
 // Get field and chipmunk sizes from CSS
@@ -25,8 +27,14 @@ config.boundary = Math.SQRT1_2 * (
 
 // Generate random unit vector
 function randomUnitVector() {
-  const angle = Math.random() * 2 * Math.PI;
-  return [Math.cos(angle), Math.sin(angle)];
+  const theta = Math.random() * 2 * Math.PI;
+  return [Math.cos(theta), Math.sin(theta)];
+}
+
+// Get angle of vector from 0 to 2π
+function angle(vector) {
+  const s = Math.atan2(vector[1], vector[0]);
+  return s < 0 ? s + 2 * Math.PI : s;
 }
 
 const chipmunks = [];
@@ -58,7 +66,9 @@ function activateChipmunk() {
   c.active = true;
   c.fleeing = false;
   c.position = randomUnitVector();
-  c.velocity = c.position.map(u => u / -3);
+  c.velocity = c.position.map(
+    u => -u * config.chipmunkSpeed
+  );
   placeChipmunk(c);
 }
 
@@ -66,7 +76,19 @@ let shooPosition;
 function shoo() {
   for (const c of chipmunks) {
     if (c.fleeing || ! c.active) continue;
-    for (let d = 0; d < 2; d++) c.velocity[d] *= -1;
+    const shooVector = [0, 1].map(
+      d => c.position[d] - shooPosition[d]
+    );
+    let sAngle = angle(shooVector);
+    let pAngle = angle(c.position);
+    const pi = Math.PI
+    if (sAngle - pAngle > pi) sAngle -= 2 * pi;
+    if (pAngle - sAngle > pi) pAngle -= 2 * pi;
+    const fleeAngle =
+        sAngle + Math.random() * (pAngle - sAngle);
+    const cfs = config.chipmunkFleeSpeed;
+    c.velocity[0] = Math.cos(fleeAngle) * cfs;
+    c.velocity[1] = Math.sin(fleeAngle) * cfs;
     c.fleeing = true;
   }
   shooPosition = null;
@@ -91,11 +113,11 @@ function update(timeStamp) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross) {
+    if (cross && ! chipmunk.fleeing) {
       const v = randomUnitVector();
       for (let d = 0; d < 2; d++) {
         position[d] = 0;
-        velocity[d] = v[d];
+        velocity[d] = v[d] * config.chipmunkFleeSpeed;
       }
       chipmunk.element.classList.add('has-money');
       chipmunk.fleeing = true;
