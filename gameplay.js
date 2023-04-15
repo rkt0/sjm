@@ -54,12 +54,12 @@ function initializeChipmunks() {
 function activateChipmunk() {
   const i = chipmunks.findIndex(c => ! c.active);
   if (i === -1) return;
-  const chipmunk = chipmunks[i];
-  chipmunk.active = true;
-  chipmunk.fleeing = false;
-  chipmunk.position = randomUnitVector();
-  chipmunk.velocity = chipmunk.position.map(u => -u);
-  placeChipmunk(chipmunk);
+  const c = chipmunks[i];
+  c.active = true;
+  c.fleeing = false;
+  c.position = randomUnitVector();
+  c.velocity = c.position.map(u => u / -3);
+  placeChipmunk(c);
 }
 
 let shooPosition;
