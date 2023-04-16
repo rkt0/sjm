@@ -1,4 +1,5 @@
 import {qs, qsa, ael, aelo} from './utility.js';
+import {fpsMeter} from './fps-meter.js';
 
 const config = {
   nChipmunks: 6,
@@ -114,6 +115,7 @@ function shoo() {
 }
 
 function startGame() {
+  fpsMeter.initialize('section.gameplay');
   state.chipmunks.length = 0;
   for (const c of qsa('.chipmunk')) c.remove();
   initializeChipmunks();
@@ -124,9 +126,6 @@ function startGame() {
   changeSection('gameplay');
   requestAnimationFrame(update);
 }
-
-const fpsMeter = {count: 0, time: 0};
-fpsMeter.element = qs('.fps-counter');
 
 function update(timeStamp) {
   state.time.lastStamp ??= timeStamp;
@@ -169,15 +168,7 @@ function update(timeStamp) {
     c.active = Math.hypot(...position) < 1;
   }
   if (state.shooPosition) shoo();
-  fpsMeter.count++;
-  fpsMeter.time += elapsed;
-  if (fpsMeter.time > 1) {
-    fpsMeter.element.innerHTML = Math.round(
-      fpsMeter.count / fpsMeter.time
-    );
-    fpsMeter.count = 0;
-    fpsMeter.time = 0;
-  }
+  fpsMeter.tick(elapsed);
   state.time.lastStamp = timeStamp;
   if (state.gameOver && ! anyActive) {
     const gotd = qs('.game-over .time-display');

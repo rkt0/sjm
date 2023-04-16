@@ -131,12 +131,6 @@ div.gameplay {
   color: var(--light);
 }
 
-.fps-counter {
-  position: absolute;
-  right: 0; bottom: 0;
-  margin: 12px;
-}
-
 
 
 /* Game-over section */
