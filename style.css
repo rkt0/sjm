@@ -2,7 +2,9 @@
 
 :root {
   --bg: #97999c;
+  --fg: #cdcfd3;
   --dark: #16171a;
+  --light: #fff;
   --field-size: 540px;
   --chipmunk-size: 18px;
   --o: calc(
@@ -12,7 +14,9 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #4c4e51;
+    --fg: #8a8c8f;
     --dark: #000;
+    --light: #cdcfd3;
   }
 }
 
@@ -29,10 +33,21 @@ body {
   overscroll-behavior: none;
   background: var(--bg);
   color: var(--dark);
-  font: bold 24px Atkinson;
+/*  font: bold 24px Atkinson;*/
+  font: bold 30px Tahoma;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: #0021a5;
+  color: var(--light);
+  padding: 12px 18px;
+  border-radius: 30px;
+  box-sizing: border-box;
 }
 
 section {
@@ -49,7 +64,7 @@ section {
 
 div.gameplay {
   position: absolute;
-  background: #ccc;
+  background: var(--fg);
   height: var(--field-size);
   width:  var(--field-size);
   overflow: hidden;
@@ -68,7 +83,32 @@ div.gameplay {
   background: #fa4616;
 }
 
-.fps-counter {
-  position: relative;
-  left: -360px;
+.sidebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.sidebar > .half {
+  width: 150px;
+  text-align: center;
+  margin: 30px;
+}
+.sidebar > .half:first-child {
+  margin-right: var(--field-size);
+}
+.sidebar button {
+  width: 100%;
+}
+.sidebar button.play {
+  background: #22884c;
+}
+.sidebar .time-area {
+  color: var(--light);
+}
+
+.fps-counter {
+  position: absolute;
+  right: 0; bottom: 0;
+  margin: 12px;
+}
+

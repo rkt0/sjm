@@ -139,7 +139,9 @@ function update(timeStamp) {
   if (! stopped) requestAnimationFrame(update);
 }
 
-ael('.fps-counter', 'click', () => {
+ael('button.pause', 'click', function() {
+  this.innerHTML = stopped ? 'Pause' : 'Play';
+  this.classList.toggle('play', ! stopped);
   stopped = ! stopped;
   oldTimeStamp = null;
   if (! stopped) requestAnimationFrame(update);
