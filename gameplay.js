@@ -3,8 +3,8 @@ import {qs, qsa, ael, aelo} from './utility.js';
 const config = {
   nChipmunks: 6,
   chipmunkRate: 1,
-  chipmunkSpeed: 0.3,
-  chipmunkFleeSpeed: 0.6,
+  chipmunkSpeed: 0.5,
+  chipmunkFleeSpeed: 1,
 };
 
 // Get field and chipmunk sizes from CSS
@@ -182,6 +182,17 @@ ael('div.gameplay', 'mousedown', e => {
   shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
   );
+});
+ael('button.again', 'click', () => {
+  chipmunks.length = 0;
+  for (const c of qsa('.chipmunk')) c.remove();
+  initializeChipmunks();
+  time.total = 0;
+  time.element.innerHTML = 0;
+  oldTimeStamp = null;
+  gameOver = false;
+  changeSection('game-over', 'gameplay');
+  requestAnimationFrame(update);
 });
 
 initializeChipmunks();

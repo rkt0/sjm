@@ -40,12 +40,16 @@ body {
   touch-action: none;
 }
 
+div {
+  box-sizing: border-box;
+}
+
 button {
   font: inherit;
   border: none;
   background: #0021a5;
   color: var(--light);
-  padding: 12px 18px;
+  padding: 12px 24px;
   border-radius: 30px;
   box-sizing: border-box;
 }
@@ -120,4 +124,15 @@ div.result {
   background: var(--fg);
   text-align: center;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 480px;
+  height: 240px;
+}
+
+button.again {
+  display: block;
+  width: 240px;
 }
