@@ -6,6 +6,32 @@
 <link rel="stylesheet" href="style.css">
 <script type="module" src="utility.js"></script>
 <script type="module" src="gameplay.js"></script>
+<section class="front current">
+  <div class="zone">
+    Click anywhere<br>to start
+  </div>
+</section>
+<section class="title">
+  <div class="zone">
+    <div>Save Jeff's Money</div>
+    <button type="button" class="show-instructions">
+      Rules
+    </button>
+    <button type="button" class="start-game">
+      Start Game
+    </button>
+  </div>
+</section>
+<section class="instructions">
+  <div class="instructions zone">
+    <div>
+      Instructions go here
+    </div>
+    <button type="button" class="start-game">
+      Start Game
+    </button>
+  </div>
+</section>
 <section class="gameplay">
   <div class="gameplay"></div>
   <div class="sidebar">
@@ -21,12 +47,12 @@
   <div class="fps-counter"></div>
 </section>
 <section class="game-over">
-  <div class="result">
+  <div class="result zone">
     <div>
       You saved Jeff's money for:<br>
       <span class="time-display">0</span> seconds
     </div>
-    <button type="button" class="again">
+    <button type="button" class="start-game">
       Play Again
     </button>
   </div>

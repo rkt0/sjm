@@ -37,10 +37,9 @@ function angle(vector) {
   return s < 0 ? s + 2 * Math.PI : s;
 }
 
-function changeSection(from, to) {
-  qs(`section.${from}`).style.display = 'none';
-  qs(`section.${to}`).style.display = '';
-  
+function changeSection(to) {
+  qs('section.current').classList.remove('current');
+  qs(`section.${to}`).classList.add('current');
 }
 
 const chipmunks = [];
@@ -104,6 +103,18 @@ function shoo() {
   shooPosition = null;
 }
 
+function startGame() {
+  chipmunks.length = 0;
+  for (const c of qsa('.chipmunk')) c.remove();
+  initializeChipmunks();
+  time.total = 0;
+  time.element.innerHTML = 0;
+  oldTimeStamp = null;
+  gameOver = false;
+  changeSection('gameplay');
+  requestAnimationFrame(update);
+}
+
 const fpsMeter = {count: 0, time: 0};
 fpsMeter.element = qs('.fps-counter');
 
@@ -163,7 +174,7 @@ function update(timeStamp) {
   if (gameOver && ! anyActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = time.element.innerHTML;
-    changeSection('gameplay', 'game-over');
+    changeSection('game-over');
     return;
   }
   if (! stopped) requestAnimationFrame(update);
@@ -183,17 +194,12 @@ ael('div.gameplay', 'mousedown', e => {
     u => (u - config.fieldSize / 2) / config.boundary
   );
 });
-ael('button.again', 'click', () => {
-  chipmunks.length = 0;
-  for (const c of qsa('.chipmunk')) c.remove();
-  initializeChipmunks();
-  time.total = 0;
-  time.element.innerHTML = 0;
-  oldTimeStamp = null;
-  gameOver = false;
-  changeSection('game-over', 'gameplay');
-  requestAnimationFrame(update);
+for (const button of qsa('button.start-game')) {
+  ael(button, 'click', startGame);
+}
+ael('button.show-instructions', 'click', () => {
+  changeSection('instructions');
 });
-
-initializeChipmunks();
-requestAnimationFrame(update);
+aelo('section.front', 'click', () => {
+  changeSection('title');
+});

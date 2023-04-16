@@ -40,10 +40,6 @@ body {
   touch-action: none;
 }
 
-div {
-  box-sizing: border-box;
-}
-
 button {
   font: inherit;
   border: none;
@@ -60,6 +56,38 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+section:not(.current) {
+  display: none;
+}
+
+.zone {
+  background: var(--fg);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  width: 360px;
+  padding: 20px;
+}
+
+
+
+/* Preliminary sections */
+
+section.front .zone {
+  width:  300px;
+  height: 120px;
+}
+
+section.title .zone {
+  height: 360px;
+}
+
+section.instructions .zone {
+  height: 360px;
 }
 
 
@@ -121,18 +149,9 @@ div.gameplay {
 /* Game-over section */
 
 div.result {
-  background: var(--fg);
-  text-align: center;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  width: 480px;
-  height: 240px;
+  height: 360px;
 }
 
 button.again {
-  display: block;
   width: 240px;
 }
