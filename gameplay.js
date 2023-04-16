@@ -191,12 +191,12 @@ function update(timeStamp) {
 ael('button.pause', 'click', function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   this.classList.toggle('play', ! state.paused);
-  state.stopped = ! state.stopped;
+  state.paused = ! state.paused;
   state.time.lastStamp = null;
-  if (! state.stopped) requestAnimationFrame(update);
+  if (! state.paused) requestAnimationFrame(update);
 });
 ael('div.gameplay', 'mousedown', e => {
-  if (state.stopped || state.gameOver) return;
+  if (state.paused || state.gameOver) return;
   const pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
