@@ -88,7 +88,6 @@ function chaseChipmunk(chipmunk, angle) {
   chipmunk.fleeing = true;
 }
 
-let shooPosition;
 function shoo() {
   for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
