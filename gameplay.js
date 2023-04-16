@@ -60,6 +60,7 @@ function initializeChipmunks() {
   }
 }
 function activateChipmunk() {
+  if (gameOver) return;
   const i = chipmunks.findIndex(c => ! c.active);
   if (i === -1) return;
   const c = chipmunks[i];
@@ -70,6 +71,12 @@ function activateChipmunk() {
     u => -u * config.chipmunkSpeed
   );
   placeChipmunk(c);
+}
+function chaseChipmunk(chipmunk, angle) {
+  const speed = config.chipmunkFleeSpeed;
+  chipmunk.velocity[0] = Math.cos(angle) * speed;
+  chipmunk.velocity[1] = Math.sin(angle) * speed;
+  chipmunk.fleeing = true;
 }
 
 let shooPosition;
@@ -84,12 +91,9 @@ function shoo() {
     const pi = Math.PI
     if (sAngle - pAngle > pi) sAngle -= 2 * pi;
     if (pAngle - sAngle > pi) pAngle -= 2 * pi;
-    const fleeAngle =
-        sAngle + Math.random() * (pAngle - sAngle);
-    const cfs = config.chipmunkFleeSpeed;
-    c.velocity[0] = Math.cos(fleeAngle) * cfs;
-    c.velocity[1] = Math.sin(fleeAngle) * cfs;
-    c.fleeing = true;
+    chaseChipmunk(
+      c, sAngle + Math.random() * (pAngle - sAngle)
+    );
   }
   shooPosition = null;
 }
@@ -97,21 +101,25 @@ function shoo() {
 const fpsMeter = {count: 0, time: 0};
 fpsMeter.element = qs('.fps-counter');
 
-let oldTimeStamp, stopped;
+let oldTimeStamp, stopped, gameOver;
 const time = {
   total: 0,
-  element: qs('.time-display'),
+  element: qs('.gameplay .time-display'),
 };
 function update(timeStamp) {
   if (! oldTimeStamp) oldTimeStamp = timeStamp;
   const elapsed = (timeStamp - oldTimeStamp) / 1000;
-  time.total += elapsed;
-  time.element.innerHTML = Math.trunc(time.total);
+  if (! gameOver) {
+    time.total += elapsed;
+    time.element.innerHTML = Math.trunc(time.total);
+  }
   if (Math.random() < elapsed * config.chipmunkRate) {
     activateChipmunk();
   }
+  let anyActive;
   for (const chipmunk of chipmunks) {
     if (! chipmunk.active) continue;
+    anyActive = true;
     const {position, velocity} = chipmunk;
     const oldPosition = [...position];
     let cross = false;
@@ -119,7 +127,7 @@ function update(timeStamp) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross && ! chipmunk.fleeing) {
+    if (cross && ! chipmunk.fleeing && ! gameOver) {
       const v = randomUnitVector();
       for (let d = 0; d < 2; d++) {
         position[d] = 0;
@@ -127,6 +135,10 @@ function update(timeStamp) {
       }
       chipmunk.element.classList.add('has-money');
       chipmunk.fleeing = true;
+      gameOver = true;
+    }
+    if (gameOver && ! chipmunk.fleeing) {
+      chaseChipmunk(chipmunk, angle(position));
     }
     placeChipmunk(chipmunk);
     chipmunk.active = Math.hypot(...position) < 1;
@@ -142,6 +154,13 @@ function update(timeStamp) {
     fpsMeter.time = 0;
   }
   oldTimeStamp = timeStamp;
+  if (gameOver && ! anyActive) {
+    const gotd = qs('.game-over .time-display');
+    gotd.innerHTML = time.element.innerHTML;
+    qs('section.gameplay').style.display = 'none';
+    qs('section.game-over').style.display = 'flex';
+    return;
+  }
   if (! stopped) requestAnimationFrame(update);
 }
 
@@ -153,7 +172,7 @@ ael('button.pause', 'click', function() {
   if (! stopped) requestAnimationFrame(update);
 });
 ael('div.gameplay', 'mousedown', e => {
-  if (stopped) return;
+  if (stopped || gameOver) return;
   const pxOffset = [e.offsetX, e.offsetY];
   shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
