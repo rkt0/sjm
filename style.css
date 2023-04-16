@@ -20,12 +20,6 @@
   }
 }
 
-@font-face {
-  font-family: Atkinson;
-  src: url(font/atkinson-bold.ttf) format('truetype');
-  font-weight: bold;
-}
-
 body {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
@@ -33,7 +27,6 @@ body {
   overscroll-behavior: none;
   background: var(--bg);
   color: var(--dark);
-/*  font: bold 24px Atkinson;*/
   font: bold 30px Tahoma;
   user-select: none;
   -webkit-user-select: none;
