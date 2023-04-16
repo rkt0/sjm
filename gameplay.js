@@ -98,9 +98,15 @@ const fpsMeter = {count: 0, time: 0};
 fpsMeter.element = qs('.fps-counter');
 
 let oldTimeStamp, stopped;
+const time = {
+  total: 0,
+  element: qs('.time-display'),
+};
 function update(timeStamp) {
   if (! oldTimeStamp) oldTimeStamp = timeStamp;
   const elapsed = (timeStamp - oldTimeStamp) / 1000;
+  time.total += elapsed;
+  time.element.innerHTML = Math.trunc(time.total);
   if (Math.random() < elapsed * config.chipmunkRate) {
     activateChipmunk();
   }
@@ -147,6 +153,7 @@ ael('button.pause', 'click', function() {
   if (! stopped) requestAnimationFrame(update);
 });
 ael('div.gameplay', 'mousedown', e => {
+  if (stopped) return;
   const pxOffset = [e.offsetX, e.offsetY];
   shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
