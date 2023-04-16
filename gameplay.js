@@ -40,6 +40,7 @@ function angle(vector) {
 // Global object for gameplay state
 const state = {
   chipmunks: [],
+  shooPosition: null,
 };
 
 function changeSection(to) {
@@ -92,7 +93,7 @@ function shoo() {
   for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
     const shooVector = [0, 1].map(
-      d => c.position[d] - shooPosition[d]
+      d => c.position[d] - state.shooPosition[d]
     );
     let sAngle = angle(shooVector);
     let pAngle = angle(c.position);
@@ -103,7 +104,7 @@ function shoo() {
       c, sAngle + Math.random() * (pAngle - sAngle)
     );
   }
-  shooPosition = null;
+  state.shooPosition = null;
 }
 
 function startGame() {
@@ -163,7 +164,7 @@ function update(timeStamp) {
     placeChipmunk(c);
     c.active = Math.hypot(...position) < 1;
   }
-  if (shooPosition) shoo();
+  if (state.shooPosition) shoo();
   fpsMeter.count++;
   fpsMeter.time += elapsed;
   if (fpsMeter.time > 1) {
@@ -193,7 +194,7 @@ ael('button.pause', 'click', function() {
 ael('div.gameplay', 'mousedown', e => {
   if (stopped || gameOver) return;
   const pxOffset = [e.offsetX, e.offsetY];
-  shooPosition = pxOffset.map(
+  state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
   );
 });
