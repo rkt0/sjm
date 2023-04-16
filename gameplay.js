@@ -37,12 +37,16 @@ function angle(vector) {
   return s < 0 ? s + 2 * Math.PI : s;
 }
 
+// Global object for gameplay state
+const state = {
+  chipmunks: [],
+};
+
 function changeSection(to) {
   qs('section.current').classList.remove('current');
   qs(`section.${to}`).classList.add('current');
 }
 
-const chipmunks = [];
 function placeChipmunk(chipmunk) {
   const loc = chipmunk.position.map(
     u => u * config.boundary
@@ -61,14 +65,13 @@ function initializeChipmunks() {
     chipmunk.active = false;
     chipmunk.fleeing = false;
     placeChipmunk(chipmunk);
-    chipmunks.push(chipmunk);
+    state.chipmunks.push(chipmunk);
   }
 }
 function activateChipmunk() {
   if (gameOver) return;
-  const i = chipmunks.findIndex(c => ! c.active);
-  if (i === -1) return;
-  const c = chipmunks[i];
+  const c = state.chipmunks.find(c => ! c.active);
+  if (! c) return;
   c.active = true;
   c.fleeing = false;
   c.position = randomUnitVector();
@@ -86,7 +89,7 @@ function chaseChipmunk(chipmunk, angle) {
 
 let shooPosition;
 function shoo() {
-  for (const c of chipmunks) {
+  for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
     const shooVector = [0, 1].map(
       d => c.position[d] - shooPosition[d]
@@ -104,7 +107,7 @@ function shoo() {
 }
 
 function startGame() {
-  chipmunks.length = 0;
+  state.chipmunks.length = 0;
   for (const c of qsa('.chipmunk')) c.remove();
   initializeChipmunks();
   time.total = 0;
@@ -134,31 +137,31 @@ function update(timeStamp) {
     activateChipmunk();
   }
   let anyActive;
-  for (const chipmunk of chipmunks) {
-    if (! chipmunk.active) continue;
+  for (const c of state.chipmunks) {
+    if (! c.active) continue;
     anyActive = true;
-    const {position, velocity} = chipmunk;
+    const {position, velocity} = c;
     const oldPosition = [...position];
     let cross = false;
     for (let d = 0; d < 2; d++) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross && ! chipmunk.fleeing && ! gameOver) {
+    if (cross && ! c.fleeing && ! gameOver) {
       const v = randomUnitVector();
       for (let d = 0; d < 2; d++) {
         position[d] = 0;
         velocity[d] = v[d] * config.chipmunkFleeSpeed;
       }
-      chipmunk.element.classList.add('has-money');
-      chipmunk.fleeing = true;
+      c.element.classList.add('has-money');
+      c.fleeing = true;
       gameOver = true;
     }
-    if (gameOver && ! chipmunk.fleeing) {
-      chaseChipmunk(chipmunk, angle(position));
+    if (gameOver && ! c.fleeing) {
+      chaseChipmunk(c, angle(position));
     }
-    placeChipmunk(chipmunk);
-    chipmunk.active = Math.hypot(...position) < 1;
+    placeChipmunk(c);
+    c.active = Math.hypot(...position) < 1;
   }
   if (shooPosition) shoo();
   fpsMeter.count++;
