@@ -41,6 +41,13 @@ function angle(vector) {
 const state = {
   chipmunks: [],
   shooPosition: null,
+  time: {
+    total: 0,
+    element: qs('.gameplay .time-display'),
+    lastStamp: null,
+  },
+  paused: false,
+  gameOver: false,
 };
 
 function changeSection(to) {
@@ -70,7 +77,7 @@ function initializeChipmunks() {
   }
 }
 function activateChipmunk() {
-  if (gameOver) return;
+  if (state.gameOver) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
   c.active = true;
@@ -110,10 +117,10 @@ function startGame() {
   state.chipmunks.length = 0;
   for (const c of qsa('.chipmunk')) c.remove();
   initializeChipmunks();
-  time.total = 0;
-  time.element.innerHTML = 0;
-  oldTimeStamp = null;
-  gameOver = false;
+  state.time.total = 0;
+  state.time.element.innerHTML = 0;
+  state.time.lastStamp = null;
+  state.gameOver = false;
   changeSection('gameplay');
   requestAnimationFrame(update);
 }
@@ -121,17 +128,15 @@ function startGame() {
 const fpsMeter = {count: 0, time: 0};
 fpsMeter.element = qs('.fps-counter');
 
-let oldTimeStamp, stopped, gameOver;
-const time = {
-  total: 0,
-  element: qs('.gameplay .time-display'),
-};
 function update(timeStamp) {
-  if (! oldTimeStamp) oldTimeStamp = timeStamp;
-  const elapsed = (timeStamp - oldTimeStamp) / 1000;
-  if (! gameOver) {
-    time.total += elapsed;
-    time.element.innerHTML = Math.trunc(time.total);
+  state.time.lastStamp ??= timeStamp;
+  const elapsed = 0.001 * (
+    timeStamp - state.time.lastStamp
+  );
+  if (! state.gameOver) {
+    state.time.total += elapsed;
+    const nSeconds = Math.trunc(state.time.total)
+    state.time.element.innerHTML = nSeconds;
   }
   if (Math.random() < elapsed * config.chipmunkRate) {
     activateChipmunk();
@@ -147,7 +152,7 @@ function update(timeStamp) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross && ! c.fleeing && ! gameOver) {
+    if (cross && ! c.fleeing && ! state.gameOver) {
       const v = randomUnitVector();
       for (let d = 0; d < 2; d++) {
         position[d] = 0;
@@ -155,9 +160,9 @@ function update(timeStamp) {
       }
       c.element.classList.add('has-money');
       c.fleeing = true;
-      gameOver = true;
+      state.gameOver = true;
     }
-    if (gameOver && ! c.fleeing) {
+    if (state.gameOver && ! c.fleeing) {
       chaseChipmunk(c, angle(position));
     }
     placeChipmunk(c);
@@ -173,25 +178,25 @@ function update(timeStamp) {
     fpsMeter.count = 0;
     fpsMeter.time = 0;
   }
-  oldTimeStamp = timeStamp;
-  if (gameOver && ! anyActive) {
+  state.time.lastStamp = timeStamp;
+  if (state.gameOver && ! anyActive) {
     const gotd = qs('.game-over .time-display');
-    gotd.innerHTML = time.element.innerHTML;
+    gotd.innerHTML = state.time.element.innerHTML;
     changeSection('game-over');
     return;
   }
-  if (! stopped) requestAnimationFrame(update);
+  if (! state.paused) requestAnimationFrame(update);
 }
 
 ael('button.pause', 'click', function() {
-  this.innerHTML = stopped ? 'Pause' : 'Play';
-  this.classList.toggle('play', ! stopped);
-  stopped = ! stopped;
-  oldTimeStamp = null;
-  if (! stopped) requestAnimationFrame(update);
+  this.innerHTML = state.paused ? 'Pause' : 'Play';
+  this.classList.toggle('play', ! state.paused);
+  state.stopped = ! state.stopped;
+  state.time.lastStamp = null;
+  if (! state.stopped) requestAnimationFrame(update);
 });
 ael('div.gameplay', 'mousedown', e => {
-  if (stopped || gameOver) return;
+  if (state.stopped || state.gameOver) return;
   const pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
