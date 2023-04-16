@@ -37,6 +37,12 @@ function angle(vector) {
   return s < 0 ? s + 2 * Math.PI : s;
 }
 
+function changeSection(from, to) {
+  qs(`section.${from}`).style.display = 'none';
+  qs(`section.${to}`).style.display = '';
+  
+}
+
 const chipmunks = [];
 function placeChipmunk(chipmunk) {
   const loc = chipmunk.position.map(
@@ -157,8 +163,7 @@ function update(timeStamp) {
   if (gameOver && ! anyActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = time.element.innerHTML;
-    qs('section.gameplay').style.display = 'none';
-    qs('section.game-over').style.display = 'flex';
+    changeSection('gameplay', 'game-over');
     return;
   }
   if (! stopped) requestAnimationFrame(update);
