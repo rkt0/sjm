@@ -49,13 +49,16 @@ button {
   box-sizing: border-box;
 }
 
+:where(section, .zone, .centered) {
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+
 section {
   height: 100%;
   width:  100%;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 section:not(.current) {
   display: none;
@@ -64,9 +67,7 @@ section:not(.current) {
 .zone {
   background: var(--fg);
   box-sizing: border-box;
-  display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-around;
   text-align: center;
   width: 360px;
@@ -112,10 +113,8 @@ div.gameplay {
   background-size: cover;
   background-origin: border-box;
   border: solid 1px #555;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
+
 .money {
   box-sizing: border-box;
   background: #fff;
@@ -125,9 +124,6 @@ div.gameplay {
   border: solid 1px #555;
   font-size: calc(var(--chipmunk-size) * 0.25);
   font-weight: normal;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .chipmunk {
@@ -160,8 +156,6 @@ div.gameplay {
 }
 
 .sidebar {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   width: 900px;
 }
