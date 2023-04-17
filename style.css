@@ -96,7 +96,8 @@ section.instructions .zone {
 
 div.gameplay {
   position: absolute;
-  background: var(--fg);
+  background: url("img/grass.jpg");
+  background-size: cover;
   height: var(--field-size);
   width:  var(--field-size);
   overflow: hidden;
