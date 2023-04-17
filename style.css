@@ -96,7 +96,7 @@ section.instructions .zone {
 
 div.gameplay {
   position: absolute;
-  background: url("img/grass.jpg");
+  background: url("img/grass.png");
   background-size: cover;
   height: var(--field-size);
   width:  var(--field-size);
@@ -108,7 +108,7 @@ div.gameplay {
   width:  20%;
   height: 20%;
   margin: 40%;
-  background: url("img/porch.jpg");
+  background: url("img/porch.png");
   background-size: cover;
   background-origin: border-box;
   border: solid 1px #555;
