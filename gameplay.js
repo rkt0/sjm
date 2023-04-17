@@ -7,6 +7,7 @@ const config = {
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
   chipmunkFleeSpeed: 1,
+  moneyText: '$35',
 };
 
 // Get field and chipmunk sizes from CSS
@@ -38,6 +39,7 @@ const state = {
   },
   paused: false,
   gameOver: false,
+  moneyElement: qs('.money'),
 };
 
 // Game flow functions
@@ -54,6 +56,7 @@ function startGame() {
   state.time.element.innerHTML = 0;
   state.time.lastStamp = null;
   state.gameOver = false;
+  qs('.porch').append(state.moneyElement);
   changeSection('gameplay');
   requestAnimationFrame(update);
 }
@@ -104,6 +107,17 @@ function chaseChipmunk(chipmunk, angle) {
   chipmunk.velocity[1] = Math.sin(angle) * speed;
   chipmunk.fleeing = true;
 }
+function giveChipmunkMoney(chipmunk) {
+  const v = geometry.randomUnitVector();
+  for (let d = 0; d < 2; d++) {
+    chipmunk.position[d] = 0;
+    chipmunk.velocity[d] =
+        v[d] * config.chipmunkFleeSpeed;
+  }
+  chipmunk.element.append(state.moneyElement);
+  chipmunk.fleeing = true;
+  state.gameOver = true;
+}
 function shoo() {
   for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
@@ -148,14 +162,7 @@ function update(timeStamp) {
       cross ||= position[d] * oldPosition[d] < 0;
     }
     if (cross && ! c.fleeing && ! state.gameOver) {
-      const v = geometry.randomUnitVector();
-      for (let d = 0; d < 2; d++) {
-        position[d] = 0;
-        velocity[d] = v[d] * config.chipmunkFleeSpeed;
-      }
-      c.element.classList.add('has-money');
-      c.fleeing = true;
-      state.gameOver = true;
+      giveChipmunkMoney(c);
     }
     if (state.gameOver && ! c.fleeing) {
       chaseChipmunk(c, geometry.angle(position));

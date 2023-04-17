@@ -112,6 +112,22 @@ div.gameplay {
   background-size: cover;
   background-origin: border-box;
   border: solid 1px #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.money {
+  box-sizing: border-box;
+  background: #fff;
+  width:  calc(var(--chipmunk-size) * 0.8);
+  height: calc(var(--chipmunk-size) * 0.5);
+  margin: 0 calc(var(--chipmunk-size) * 0.1);
+  border: solid 1px #555;
+  font-size: calc(var(--chipmunk-size) * 0.25);
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chipmunk {
@@ -121,9 +137,6 @@ div.gameplay {
   width:  var(--chipmunk-size);
   height: var(--chipmunk-size);
 }
-.chipmunk.has-money {
-  background: #555;
-}
 .chipmunk > img {
   position: absolute;
   width:  100%;
@@ -131,6 +144,19 @@ div.gameplay {
 }
 .chipmunk.flipped > img {
   transform: scaleX(-1);
+}
+.chipmunk .money {
+  position: relative;
+  z-index: 1;
+  --lr-offset: 40%;
+  --rotation: -30deg;
+  left: var(--lr-offset);
+  top: 40%;
+  transform: rotate(var(--rotation));
+}
+.chipmunk.flipped .money {
+  left: calc(-1 * var(--lr-offset));
+  transform: rotate(calc(-1 * var(--rotation)));
 }
 
 .sidebar {
