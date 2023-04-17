@@ -103,6 +103,17 @@ div.gameplay {
   overflow: hidden;
 }
 
+.porch {
+  box-sizing: border-box;
+  width:  20%;
+  height: 20%;
+  margin: 40%;
+  background: url("img/porch.jpg");
+  background-size: cover;
+  background-origin: border-box;
+  border: solid 1px #555;
+}
+
 .chipmunk {
   position: absolute;
   left: var(--o);
