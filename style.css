@@ -6,7 +6,7 @@
   --dark: #16171a;
   --light: #fff;
   --field-size: 540px;
-  --chipmunk-size: 18px;
+  --chipmunk-size: 60px;
   --o: calc(
     (var(--field-size) - var(--chipmunk-size)) / 2
   );
@@ -22,7 +22,7 @@
 @media (max-width: 539px) {
   :root {
     --field-size: 360px;
-    --chipmunk-size: 12px;
+    --chipmunk-size: 40px;
   }
 }
 
@@ -108,11 +108,17 @@ div.gameplay {
   top:  var(--o);
   width:  var(--chipmunk-size);
   height: var(--chipmunk-size);
-  border-radius: 50%;
-  background: #0021a5;
 }
 .chipmunk.has-money {
-  background: #fa4616;
+  background: #555;
+}
+.chipmunk > img {
+  position: absolute;
+  width:  100%;
+  height: 100%;
+}
+.chipmunk.flipped > img {
+  transform: scaleX(-1);
 }
 
 .sidebar {

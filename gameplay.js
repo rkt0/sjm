@@ -65,11 +65,17 @@ function placeChipmunk(chipmunk) {
   );
   const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
   chipmunk.element.style.transform = xf;
+  chipmunk.element.classList.toggle(
+    'flipped', chipmunk.velocity[0] < 0
+  );
 }
 function initializeChipmunks() {
   for (let i = 0; i < config.nChipmunks; i++) {
     const element = document.createElement('div');
     element.classList.add('chipmunk');
+    const img = document.createElement('img');
+    img.src = 'img/chipmunk.png';
+    element.append(img);
     qs('div.gameplay').append(element);
     const chipmunk = {element};
     chipmunk.position = [1, 0];
