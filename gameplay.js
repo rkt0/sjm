@@ -40,11 +40,25 @@ const state = {
   gameOver: false,
 };
 
+// Game flow functions
 function changeSection(to) {
   qs('section.current').classList.remove('current');
   qs(`section.${to}`).classList.add('current');
 }
+function startGame() {
+  fpsMeter.initialize('section.gameplay');
+  state.chipmunks.length = 0;
+  for (const c of qsa('.chipmunk')) c.remove();
+  initializeChipmunks();
+  state.time.total = 0;
+  state.time.element.innerHTML = 0;
+  state.time.lastStamp = null;
+  state.gameOver = false;
+  changeSection('gameplay');
+  requestAnimationFrame(update);
+}
 
+// Chipmunk functions
 function placeChipmunk(chipmunk) {
   const loc = chipmunk.position.map(
     u => u * config.boundary
@@ -84,7 +98,6 @@ function chaseChipmunk(chipmunk, angle) {
   chipmunk.velocity[1] = Math.sin(angle) * speed;
   chipmunk.fleeing = true;
 }
-
 function shoo() {
   for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
@@ -103,19 +116,7 @@ function shoo() {
   state.shooPosition = null;
 }
 
-function startGame() {
-  fpsMeter.initialize('section.gameplay');
-  state.chipmunks.length = 0;
-  for (const c of qsa('.chipmunk')) c.remove();
-  initializeChipmunks();
-  state.time.total = 0;
-  state.time.element.innerHTML = 0;
-  state.time.lastStamp = null;
-  state.gameOver = false;
-  changeSection('gameplay');
-  requestAnimationFrame(update);
-}
-
+// Game loop function
 function update(timeStamp) {
   state.time.lastStamp ??= timeStamp;
   const elapsed = 0.001 * (
@@ -168,6 +169,16 @@ function update(timeStamp) {
   if (! state.paused) requestAnimationFrame(update);
 }
 
+// Attach event listeners
+aelo('section.front', 'click', () => {
+  changeSection('title');
+});
+ael('button.show-instructions', 'click', () => {
+  changeSection('instructions');
+});
+for (const button of qsa('button.start-game')) {
+  ael(button, 'click', startGame);
+}
 ael('button.pause', 'click', function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   this.classList.toggle('play', ! state.paused);
@@ -181,13 +192,4 @@ ael('div.gameplay', 'mousedown', e => {
   state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
   );
-});
-for (const button of qsa('button.start-game')) {
-  ael(button, 'click', startGame);
-}
-ael('button.show-instructions', 'click', () => {
-  changeSection('instructions');
-});
-aelo('section.front', 'click', () => {
-  changeSection('title');
 });
