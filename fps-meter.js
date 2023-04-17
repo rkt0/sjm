@@ -1,7 +1,11 @@
 export const fpsMeter = {
-  count: 0,
-  time: 0,
   initialize(whereSelector) {
+    this.count = 0;
+    this.time = 0;
+    if (this.element) {
+      this.element.innerHTML = '';
+      return;
+    }
     const div = document.createElement('div');
     div.classList.add('fps-counter');
     document.querySelector(whereSelector).append(div);
