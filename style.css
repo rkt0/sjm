@@ -47,6 +47,7 @@ button {
   padding: 12px 24px;
   border-radius: 30px;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 :where(section, .zone, .centered) {

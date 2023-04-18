@@ -7,7 +7,6 @@ const config = {
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
   chipmunkFleeSpeed: 1,
-  moneyText: '$35',
 };
 
 // Get field and chipmunk sizes from CSS
