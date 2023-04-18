@@ -7,6 +7,7 @@
   --light: #fff;
   --field-size: 540px;
   --chipmunk-size: 60px;
+  --porch-size: 108px;
   --o: calc(
     (var(--field-size) - var(--chipmunk-size)) / 2
   );
@@ -23,6 +24,7 @@
   :root {
     --field-size: 360px;
     --chipmunk-size: 40px;
+    --porch-size: 72px;
   }
 }
 
@@ -107,13 +109,16 @@ div.gameplay {
 
 .porch {
   box-sizing: border-box;
-  width:  20%;
-  height: 20%;
-  margin: 40%;
+  width:  var(--porch-size);
+  height: var(--porch-size);
+  margin: calc(
+    (var(--field-size) - var(--porch-size)) / 2
+  );
   background: url("img/porch.png");
   background-size: cover;
   background-origin: border-box;
   border: solid 1px #555;
+  pointer-events: none;
 }
 
 .money {
@@ -133,6 +138,7 @@ div.gameplay {
   top:  var(--o);
   width:  var(--chipmunk-size);
   height: var(--chipmunk-size);
+  pointer-events: none;
 }
 .chipmunk > img {
   position: absolute;

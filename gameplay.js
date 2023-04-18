@@ -11,16 +11,17 @@ const config = {
 
 // Get field and chipmunk sizes from CSS
 {
-  const [f, c] = ['field', 'chipmunk'].map(
-    x => parseInt(
-      getComputedStyle(qs(':root')).getPropertyValue(
-        `--${x}-size`
-      )
-    )
-  );
-  config.fieldSize = f;
-  config.chipmunkSize = c;
-  config.boundary = (f + c) / 2;
+  function cssInt(property, selector = ':root') {
+    const s = getComputedStyle(qs(selector));
+    return parseInt(s.getPropertyValue(property));
+  }
+  config.fieldSize = cssInt('--field-size');
+  config.chipmunkSize = cssInt('--chipmunk-size');
+  config.porchSize = cssInt('width', '.porch');
+  config.boundary =
+      (config.fieldSize + config.chipmunkSize) / 2;
+  config.porchBoundary =
+      config.porchSize / config.boundary / 2;
 }
 
 // Global object for gameplay state
@@ -35,6 +36,7 @@ const state = {
   paused: false,
   gameOver: false,
   moneyElement: qs('.money'),
+  porchShoos: 0,
 };
 
 // Game flow functions
@@ -115,6 +117,10 @@ function giveChipmunkMoney(chipmunk) {
   state.gameOver = true;
 }
 function shoo() {
+  const onPorch = state.shooPosition.every(
+    u => Math.abs(u) < config.porchBoundary
+  );
+  if (onPorch) state.porchShoos++;
   for (const c of state.chipmunks) {
     if (c.fleeing || ! c.active) continue;
     const shooVector = [0, 1].map(
