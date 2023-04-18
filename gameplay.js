@@ -7,6 +7,7 @@ const config = {
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
   chipmunkFleeSpeed: 1,
+  shooRadius: 0.3,
 };
 
 // Get field and chipmunk sizes from CSS
@@ -117,25 +118,50 @@ function giveChipmunkMoney(chipmunk) {
   state.gameOver = true;
 }
 function shoo() {
-  const onPorch = state.shooPosition.every(
+
+  // Compute values that do not depend on chipmunk
+  const sPos = state.shooPosition;
+  const sAngle = geometry.angle(sPos);
+  const pi = Math.PI;
+  const onPorch = sPos.every(
     u => Math.abs(u) < config.porchBoundary
   );
   if (onPorch) state.porchShoos++;
+
+  // Handle each chipmunk
   for (const c of state.chipmunks) {
+
+    // Skip if inactive or already fleeing
     if (c.fleeing || ! c.active) continue;
-    const shooVector = [0, 1].map(
-      d => c.position[d] - state.shooPosition[d]
-    );
-    let sAngle = geometry.angle(shooVector);
-    let pAngle = geometry.angle(c.position);
-    const pi = Math.PI
-    if (sAngle - pAngle > pi) sAngle -= 2 * pi;
-    if (pAngle - sAngle > pi) pAngle -= 2 * pi;
-    chaseChipmunk(
-      c, sAngle + Math.random() * (pAngle - sAngle)
-    );
+
+    // Compute values specific to chipmunk
+    const cPos = c.position;
+    const dPos = [0, 1].map(i => cPos[i] - sPos[i]);
+    const dNorm = Math.hypot(...dPos);
+
+    // Skip if shoo is too far away
+    if (dNorm > config.shooRadius) continue;
+
+    // Skip if shoo is on wrong side of porch
+    const csAngle = geometry.angleBetween(cPos, sPos);
+    if (! onPorch && csAngle > pi / 2) continue;
+
+    // Angles must be within π of each other
+    let cAngle = geometry.angle(cPos);
+    let dAngle = geometry.angle(dPos);
+    if (dAngle - cAngle > pi) dAngle -= 2 * pi;
+    if (cAngle - dAngle > pi) cAngle -= 2 * pi;
+    
+    // Chase chipmunk away from both origin and shoo
+    const a0 = Math.max(cAngle, dAngle) - pi / 2;
+    const a1 = Math.min(cAngle, dAngle) + pi / 2;
+    chaseChipmunk(c, a0 + Math.random() * (a1 - a0));
+
   }
+  
+  // Reset shoo position
   state.shooPosition = null;
+  
 }
 
 // Game loop function
