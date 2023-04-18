@@ -20,12 +20,8 @@ const config = {
   );
   config.fieldSize = f;
   config.chipmunkSize = c;
+  config.boundary = (f + c) / 2;
 }
-
-// Distance at which chipmunks are considered "gone"
-config.boundary = Math.SQRT1_2 * (
-  config.fieldSize + config.chipmunkSize
-);
 
 // Global object for gameplay state
 const state = {
@@ -94,7 +90,7 @@ function activateChipmunk() {
   if (! c) return;
   c.active = true;
   c.fleeing = false;
-  c.position = geometry.randomUnitVector();
+  c.position = geometry.randomUnitSupNormVector();
   c.velocity = c.position.map(
     u => -u * config.chipmunkSpeed
   );
@@ -167,7 +163,7 @@ function update(timeStamp) {
       chaseChipmunk(c, geometry.angle(position));
     }
     placeChipmunk(c);
-    c.active = Math.hypot(...position) < 1;
+    c.active = position.every(u => Math.abs(u) < 1);
   }
   if (state.shooPosition) shoo();
   fpsMeter.tick(elapsed);

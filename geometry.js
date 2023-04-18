@@ -11,5 +11,13 @@ export const geometry = {
     const theta = Math.random() * 2 * Math.PI;
     return [Math.cos(theta), Math.sin(theta)];
   },
+  
+  // Generate random vector with unit sup norm
+  randomUnitSupNormVector() {
+    const a = Math.random() * 2 - 1;
+    const u = Math.trunc(Math.random() * 4);
+    const b = u & 1 ? -1 : 1;
+    return u & 2 ? [a, b] : [b, a];
+  },
 
 };
