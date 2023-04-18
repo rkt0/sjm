@@ -16,13 +16,12 @@ const config = {
     const s = getComputedStyle(qs(selector));
     return parseInt(s.getPropertyValue(property));
   }
-  config.fieldSize = cssInt('--field-size');
-  config.chipmunkSize = cssInt('--chipmunk-size');
-  config.porchSize = cssInt('width', '.porch');
-  config.boundary =
-      (config.fieldSize + config.chipmunkSize) / 2;
-  config.porchBoundary =
-      config.porchSize / config.boundary / 2;
+  const fieldSize = cssInt('--field-size');
+  const chipmunkSize = cssInt('--chipmunk-size');
+  const porchSize = cssInt('width', '.porch');
+  config.fieldSize = fieldSize;
+  config.boundary = (fieldSize + chipmunkSize) / 2;
+  config.porch = porchSize / 2 / config.boundary;
 }
 
 // Global object for gameplay state
@@ -126,7 +125,7 @@ function shoo() {
   const sAngle = geometry.angle(sPos);
   const pi = Math.PI;
   const onPorch = sPos.every(
-    u => Math.abs(u) < config.porchBoundary
+    u => Math.abs(u) < config.porch
   );
   if (onPorch) state.porchShoos++;
 
