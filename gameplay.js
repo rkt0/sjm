@@ -85,6 +85,7 @@ function initializeChipmunks() {
   }
 }
 function activateChipmunk() {
+  if (state.chipmunks.some(c => c.active)) return;
   if (state.gameOver) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
