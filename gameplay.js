@@ -5,8 +5,8 @@ import {fpsMeter} from './fps-meter.js';
 const config = {
   nChipmunks: 6,
   chipmunkRate: 1,
-  chipmunkSpeed: 0.5,
-  chipmunkFleeSpeed: 1,
+  chipmunkSpeed: 0.3,
+  chipmunkFleeSpeed: 0.6,
   shooRadius: 0.3,
 };
 
@@ -35,8 +35,10 @@ const state = {
     lastStamp: null,
   },
   paused: false,
-  gameOver: false,
-  moneyElement: qs('.money'),
+  money: {
+    taken: false,
+    element: qs('.money')
+  },
   porchShoos: 0,
 };
 
@@ -53,8 +55,8 @@ function startGame() {
   state.time.total = 0;
   state.time.element.innerHTML = 0;
   state.time.lastStamp = null;
-  state.gameOver = false;
-  qs('.porch').append(state.moneyElement);
+  state.money.taken = false;
+  qs('.porch').append(state.money.element);
   changeSection('gameplay');
   requestAnimationFrame(update);
 }
@@ -89,7 +91,7 @@ function initializeChipmunks() {
 }
 function activateChipmunk() {
   if (state.chipmunks.some(c => c.active)) return;
-  if (state.gameOver) return;
+  if (state.money.taken) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
   c.active = true;
@@ -113,9 +115,9 @@ function giveChipmunkMoney(chipmunk) {
     chipmunk.velocity[d] =
         v[d] * config.chipmunkFleeSpeed;
   }
-  chipmunk.element.append(state.moneyElement);
+  chipmunk.element.append(state.money.element);
   chipmunk.fleeing = true;
-  state.gameOver = true;
+  state.money.taken = true;
 }
 function shoo() {
 
@@ -131,8 +133,8 @@ function shoo() {
   // Handle each chipmunk
   for (const c of state.chipmunks) {
 
-    // Skip if inactive or already fleeing
-    if (c.fleeing || ! c.active) continue;
+    // Skip if inactive
+    if (! c.active) continue;
 
     // Compute values specific to chipmunk
     const cPos = c.position;
@@ -170,11 +172,10 @@ function update(timeStamp) {
   const elapsed = 0.001 * (
     timeStamp - state.time.lastStamp
   );
-  if (! state.gameOver) {
-    state.time.total += elapsed;
-    const nSeconds = Math.trunc(state.time.total)
-    state.time.element.innerHTML = nSeconds;
-  }
+  state.time.total += elapsed;
+  state.time.element.innerHTML = Math.trunc(
+    state.time.total
+  );
   if (Math.random() < elapsed * config.chipmunkRate) {
     activateChipmunk();
   }
@@ -189,10 +190,10 @@ function update(timeStamp) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross && ! c.fleeing && ! state.gameOver) {
+    if (cross && ! c.fleeing && ! state.money.taken) {
       giveChipmunkMoney(c);
     }
-    if (state.gameOver && ! c.fleeing) {
+    if (! c.fleeing && state.money.taken) {
       chaseChipmunk(c, geometry.angle(position));
     }
     placeChipmunk(c);
@@ -201,7 +202,7 @@ function update(timeStamp) {
   if (state.shooPosition) shoo();
   fpsMeter.tick(elapsed);
   state.time.lastStamp = timeStamp;
-  if (state.gameOver && ! anyActive) {
+  if (state.money.taken && ! anyActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     changeSection('game-over');
@@ -228,7 +229,7 @@ ael('button.pause', 'click', function() {
   if (! state.paused) requestAnimationFrame(update);
 });
 ael('div.gameplay', 'mousedown', e => {
-  if (state.paused || state.gameOver) return;
+  if (state.paused) return;
   const pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
