@@ -27,6 +27,7 @@ const config = {
 // Global object for gameplay state
 const state = {
   chipmunks: [],
+  nActive: 0,
   shooPosition: null,
   time: {
     total: 0,
@@ -90,11 +91,13 @@ function initializeChipmunks() {
 }
 function activateChipmunks(timeInterval) {
   if (state.money.taken) return;
+  if (state.nActive > state.time.total / 10) return;
   const rate = 0.1 + state.time.total * 0.03;
   const probability = rate * timeInterval;
   if (Math.random() > probability) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
+  state.nActive++;
   c.active = true;
   c.fleeing = false;
   c.position = geometry.randomUnitSupNormVector();
@@ -184,12 +187,10 @@ function update(timeStamp) {
   activateChipmunks(elapsed);
   
   // Deal with each chipmunk
-  let anyActive;
   for (const c of state.chipmunks) {
     
     // Skip if inactive
     if (! c.active) continue;
-    anyActive = true;
     
     // Position and velocity
     const {position, velocity} = c;
@@ -214,6 +215,7 @@ function update(timeStamp) {
     // Place chipmunk; deactivate if out of bounds
     placeChipmunk(c);
     c.active = position.every(u => Math.abs(u) < 1);
+    if (! c.active) state.nActive--;
 
   }
 
@@ -225,7 +227,7 @@ function update(timeStamp) {
   state.time.lastStamp = timeStamp;
 
   // Check if game is over
-  if (state.money.taken && ! anyActive) {
+  if (state.money.taken && ! state.nActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     changeSection('game-over');
