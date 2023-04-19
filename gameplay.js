@@ -3,10 +3,10 @@ import {geometry} from './geometry.js';
 import {fpsMeter} from './fps-meter.js';
 
 const config = {
-  nChipmunks: 6,
+  nChipmunks: 36,
   chipmunkRate: 1,
-  chipmunkSpeed: 0.3,
-  chipmunkFleeSpeed: 0.6,
+  chipmunkSpeed: 0.5,
+  chipmunkFleeSpeed: 1,
   shooRadius: 0.3,
 };
 
@@ -88,9 +88,11 @@ function initializeChipmunks() {
     state.chipmunks.push(chipmunk);
   }
 }
-function activateChipmunk() {
-  if (state.chipmunks.some(c => c.active)) return;
+function activateChipmunks(timeInterval) {
   if (state.money.taken) return;
+  const rate = 0.1 + state.time.total * 0.03;
+  const probability = rate * timeInterval;
+  if (Math.random() > probability) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
   c.active = true;
@@ -178,10 +180,8 @@ function update(timeStamp) {
     state.time.total
   );
   
-  // Possibly activate a chipmunk
-  if (Math.random() < elapsed * config.chipmunkRate) {
-    activateChipmunk();
-  }
+  // Possibly activate chipmunk
+  activateChipmunks(elapsed);
   
   // Deal with each chipmunk
   let anyActive;
