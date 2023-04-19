@@ -167,6 +167,8 @@ function shoo() {
 
 // Game loop function
 function update(timeStamp) {
+  
+  // Timekeeping
   state.time.lastStamp ??= timeStamp;
   const elapsed = 0.001 * (
     timeStamp - state.time.lastStamp
@@ -175,15 +177,26 @@ function update(timeStamp) {
   state.time.element.innerHTML = Math.trunc(
     state.time.total
   );
+  
+  // Possibly activate a chipmunk
   if (Math.random() < elapsed * config.chipmunkRate) {
     activateChipmunk();
   }
+  
+  // Deal with each chipmunk
   let anyActive;
   for (const c of state.chipmunks) {
+    
+    // Skip if inactive
     if (! c.active) continue;
     anyActive = true;
+    
+    // Position and velocity
     const {position, velocity} = c;
     const oldPosition = [...position];
+    
+    // Adjust chipmunk position 
+    // while checking if it crosses origin (money)
     let cross = false;
     for (let d = 0; d < 2; d++) {
       position[d] += velocity[d] * elapsed;
@@ -192,22 +205,36 @@ function update(timeStamp) {
     if (cross && ! c.fleeing && ! state.money.taken) {
       giveChipmunkMoney(c);
     }
+    
+    // All chipmunks flee once money is taken
     if (! c.fleeing && state.money.taken) {
       chaseChipmunk(c, geometry.angle(position));
     }
+    
+    // Place chipmunk; deactivate if out of bounds
     placeChipmunk(c);
     c.active = position.every(u => Math.abs(u) < 1);
+
   }
+
+  // Shoo chipmunks
   if (state.shooPosition) shoo();
+  
+  // Timekeeping
   fpsMeter.tick(elapsed);
   state.time.lastStamp = timeStamp;
+
+  // Check if game is over
   if (state.money.taken && ! anyActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     changeSection('game-over');
     return;
   }
+  
+  // Loop
   if (! state.paused) requestAnimationFrame(update);
+
 }
 
 // Attach event listeners
