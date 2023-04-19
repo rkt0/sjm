@@ -91,9 +91,11 @@ function initializeChipmunks() {
 }
 function activateChipmunks(timeInterval) {
   if (state.money.taken) return;
-  if (state.nActive > state.time.total / 10) return;
-  const rate = 0.1 + state.time.total * 0.03;
-  const probability = rate * timeInterval;
+  const t = state.time.total;
+  if (state.nActive > t / 10) return;
+  const rate = 0.1 + t * 0.03;
+  let probability = rate * timeInterval;
+  if (t > 2 && ! state.nActive) probability = 1;
   if (Math.random() > probability) return;
   const c = state.chipmunks.find(c => ! c.active);
   if (! c) return;
