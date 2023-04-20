@@ -136,7 +136,7 @@ function initializeMountainLion() {
   const element = document.createElement('div');
   element.classList.add('mountain-lion');
   const img = document.createElement('img');
-  img.src = 'scrap/mountain_lion-04.gif';
+  img.src = 'img/mountain-lion.png';
   element.append(img);
   qs('div.gameplay').append(element);
   state.mountainLion.element = element;
@@ -148,13 +148,18 @@ function activateMountainLion() {
   state.nActive++;
   state.mountainLion.active = true;
   state.mountainLion.position = 0;
-  state.money.taken = true;
 }
 function placeMountainLion() {
   const loc = 
       state.mountainLion.position * config.mlTrack;
   const xf = `translateX(${loc}px)`;
   state.mountainLion.element.style.transform = xf;
+}
+function giveMountainLionMoney() {
+  if (state.money.taken) return;
+  const ml = state.mountainLion;
+  ml.element.append(state.money.element);
+  state.money.taken = true;
 }
 
 // Shoo function
@@ -268,6 +273,7 @@ function update(timeStamp) {
   if (ml.active && state.nActive === 1) {
     ml.position += ml.velocity * elapsed;
     placeMountainLion(ml.position);
+    if (ml.position > 0.3) giveMountainLionMoney();
     ml.active = ml.position < 1;
     if (! ml.active) state.nActive--;
   }
