@@ -295,24 +295,34 @@ function update(timeStamp) {
 
 }
 
+// Determine appropriate event type
+const eType = matchMedia('(hover: none)').matches ? 
+    'touchstart' : 'mousedown';
+if (eType === 'touchstart') {
+  for (const span of qsa('span.click-or-touch')) {
+    const cap = span.innerHTML.trim().startsWith('C');
+    span.innerHTML = cap ? 'Touch' : 'touch';
+  }  
+}
+
 // Attach event listeners
-aelo('section.front', 'click', () => {
+aelo('section.front', eType, () => {
   changeSection('title');
 });
-ael('button.show-instructions', 'click', () => {
+ael('button.show-instructions', eType, () => {
   changeSection('instructions');
 });
 for (const button of qsa('button.start-game')) {
-  ael(button, 'click', startGame);
+  ael(button, eType, startGame);
 }
-ael('button.pause', 'click', function() {
+ael('button.pause', eType, function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   this.classList.toggle('play', ! state.paused);
   state.paused = ! state.paused;
   state.time.lastStamp = null;
   if (! state.paused) requestAnimationFrame(update);
 });
-ael('div.gameplay', 'mousedown', e => {
+ael('div.gameplay', eType, e => {
   if (state.paused) return;
   const pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
