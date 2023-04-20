@@ -18,16 +18,17 @@ const config = {
   }
   const fieldSize = cssInt('--field-size');
   const chipmunkSize = cssInt('--chipmunk-size');
-  const porchSize = cssInt('width', '.porch');
+  const porchSize = cssInt('--porch-size');
+  const mlSize = cssInt('--mountain-lion-size');
   config.fieldSize = fieldSize;
   config.boundary = (fieldSize + chipmunkSize) / 2;
   config.porch = porchSize / 2 / config.boundary;
+  config.mlTrack = fieldSize + mlSize;
 }
 
 // Global object for gameplay state
 const state = {
   chipmunks: [],
-  nActive: 0,
   shooPosition: null,
   time: {
     total: 0,
@@ -40,6 +41,8 @@ const state = {
     element: qs('.money')
   },
   porchShoos: 0,
+  mountainLion: {active: false},
+  nActive: 0,
 };
 
 // Game flow functions
@@ -52,10 +55,12 @@ function startGame() {
   state.chipmunks.length = 0;
   for (const c of qsa('.chipmunk')) c.remove();
   initializeChipmunks();
+  initializeMountainLion();
   state.time.total = 0;
   state.time.element.innerHTML = 0;
   state.time.lastStamp = null;
   state.money.taken = false;
+  state.porchShoos = 0;
   qs('.porch').append(state.money.element);
   changeSection('gameplay');
   requestAnimationFrame(update);
@@ -108,7 +113,7 @@ function activateChipmunks(timeInterval) {
   );
   placeChipmunk(c);
 }
-function chaseChipmunk(chipmunk, angle) {
+function chaseChipmunk(chipmunk, angle = 0) {
   const speed = config.chipmunkFleeSpeed;
   chipmunk.velocity[0] = Math.cos(angle) * speed;
   chipmunk.velocity[1] = Math.sin(angle) * speed;
@@ -125,7 +130,38 @@ function giveChipmunkMoney(chipmunk) {
   chipmunk.fleeing = true;
   state.money.taken = true;
 }
+
+// Mountain lion functions
+function initializeMountainLion() {
+  const element = document.createElement('div');
+  element.classList.add('mountain-lion');
+  const img = document.createElement('img');
+  img.src = 'scrap/mountain_lion-04.gif';
+  element.append(img);
+  qs('div.gameplay').append(element);
+  state.mountainLion.element = element;
+  state.mountainLion.velocity = 0.2;
+}
+function activateMountainLion() {
+  if (state.mountainLion.active) return;
+  for (const c of state.chipmunks) chaseChipmunk(c);
+  state.nActive++;
+  state.mountainLion.active = true;
+  state.mountainLion.position = 0;
+  state.money.taken = true;
+}
+function placeMountainLion() {
+  const loc = 
+      state.mountainLion.position * config.mlTrack;
+  const xf = `translateX(${loc}px)`;
+  state.mountainLion.element.style.transform = xf;
+}
+
+// Shoo function
 function shoo() {
+  
+  // Skip if mountain lion is active
+  if (state.mountainLion.active) return;
 
   // Compute values that do not depend on chipmunk
   const sPos = state.shooPosition;
@@ -169,6 +205,9 @@ function shoo() {
   
   // Reset shoo position
   state.shooPosition = null;
+  
+  // Mountain lion
+  if (state.porchShoos > 5) activateMountainLion();
   
 }
 
@@ -223,6 +262,15 @@ function update(timeStamp) {
 
   // Shoo chipmunks
   if (state.shooPosition) shoo();
+  
+  // Mountain lion
+  const ml = state.mountainLion;
+  if (ml.active && state.nActive === 1) {
+    ml.position += ml.velocity * elapsed;
+    placeMountainLion(ml.position);
+    ml.active = ml.position < 1;
+    if (! ml.active) state.nActive--;
+  }
   
   // Timekeeping
   fpsMeter.tick(elapsed);

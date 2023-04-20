@@ -7,10 +7,12 @@
   --light: #fff;
   --field-size: 540px;
   --chipmunk-size: 60px;
-  --porch-size: 108px;
   --o: calc(
     (var(--field-size) - var(--chipmunk-size)) / 2
   );
+  --porch-size: 108px;
+  --mountain-lion-size: 180px;
+  --mountain-lion-top: 90px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -25,6 +27,7 @@
     --field-size: 360px;
     --chipmunk-size: 40px;
     --porch-size: 72px;
+    --mountain-lion-size: 120px;
   }
 }
 
@@ -160,6 +163,17 @@ div.gameplay {
 .chipmunk.flipped .money {
   left: calc(-1 * var(--lr-offset));
   transform: rotate(calc(-1 * var(--rotation)));
+}
+
+.mountain-lion {
+  position: absolute;
+  width:  var(--mountain-lion-size);
+  height: var(--mountain-lion-size);
+  left: calc(var(--mountain-lion-size) * -1);
+  top: var(--mountain-lion-top);
+}
+.mountain-lion img {
+  width: 100%;
 }
 
 .sidebar {
