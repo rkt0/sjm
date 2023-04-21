@@ -89,23 +89,6 @@ p {
 
 
 
-/* Preliminary sections */
-
-section.front .zone {
-  width:  300px;
-  height: 120px;
-}
-
-section.title .zone {
-  height: 360px;
-}
-
-section.instructions .zone {
-  height: 480px;
-}
-
-
-
 /* Gameplay section */
 
 div.gameplay {
@@ -149,6 +132,7 @@ div.gameplay {
   width:  var(--chipmunk-size);
   height: var(--chipmunk-size);
   pointer-events: none;
+  text-align: initial;
 }
 .chipmunk > img {
   position: absolute;
@@ -218,6 +202,42 @@ div.gameplay {
   .sidebar > .half.time-area {
     width: 90px;
   }
+}
+
+
+
+/* Preliminary sections */
+
+section.front .zone {
+  width:  300px;
+  height: 120px;
+}
+
+section.title .zone {
+  height: 540px;
+}
+.illustration {
+  width:  300px;
+  height: 300px;
+  border-radius: 50%;
+  background: url("img/grass.png");
+  transform: scale(0.8);
+}
+.illustration .chipmunk {
+  position: relative;
+  left: 0; top: 0;
+  margin: auto;
+  transform: translate(-5px, -5px) scale(4);
+}
+.illustration .money {
+  border: solid 0.5px #000;
+  font-size: calc(var(--chipmunk-size) * 0.2);
+  transform: scale(0.75) translateX(-22px)
+             rotate(-15deg);
+}
+
+section.instructions .zone {
+  height: 480px;
 }
 
 

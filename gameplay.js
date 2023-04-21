@@ -77,14 +77,19 @@ function placeChipmunk(chipmunk) {
     'flipped', chipmunk.velocity[0] < 0
   );
 }
+function makeChipmunkElement() {
+  const element = document.createElement('div');
+  element.classList.add('chipmunk');
+  const img = document.createElement('img');
+  img.src = 'img/chipmunk.png';
+  element.append(img);
+  return element;
+}
 function initializeChipmunks() {
+  const gameplayDiv = qs('div.gameplay');
   for (let i = 0; i < config.nChipmunks; i++) {
-    const element = document.createElement('div');
-    element.classList.add('chipmunk');
-    const img = document.createElement('img');
-    img.src = 'img/chipmunk.png';
-    element.append(img);
-    qs('div.gameplay').append(element);
+    const element = makeChipmunkElement();
+    gameplayDiv.append(element);
     const chipmunk = {element};
     chipmunk.position = [1, 0];
     chipmunk.velocity = [0, 0];
@@ -330,3 +335,11 @@ ael('div.gameplay', eType, e => {
     u => (u - config.fieldSize / 2) / config.boundary
   );
 });
+
+// Make title screen chipmunk
+{
+  const chipmunk = makeChipmunkElement();
+  const money = state.money.element.cloneNode(true);
+  chipmunk.append(money);
+  qs('.illustration').append(chipmunk);  
+}
