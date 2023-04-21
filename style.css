@@ -50,7 +50,8 @@ button {
   border: none;
   background: #0021a5;
   color: var(--light);
-  padding: 12px 24px;
+  width: 240px;
+  height: 60px;
   border-radius: 30px;
   box-sizing: border-box;
   cursor: pointer;
@@ -85,6 +86,11 @@ p {
   text-align: left;
   font-size: 24px;
   margin: 1em;
+}
+h1 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1;
 }
 
 
@@ -214,7 +220,7 @@ section.front .zone {
 }
 
 section.title .zone {
-  height: 540px;
+  height: min(100%, 600px)
 }
 .illustration {
   width:  300px;
@@ -222,6 +228,7 @@ section.title .zone {
   border-radius: 50%;
   background: url("img/grass.png");
   transform: scale(0.8);
+  margin-block: -30px;
 }
 .illustration .chipmunk {
   position: relative;
@@ -235,7 +242,6 @@ section.title .zone {
   transform: scale(0.75) translateX(-22px)
              rotate(-15deg);
 }
-
 section.instructions .zone {
   height: 480px;
 }
@@ -246,8 +252,4 @@ section.instructions .zone {
 
 div.result {
   height: 360px;
-}
-
-button.again {
-  width: 240px;
 }
