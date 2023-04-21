@@ -96,6 +96,7 @@ function initializeChipmunks() {
 }
 function activateChipmunks(timeInterval) {
   if (state.money.taken) return;
+  if (state.mountainLion.active) return;
   const t = state.time.total;
   if (state.nActive > t / 10) return;
   const rate = 0.1 + t * 0.03;
