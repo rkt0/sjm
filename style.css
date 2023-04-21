@@ -253,3 +253,6 @@ section.instructions .zone {
 div.result {
   height: 360px;
 }
+div.result .time-display {
+  font-size: 60px;
+}
