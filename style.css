@@ -68,7 +68,7 @@ section {
   width:  100%;
   flex-direction: column;
   transform: scale(0);
-  transition: transform 1s;
+  transition: transform 0.6s;
   position: absolute;
 }
 section.current {
