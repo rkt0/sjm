@@ -237,6 +237,7 @@ section.title .zone {
   margin-block: -30px;
 }
 .illustration .chipmunk {
+  --chipmunk-size: 60px;
   position: relative;
   left: 0; top: 0;
   margin: auto;
