@@ -67,9 +67,12 @@ section {
   height: 100%;
   width:  100%;
   flex-direction: column;
+  transform: scale(0);
+  transition: transform 1s;
+  position: absolute;
 }
-section:not(.current) {
-  display: none;
+section.current {
+  transform: scale(1);
 }
 
 .zone {

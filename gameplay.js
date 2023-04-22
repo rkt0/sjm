@@ -47,13 +47,17 @@ const state = {
 
 // Game flow functions
 function changeSection(to) {
-  qs('section.current').classList.remove('current');
-  qs(`section.${to}`).classList.add('current');
+  const currentSection = qs('section.current');
+  aelo(currentSection, 'transitionend', () => {
+    qs(`section.${to}`).classList.add('current');
+  });
+  currentSection.classList.remove('current');
 }
 function startGame() {
   fpsMeter.initialize('section.gameplay');
   state.chipmunks.length = 0;
-  for (const c of qsa('.chipmunk')) c.remove();
+  const oldChipmunks = qsa('.gameplay .chipmunk');
+  for (const c of oldChipmunks) c.remove();
   initializeChipmunks();
   initializeMountainLion();
   state.time.total = 0;
@@ -63,7 +67,9 @@ function startGame() {
   state.porchShoos = 0;
   qs('.porch').append(state.money.element);
   changeSection('gameplay');
-  requestAnimationFrame(update);
+  aelo('section.gameplay', 'transitionend', () => {
+    requestAnimationFrame(update);    
+  });
 }
 
 // Chipmunk functions
