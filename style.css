@@ -1,10 +1,10 @@
 /* General */
 
 :root {
-  --bg: #97999c;
-  --fg: #cdcfd3;
-  --dark: #16171a;
-  --light: #fff;
+  --dark: #1d1f23;
+  --bg: #c7c9c8;
+  --fg: var(--dark);
+  --btn-bg: #0021a5;
   --field-size: 540px;
   --chipmunk-size: 60px;
   --o: calc(
@@ -16,10 +16,16 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #4c4e51;
-    --fg: #8a8c8f;
-    --dark: #000;
-    --light: #cdcfd3;
+    --bg: #343741;
+    --fg: #d8d4d7;
+    --btn-fg: var(--fg);
+  }
+  button {
+    --half-border: solid 1px var(--fg);
+  }
+  .illustration {
+    --half-border: solid 1.5px var(--fg);
+    --money-bg: var(--fg);
   }
 }
 @media (max-width: 539px) {
@@ -38,7 +44,7 @@ body {
   margin: 0;
   overscroll-behavior: none;
   background: var(--bg);
-  color: var(--dark);
+  color: var(--fg);
   font: bold 30px Tahoma;
   user-select: none;
   -webkit-user-select: none;
@@ -47,9 +53,10 @@ body {
 
 button {
   font: inherit;
-  border: none;
-  background: #0021a5;
-  color: var(--light);
+  background: var(--btn-bg);
+  color: var(--btn-fg, #fff);
+  border:  var(--half-border, none);
+  outline: var(--half-border, none);
   width: 240px;
   height: 60px;
   border-radius: 30px;
@@ -79,7 +86,6 @@ section.current {
 }
 
 .zone {
-  background: var(--fg);
   box-sizing: border-box;
   flex-direction: column;
   justify-content: space-around;
@@ -107,6 +113,9 @@ div.gameplay {
   position: absolute;
   background: url("img/grass.png");
   background-size: cover;
+  background-origin: border-box;
+  border:  var(--half-border, none);
+  outline: var(--half-border, none);
   height: var(--field-size);
   width:  var(--field-size);
   overflow: hidden;
@@ -128,7 +137,8 @@ div.gameplay {
 
 .money {
   box-sizing: border-box;
-  background: #fff;
+  background: var(--money-bg, #fff);
+  color: var(--dark);
   width:  calc(var(--chipmunk-size) * 0.8);
   height: calc(var(--chipmunk-size) * 0.5);
   margin: 0 calc(var(--chipmunk-size) * 0.1);
@@ -195,9 +205,6 @@ div.gameplay {
 .sidebar button {
   width: 100%;
 }
-.sidebar .time-area {
-  color: var(--light);
-}
 
 @media (max-width: 959px) {
   div.gameplay {
@@ -226,10 +233,14 @@ section.title .zone {
   height: min(100%, 600px)
 }
 .illustration {
+  box-sizing: border-box;
   width:  300px;
   height: 300px;
   border-radius: 50%;
+  border:  var(--half-border, none);
+  outline: var(--half-border, none);
   background: url("img/grass.png");
+  background-origin: border-box;
   transform: scale(0.8);
   margin-block: -30px;
 }
@@ -241,7 +252,6 @@ section.title .zone {
   transform: translate(-5px, -5px) scale(4);
 }
 .illustration .money {
-  background: var(--light);
   border: solid 0.5px #000;
   font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)
