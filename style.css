@@ -195,9 +195,6 @@ div.gameplay {
 .sidebar button {
   width: 100%;
 }
-.sidebar button.play {
-  background: #22884c;
-}
 .sidebar .time-area {
   color: var(--light);
 }
@@ -244,6 +241,7 @@ section.title .zone {
   transform: translate(-5px, -5px) scale(4);
 }
 .illustration .money {
+  background: var(--light);
   border: solid 0.5px #000;
   font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)

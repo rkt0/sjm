@@ -329,7 +329,6 @@ for (const button of qsa('button.start-game')) {
 }
 ael('button.pause', eType, function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
-  this.classList.toggle('play', ! state.paused);
   state.paused = ! state.paused;
   state.time.lastStamp = null;
   if (! state.paused) requestAnimationFrame(update);
