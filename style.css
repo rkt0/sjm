@@ -38,6 +38,22 @@
   }
 }
 
+@font-face {
+  font-family: NotoSans;
+  src: url(font/notosans-400.ttf);
+  font-weight: 400;
+}
+@font-face {
+  font-family: NotoSans;
+  src: url(font/notosans-600.ttf);
+  font-weight: 600;
+}
+@font-face {
+  font-family: NotoSans;
+  src: url(font/notosans-800.ttf);
+  font-weight: 800;
+}
+
 body {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
@@ -45,7 +61,7 @@ body {
   overscroll-behavior: none;
   background: var(--bg);
   color: var(--fg);
-  font: bold 30px Tahoma;
+  font: 600 30px NotoSans;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
@@ -102,6 +118,7 @@ p {
 h1 {
   margin: 0;
   font-size: 48px;
+  font-weight: 800;
   line-height: 1;
 }
 
@@ -144,7 +161,7 @@ div.gameplay {
   margin: 0 calc(var(--chipmunk-size) * 0.1);
   border: solid 1px #555;
   font-size: calc(var(--chipmunk-size) * 0.25);
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .chipmunk {
@@ -270,4 +287,5 @@ div.result {
 }
 div.result .time-display {
   font-size: 60px;
+  font-weight: 800;
 }
