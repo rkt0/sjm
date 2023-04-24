@@ -1,10 +1,13 @@
 /* General */
 
 :root {
-  --dark: #1d1f23;
+  
+  --darkest: #1d1f23;
+  --lightest: #fff;
   --bg: #c7c9c8;
-  --fg: var(--dark);
-  --btn-bg: #0021a5;
+  --fg: var(--darkest);
+  --bdr: none;
+
   --field-size: 540px;
   --chipmunk-size: 60px;
   --o: calc(
@@ -13,24 +16,18 @@
   --porch-size: 108px;
   --mountain-lion-size: 360px;
   --mountain-lion-top: 210px;
+
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #343741;
     --fg: #d8d4d7;
-  }
-  button {
-    --btn-fg: var(--fg);
-    --half-border: solid 1px var(--btn-fg);
-  }
-  div.gameplay {
-    outline: solid 2px var(--fg);
-  }
-  .illustration {
-    --half-border: solid 1.5px var(--fg);
-    --money-bg: var(--fg);
+    --lightest: var(--fg);
+    --bdr: var(--fg);
   }
 }
+
 @media (max-width: 539px) {
   :root {
     --field-size: 360px;
@@ -72,10 +69,11 @@ body {
 
 button {
   font: inherit;
-  background: var(--btn-bg);
-  color: var(--btn-fg, #fff);
-  border:  var(--half-border, none);
-  outline: var(--half-border, none);
+  background: #0021a5;
+  color: var(--lightest);
+  --half-border: solid 1px var(--bdr);
+  border: var(--half-border);
+  outline: var(--half-border);
   width: 240px;
   height: 60px;
   border-radius: 30px;
@@ -90,18 +88,18 @@ button {
 }
 
 section {
+  position: absolute;
   height: 100%;
-  width:  100%;
+  width: 100%;
   flex-direction: column;
   transform: scale(0);
   transition: transform 0.6s 
-              cubic-bezier(0.33, 0, 0.67, 0.67);
-  position: absolute;
+      cubic-bezier(0.33, 0, 0.67, 0.67);
 }
 section.current {
   transform: scale(1);
   transition-timing-function:
-              cubic-bezier(0.33, 0.67, 0.67, 1);
+      cubic-bezier(0.33, 0.67, 0.67, 1);
 }
 
 .zone {
@@ -117,6 +115,7 @@ p {
   text-align: left;
   font-size: 24px;
   margin: 1em;
+  padding-left: 0.5em;
 }
 h1 {
   margin: 0;
@@ -131,22 +130,23 @@ h1 {
 
 div.gameplay {
   position: absolute;
-  background: url("img/grass.png");
+  background: url(img/grass.png);
   background-size: cover;
   background-origin: border-box;
   height: var(--field-size);
-  width:  var(--field-size);
+  width: var(--field-size);
   overflow: hidden;
+  outline: solid 2px var(--bdr);
 }
 
 .porch {
   box-sizing: border-box;
-  width:  var(--porch-size);
+  width: var(--porch-size);
   height: var(--porch-size);
   margin: calc(
     (var(--field-size) - var(--porch-size)) / 2
   );
-  background: url("img/porch.png");
+  background: url(img/porch.png);
   background-size: cover;
   background-origin: border-box;
   border: solid 1px #555;
@@ -155,12 +155,12 @@ div.gameplay {
 
 .money {
   box-sizing: border-box;
-  background: var(--money-bg, #fff);
-  color: var(--dark);
-  width:  calc(var(--chipmunk-size) * 0.8);
+  background: #fff;
+  color: var(--darkest);
+  width: calc(var(--chipmunk-size) * 0.8);
   height: calc(var(--chipmunk-size) * 0.5);
   margin: 0 calc(var(--chipmunk-size) * 0.1);
-  border: solid 1px #555;
+  border: solid 1px var(--darkest);
   font-size: calc(var(--chipmunk-size) * 0.25);
   font-weight: 400;
 }
@@ -168,21 +168,21 @@ div.gameplay {
 .chipmunk {
   position: absolute;
   left: var(--o);
-  top:  var(--o);
-  width:  var(--chipmunk-size);
+  top: var(--o);
+  width: var(--chipmunk-size);
   height: var(--chipmunk-size);
   pointer-events: none;
   text-align: initial;
 }
-.chipmunk > img {
+.chipmunk img {
   position: absolute;
-  width:  100%;
+  width: 100%;
   height: 100%;
 }
-.chipmunk.flipped > img {
+.chipmunk.flipped img {
   transform: scaleX(-1);
 }
-.chipmunk > .money {
+.chipmunk .money {
   position: relative;
   z-index: 1;
   --lr-offset: 40%;
@@ -191,21 +191,21 @@ div.gameplay {
   top: 40%;
   transform: rotate(var(--rotation));
 }
-.chipmunk.flipped > .money {
+.chipmunk.flipped .money {
   left: calc(-1 * var(--lr-offset));
   transform: rotate(calc(-1 * var(--rotation)));
 }
 
 .mountain-lion {
   position: absolute;
-  width:  var(--mountain-lion-size);
+  width: var(--mountain-lion-size);
   left: calc(var(--mountain-lion-size) * -1);
   top: var(--mountain-lion-top);
 }
-.mountain-lion > img {
+.mountain-lion img {
   width: 100%;
 }
-.mountain-lion > .money {
+.mountain-lion .money {
   position: absolute;
   top: calc(0.14 * var(--mountain-lion-size));
   left: calc(0.9 * var(--mountain-lion-size));
@@ -216,7 +216,7 @@ div.gameplay {
   justify-content: space-between;
   width: 900px;
 }
-.sidebar > .half {
+.sidebar .half {
   width: 150px;
   text-align: center;
 }
@@ -233,7 +233,7 @@ div.gameplay {
     justify-content: space-around;
     margin-top: 30px;
   }
-  .sidebar > .half.time-area {
+  .sidebar .half.time-area {
     width: 90px;
   }
 }
@@ -243,37 +243,38 @@ div.gameplay {
 /* Preliminary sections */
 
 section.front .zone {
-  width:  300px;
+  width: 300px;
   height: 120px;
 }
 
 section.title .zone {
-  height: min(100%, 600px)
+  height: min(100%, 600px);
 }
 .illustration {
   box-sizing: border-box;
-  width:  300px;
+  width: 300px;
   height: 300px;
   border-radius: 50%;
-  border:  var(--half-border, none);
-  outline: var(--half-border, none);
-  background: url("img/grass.png");
+  --half-border: solid 1.5px var(--bdr);
+  border: var(--half-border);
+  outline: var(--half-border);
+  background: url(img/grass.png);
   background-origin: border-box;
   transform: scale(0.8);
-  margin-block: -30px;
+  margin: -30px 0;
 }
 .illustration .chipmunk {
   --chipmunk-size: 60px;
   position: relative;
   left: 0; top: 0;
-  margin: auto;
   transform: translate(-5px, -5px) scale(4);
 }
 .illustration .money {
-  border: solid 0.5px #000;
+  background: var(--lightest);
+  border-width: 0.75px;
   font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)
-             rotate(-15deg);
+      rotate(-15deg);
 }
 section.instructions .zone {
   height: 480px;
