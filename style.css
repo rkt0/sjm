@@ -137,28 +137,6 @@ div.gameplay {
   width:  var(--field-size);
   overflow: hidden;
 }
-div.gameplay::before,
-div.gameplay::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  height: var(--field-size);
-  width:  var(--field-size);
-}
-div.gameplay::before {
-  background: linear-gradient(
-    0deg, 
-    var(--bg) 0%, #0000 5%, #0000 95%, var(--bg) 100%
-  );
-  z-index: 1;
-}
-div.gameplay::after {
-  background: linear-gradient(
-    90deg, 
-    var(--bg) 0%, #0000 5%, #0000 95%, var(--bg) 100%
-  );
-  z-index: 2;
-}
 
 .porch {
   box-sizing: border-box;
