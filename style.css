@@ -18,10 +18,13 @@
   :root {
     --bg: #343741;
     --fg: #d8d4d7;
-    --btn-fg: var(--fg);
   }
   button {
-    --half-border: solid 1px var(--fg);
+    --btn-fg: var(--fg);
+    --half-border: solid 1px var(--btn-fg);
+  }
+  div.gameplay {
+    outline: solid 2px var(--fg);
   }
   .illustration {
     --half-border: solid 1.5px var(--fg);
@@ -131,8 +134,6 @@ div.gameplay {
   background: url("img/grass.png");
   background-size: cover;
   background-origin: border-box;
-  border:  var(--half-border, none);
-  outline: var(--half-border, none);
   height: var(--field-size);
   width:  var(--field-size);
   overflow: hidden;
