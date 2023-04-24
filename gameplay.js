@@ -1,6 +1,7 @@
 import {qs, qsa, ael, aelo} from './utility.js';
 import {geometry} from './geometry.js';
 import {fpsMeter} from './fps-meter.js';
+import {music} from './music.js';
 
 const config = {
   nChipmunks: 36,
@@ -320,6 +321,7 @@ if (eType === 'touchstart') {
 // Attach event listeners
 aelo('section.front', eType, () => {
   changeSection('title');
+  music.next();
 });
 ael('button.show-instructions', eType, () => {
   changeSection('instructions');
