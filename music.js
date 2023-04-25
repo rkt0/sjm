@@ -3,12 +3,20 @@ import {qs, ael} from './utility.js';
 export const music = {
   element: qs('audio'),
   recentIds: [],
-  recentMax: 2,
+  recentMax: 6,
   playlist: [
     new Track(1, 'The Entertainer'),
     new Track(1, 'Maple Leaf Rag'),
+    new Track(1, 'Frogs Legs Rag'),
+    new Track(1, 'Onion Capers'),
+    new Track(1, 'Hyperfun'),
+    new Track(1, 'Gold Rush'),
     new Track(0, 'Fig Leaf Rag'),
-    new Track(0, 'Onion Capers'),
+    new Track(0, 'Lively Lumpsucker'),
+    new Track(0, 'Wagon Wheel'),
+    new Track(0, 'Merry Go'),
+    new Track(0, 'Hand Trolley'),         // ?
+    new Track(0, 'Hammock Fight'),        // ?
   ],
 };
 music.next = function() {
