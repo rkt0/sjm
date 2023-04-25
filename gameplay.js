@@ -308,10 +308,15 @@ function update(timeStamp) {
 
 }
 
-// Determine appropriate event type
-const eType = matchMedia('(hover: none)').matches ? 
-    'touchstart' : 'mousedown';
-if (eType === 'touchstart') {
+// Determine appropriate event types
+const eType = {};
+{
+  const touch = matchMedia('(hover: none)').matches;
+  eType.front = touch ? 'touchend' : 'click';
+  eType.button = touch ? 'touchstart' : 'click';
+  eType.shoo = touch ? 'touchstart' : 'mousedown';
+}
+if (eType.front !== 'click') {
   for (const span of qsa('span.click-or-touch')) {
     const cap = span.innerHTML.trim().startsWith('C');
     span.innerHTML = cap ? 'Touch' : 'touch';
@@ -319,23 +324,23 @@ if (eType === 'touchstart') {
 }
 
 // Attach event listeners
-aelo('section.front', eType, () => {
+aelo('section.front', eType.front, () => {
   changeSection('title');
   music.next();
 });
-ael('button.show-instructions', eType, () => {
+ael('.show-instructions', eType.button, () => {
   changeSection('instructions');
 });
 for (const button of qsa('button.start-game')) {
-  ael(button, eType, startGame);
+  ael(button, eType.button, startGame);
 }
-ael('button.pause', eType, function() {
+ael('.pause', eType.button, function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   state.paused = ! state.paused;
   state.time.lastStamp = null;
   if (! state.paused) requestAnimationFrame(update);
 });
-ael('div.gameplay', eType, e => {
+ael('div.gameplay', eType.shoo, e => {
   if (state.paused) return;
   const pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
