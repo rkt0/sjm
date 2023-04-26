@@ -157,6 +157,7 @@ function initializeMountainLion() {
 }
 function activateMountainLion() {
   if (state.mountainLion.active) return;
+  if (state.money.taken) return;
   for (const c of state.chipmunks) chaseChipmunk(c);
   state.nActive++;
   state.mountainLion.active = true;
