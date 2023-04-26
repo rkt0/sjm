@@ -315,12 +315,12 @@ const eType = {};
   eType.front = touch ? 'touchend' : 'click';
   eType.button = touch ? 'touchstart' : 'click';
   eType.shoo = touch ? 'touchstart' : 'mousedown';
-}
-if (eType.front !== 'click') {
-  for (const span of qsa('span.click-or-touch')) {
-    const cap = span.innerHTML.trim().startsWith('C');
-    span.innerHTML = cap ? 'Touch' : 'touch';
-  }  
+  if (touch) {
+    for (const s of qsa('span.click-or-touch')) {
+      const cap = s.innerHTML.trim().startsWith('C');
+      s.innerHTML = cap ? 'Touch' : 'touch';
+    }
+  }
 }
 
 // Attach event listeners
@@ -340,9 +340,19 @@ ael('.pause', eType.button, function() {
   state.time.lastStamp = null;
   if (! state.paused) requestAnimationFrame(update);
 });
-ael('div.gameplay', eType.shoo, e => {
+ael('div.gameplay', eType.shoo, function(e) {
   if (state.paused) return;
-  const pxOffset = [e.offsetX, e.offsetY];
+  let pxOffset;
+  if (eType.shoo === 'touchstart') {
+    if (! config.fieldLocation) {
+      const rect = this.getBoundingClientRect();
+      config.fieldLocation = [rect.x, rect.y];
+    }
+    const t = e.changedTouches[0];
+    const tLoc = [t.clientX, t.clientY];
+    const fLoc = config.fieldLocation;
+    pxOffset = [0, 1].map(u => tLoc[u] - fLoc[u]);
+  } else pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
     u => (u - config.fieldSize / 2) / config.boundary
   );
