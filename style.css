@@ -71,13 +71,12 @@ button {
   font: inherit;
   background: #0021a5;
   color: var(--lightest);
-  --half-border: solid 1px var(--bdr);
-  border: var(--half-border);
-  outline: var(--half-border);
-  width: 240px;
-  height: 60px;
-  border-radius: 30px;
-  box-sizing: border-box;
+  --bdr-width: 2px;
+  width: calc(240px + 2 * var(--bdr-width));
+  height: calc(60px + 2 * var(--bdr-width));
+  border-radius: calc(30px + var(--bdr-width));
+  border: solid var(--bdr-width) var(--bdr);
+  outline: none;
   cursor: pointer;
 }
 
@@ -252,14 +251,14 @@ section.title .zone {
 }
 .illustration {
   box-sizing: border-box;
-  width: 300px;
-  height: 300px;
+  --bdr-width: 3px;
+  --size: calc(300px + 2 * var(--bdr-width));
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
-  --half-border: solid 1.5px var(--bdr);
-  border: var(--half-border);
-  outline: var(--half-border);
+  border: solid var(--bdr-width) var(--bdr);
   background: url(img/grass.png);
-  background-origin: border-box;
+  background-position: center;
   transform: scale(0.8);
   margin: -30px 0;
 }
