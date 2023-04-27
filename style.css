@@ -87,6 +87,7 @@ button {
 }
 
 section {
+  display: none;
   position: absolute;
   height: 100%;
   width: 100%;

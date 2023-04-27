@@ -366,3 +366,8 @@ ael('div.gameplay', eType.shoo, function(e) {
   chipmunk.append(money);
   qs('.illustration').append(chipmunk);  
 }
+
+// Override display property of section style
+for (const section of qsa('section')) {
+  section.style.display = 'flex';
+}
