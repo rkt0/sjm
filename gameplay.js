@@ -327,7 +327,7 @@ const eType = {};
 // Attach event listeners
 aelo('section.front', eType.front, () => {
   changeSection('title');
-  music.next();
+  music.start();
 });
 ael('.show-instructions', eType.button, () => {
   changeSection('instructions');

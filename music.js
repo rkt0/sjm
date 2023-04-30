@@ -2,8 +2,10 @@ import {qs, ael} from './utility.js';
 
 export const music = {
   element: qs('audio'),
-  recentIds: [],
-  recentMax: 6,
+  recent: [],
+  recentMax: 6,   // number of recent tracks to store
+  daysFresh: 7,   // number of days to store
+  firstId: 0,     // id to play if no recent tracks
   playlist: [
     new Track(1, 'The Entertainer'),
     new Track(1, 'Maple Leaf Rag'),
@@ -19,11 +21,27 @@ export const music = {
     new Track(0, 'Hammock Fight'),        // ?
   ],
 };
+music.start = function() {
+  const rString = localStorage.getItem('recentMusic');
+  const rFull = JSON.parse(rString) ?? [];
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const old = Date.now() - msPerDay * this.daysFresh;
+  this.recent = rFull.filter(x => x.timestamp > old);
+  this.play(this.recent.shift()?.id ?? this.firstId);
+};
+music.play = function(id) {
+  const {element, recent} = this;
+  element.src = this.playlist[id].src;
+  element.play();
+  recent.unshift({id, timestamp: Date.now()});
+  if (recent.length > this.recentMax) recent.pop();
+  const rString = JSON.stringify(recent);
+  localStorage.setItem('recentMusic', rString);
+};
 music.next = function() {
-  const {recentIds: rIds, recentMax: rMax} = this;
-  const rFrac = rIds.length / rMax;
+  const recentIds = this.recent.map(x => x.id);
   const weights = this.playlist.map(
-    (e, i) => rIds.includes(i) ? 0 : rFrac + e.good
+    (e, i) => recentIds.includes(i) ? 0 : 1 + e.good
   );
   const n = weights.length;
   const cdf = [];
@@ -35,12 +53,8 @@ music.next = function() {
   const rand = Math.random();
   let nextId = 0;
   while (cdf[nextId] < rand) nextId++;
-  this.element.src = this.playlist[nextId].src;
-  this.element.play();
-  if (rIds.unshift(nextId) > rMax) rIds.pop();
+  this.play(nextId);
 };
-
-ael(music.element, 'ended', () => music.next());
 
 function Track(good, title) {
   this.src = `audio/${
@@ -48,3 +62,5 @@ function Track(good, title) {
   }.mp3`;
   this.good = good;
 }
+
+ael(music.element, 'ended', () => music.next());
