@@ -339,6 +339,7 @@ ael('.pause', eType.button, function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   state.paused = ! state.paused;
   state.time.lastStamp = null;
+  music.element[state.paused ? 'pause' : 'play']();
   if (! state.paused) requestAnimationFrame(update);
 });
 ael('div.gameplay', eType.shoo, function(e) {
