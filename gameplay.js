@@ -5,6 +5,7 @@ import music from './music.js';
 
 const config = {
   fpsMeterOn: false,
+  musicOn: false,
   nChipmunks: 36,
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
@@ -329,7 +330,7 @@ const eType = {};
 // Attach event listeners
 aelo('section.front', eType.front, () => {
   changeSection('title');
-  music.start();
+  if (config.musicOn) music.start();
 });
 ael('.show-instructions', eType.button, () => {
   changeSection('instructions');
@@ -341,7 +342,9 @@ ael('.pause', eType.button, function() {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
   state.paused = ! state.paused;
   state.time.lastStamp = null;
-  music.element[state.paused ? 'pause' : 'play']();
+  if (config.musicOn) {
+    music.element[state.paused ? 'pause' : 'play']();
+  }
   if (! state.paused) requestAnimationFrame(update);
 });
 ael('div.gameplay', eType.shoo, function(e) {
