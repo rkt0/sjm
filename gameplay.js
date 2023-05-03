@@ -1,7 +1,7 @@
 import {qs, qsa, ael, aelo} from './utility.js';
-import {geometry} from './geometry.js';
-import {fpsMeter} from './fps-meter.js';
-import {music} from './music.js';
+import geometry from './geometry.js';
+import fpsMeter from './fps-meter.js';
+import music from './music.js';
 
 const config = {
   nChipmunks: 36,

@@ -1,4 +1,4 @@
-export const geometry = {
+export default {
 
   // Get angle of vector from 0 to 2π
   angle(vector) {

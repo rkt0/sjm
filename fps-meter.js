@@ -1,4 +1,4 @@
-export const fpsMeter = {
+export default {
   initialize(whereSelector) {
     this.count = 0;
     this.time = 0;

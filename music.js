@@ -1,6 +1,7 @@
 import {qs, ael} from './utility.js';
 
-export const music = {
+export {music as default};
+const music = {
   element: qs('audio'),
   recent: [],
   recentMax: 4,   // number of recent tracks to store
