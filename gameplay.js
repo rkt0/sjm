@@ -5,7 +5,7 @@ import music from './music.js';
 
 const config = {
   fpsMeterOn: false,
-  musicOn: false,
+  musicOn: true,
   nChipmunks: 36,
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
