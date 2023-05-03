@@ -10,6 +10,10 @@ export default {
     div.classList.add('fps-counter');
     document.querySelector(whereSelector).append(div);
     this.element = div;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'fps-meter.css';
+    document.head.append(link);
   },
   tick(elapsedTime) {
     this.count++;
