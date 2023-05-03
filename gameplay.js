@@ -4,6 +4,7 @@ import fpsMeter from './fps-meter.js';
 import music from './music.js';
 
 const config = {
+  fpsMeterOn: false,
   nChipmunks: 36,
   chipmunkRate: 1,
   chipmunkSpeed: 0.5,
@@ -55,7 +56,6 @@ function changeSection(to) {
   currentSection.classList.remove('current');
 }
 function startGame() {
-  fpsMeter.initialize('section.gameplay');
   state.chipmunks.length = 0;
   const oldChipmunks = qsa('.gameplay .chipmunk');
   for (const c of oldChipmunks) c.remove();
@@ -71,6 +71,8 @@ function startGame() {
   aelo('section.gameplay', 'transitionend', () => {
     requestAnimationFrame(update);    
   });
+  if (! config.fpsMeterOn) return;
+  fpsMeter.initialize('section.gameplay');
 }
 
 // Chipmunk functions
@@ -293,7 +295,7 @@ function update(timeStamp) {
   }
   
   // Timekeeping
-  fpsMeter.tick(elapsed);
+  if (config.fpsMeterOn) fpsMeter.tick(elapsed);
   state.time.lastStamp = timeStamp;
 
   // Check if game is over
