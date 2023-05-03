@@ -7,6 +7,7 @@ const music = {
   recentMax: 4,   // number of recent tracks to store
   daysFresh: 7,   // number of days to store
   firstId: 0,     // id to play if no recent tracks
+  restartsMax: 2,
   playlist: [
     new Track(1, 'The Entertainer'),
     new Track(1, 'Maple Leaf Rag'),
@@ -24,22 +25,29 @@ music.start = function() {
   const rFull = JSON.parse(rString) ?? [];
   const msPerDay = 1000 * 60 * 60 * 24;
   const old = Date.now() - msPerDay * this.daysFresh;
-  this.recent = rFull.filter(x => x.timestamp > old);
-  this.play(this.recent.shift()?.id ?? this.firstId);
+  this.recent = rFull.filter(x => x.time > old);
+  const last = this.recent.shift();
+  if (! last) this.play(this.firstId);
+  else {
+    const {id, restarts} = last;
+    if (restarts >= this.restartsMax) this.next(id);
+    else this.play(id, restarts + 1);
+  }
 };
-music.play = function(id) {
+music.play = function(id, restarts = 0) {
   const {element, recent} = this;
   element.src = this.playlist[id].src;
   element.play();
-  recent.unshift({id, timestamp: Date.now()});
+  recent.unshift({id, time: Date.now(), restarts});
   if (recent.length > this.recentMax) recent.pop();
   const rString = JSON.stringify(recent);
   localStorage.setItem('recentMusic', rString);
 };
-music.next = function() {
-  const recentIds = this.recent.map(x => x.id);
+music.next = function(otherIdToAvoid) {
+  const idsToAvoid = this.recent.map(x => x.id);
+  idsToAvoid.push(otherIdToAvoid);
   const weights = this.playlist.map(
-    (e, i) => recentIds.includes(i) ? 0 : 1 + e.good
+    (e, i) => idsToAvoid.includes(i) ? 0 : 1 + e.good
   );
   const n = weights.length;
   const cdf = [];
