@@ -4,9 +4,9 @@ export {music as default};
 const music = {
   element: qs('audio'),
   recent: [],
-  recentMax: 4,   // number of recent tracks to store
-  daysFresh: 7,   // number of days to store
-  firstId: 0,     // id to play if no recent tracks
+  recentMax: 4,
+  daysFresh: 7,
+  firstId: 0,
   restartsMax: 2,
   playlist: [
     new Track(1, 'The Entertainer'),
