@@ -8,12 +8,12 @@ const config = {
   musicOn: true,
   nChipmunks: 36,
   chipmunkRate: 1,
-  chipmunkSpeed: 0.5,
+  chipmunkSpeed: 0.375,
   chipmunkFleeSpeed: 1,
-  shooRadius: 0.3,
+  shooRadius: 0.375,
 };
 
-// Get field and chipmunk sizes from CSS
+// Get sizes from CSS
 {
   function cssInt(property, selector = ':root') {
     const s = getComputedStyle(qs(selector));
