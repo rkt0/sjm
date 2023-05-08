@@ -76,6 +76,7 @@ function startGame() {
   state.shooPosition = null;
   state.porch.shakeTimer = 0;
   state.porch.disturbance = 0;
+  state.porch.element.classList.remove('shaking');
   state.porch.element.append(state.money.element);
   changeSection('gameplay');
   aelo('section.gameplay', 'transitionend', () => {
@@ -375,6 +376,9 @@ ael('.pause', eType.button, function() {
   if (config.musicOn) {
     music.element[state.paused ? 'pause' : 'play']();
   }
+  state.porch.element.classList.toggle(
+    'paused', state.paused
+  );
   if (! state.paused) requestAnimationFrame(update);
 });
 ael('div.gameplay', eType.shoo, function(e) {

@@ -158,6 +158,9 @@ div.gameplay {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
+.porch.shaking.paused {
+  animation-play-state: paused;
+}
 @keyframes shake-porch {
   0%, 50%, 100% {transform: translateY(0);}
   25% {transform: translateY(6px);}
