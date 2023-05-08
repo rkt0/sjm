@@ -10,6 +10,7 @@ const config = {
   chipmunkRate: 1,
   chipmunkSpeed: 0.375,
   chipmunkFleeSpeed: 1,
+  chipmunkMoneySpeed: 0.625,
   shooRadius: 0.375,
   porchShakeTime: 0.6,
   porchDisturbancePerShoo: 1,
@@ -141,7 +142,9 @@ function activateChipmunks(timeInterval) {
   placeChipmunk(c);
 }
 function chaseChipmunk(chipmunk, angle = 0) {
-  const speed = config.chipmunkFleeSpeed;
+  const speed = chipmunk.hasMoney ?
+      config.chipmunkMoneySpeed :
+      config.chipmunkFleeSpeed;
   chipmunk.velocity[0] = Math.cos(angle) * speed;
   chipmunk.velocity[1] = Math.sin(angle) * speed;
   chipmunk.fleeing = true;
@@ -151,10 +154,11 @@ function giveChipmunkMoney(chipmunk) {
   for (let d = 0; d < 2; d++) {
     chipmunk.position[d] = 0;
     chipmunk.velocity[d] =
-        v[d] * config.chipmunkFleeSpeed;
+        v[d] * config.chipmunkMoneySpeed;
   }
   chipmunk.element.append(state.money.element);
   chipmunk.fleeing = true;
+  chipmunk.hasMoney = true;
   state.money.taken = true;
 }
 
