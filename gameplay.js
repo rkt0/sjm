@@ -82,7 +82,7 @@ function startGame() {
   state.porch.element.append(state.money.element);
   changeSection('gameplay');
   aelo('section.gameplay', 'transitionend', () => {
-    requestAnimationFrame(update);    
+    requestAnimationFrame(update);
   });
   if (! config.fpsMeterOn) return;
   fpsMeter.initialize('section.gameplay');
@@ -185,7 +185,7 @@ function activateMountainLion() {
   state.mountainLion.position = 0;
 }
 function placeMountainLion() {
-  const loc = 
+  const loc =
       state.mountainLion.position * config.mlTrack;
   const xf = `translateX(${loc}px)`;
   state.mountainLion.element.style.transform = xf;
@@ -199,7 +199,7 @@ function giveMountainLionMoney() {
 
 // Shoo function
 function shoo() {
-  
+
   // Skip if mountain lion is active
   if (state.mountainLion.active) return;
 
@@ -234,17 +234,17 @@ function shoo() {
     let dAngle = geometry.angle(dPos);
     if (dAngle - cAngle > pi) dAngle -= 2 * pi;
     if (cAngle - dAngle > pi) cAngle -= 2 * pi;
-    
+
     // Chase chipmunk away from both origin and shoo
     const a0 = Math.max(cAngle, dAngle) - pi / 2;
     const a1 = Math.min(cAngle, dAngle) + pi / 2;
     chaseChipmunk(c, a0 + Math.random() * (a1 - a0));
 
   }
-  
+
   // Reset shoo position
   state.shooPosition = null;
-  
+
   // Porch and mountain lion
   if (onPorch && ! state.money.taken) {
     const p = state.porch;
@@ -255,12 +255,12 @@ function shoo() {
       activateMountainLion();
     }
   }
-  
+
 }
 
 // Game loop function
 function update(timeStamp) {
-  
+
   // Timekeeping
   state.time.lastStamp ??= timeStamp;
   const elapsed = 0.001 * (
@@ -270,21 +270,21 @@ function update(timeStamp) {
   state.time.element.innerHTML = Math.trunc(
     state.time.total
   );
-  
+
   // Possibly activate chipmunk
   activateChipmunks(elapsed);
-  
+
   // Deal with each chipmunk
   for (const c of state.chipmunks) {
-    
+
     // Skip if inactive
     if (! c.active) continue;
-    
+
     // Position and velocity
     const {position, velocity} = c;
     const oldPosition = [...position];
-    
-    // Adjust chipmunk position 
+
+    // Adjust chipmunk position
     // while checking if it crosses origin (money)
     let cross = false;
     for (let d = 0; d < 2; d++) {
@@ -294,19 +294,19 @@ function update(timeStamp) {
     if (cross && ! c.fleeing && ! state.money.taken) {
       giveChipmunkMoney(c);
     }
-    
+
     // All chipmunks flee once money is taken
     if (! c.fleeing && state.money.taken) {
       chaseChipmunk(c, geometry.angle(position));
     }
-    
+
     // Place chipmunk; deactivate if out of bounds
     placeChipmunk(c);
     c.active = position.every(u => Math.abs(u) < 1);
     if (! c.active) state.nActive--;
 
   }
-  
+
   // Decrease porch timers
   {
     const p = state.porch;
@@ -318,10 +318,10 @@ function update(timeStamp) {
     p.disturbance -= elapsed;
     if (p.disturbance < 0) p.disturbance = 0;
   }
-  
+
   // Shoo chipmunks
   if (state.shooPosition) shoo();
-  
+
   // Mountain lion
   if (state.mountainLion.active) {
     const ml = state.mountainLion;
@@ -331,7 +331,7 @@ function update(timeStamp) {
     ml.active = ml.position < 1;
     if (! ml.active) state.nActive--;
   }
-  
+
   // Timekeeping
   if (config.fpsMeterOn) fpsMeter.tick(elapsed);
   state.time.lastStamp = timeStamp;
@@ -343,7 +343,7 @@ function update(timeStamp) {
     changeSection('game-over');
     return;
   }
-  
+
   // Loop
   if (! state.paused) requestAnimationFrame(update);
 
@@ -410,7 +410,7 @@ ael('div.gameplay', eType.shoo, function(e) {
   const chipmunk = makeChipmunkElement();
   const money = state.money.element.cloneNode(true);
   chipmunk.append(money);
-  qs('.illustration').append(chipmunk);  
+  qs('.illustration').append(chipmunk);
 }
 
 // Override display property of section style
