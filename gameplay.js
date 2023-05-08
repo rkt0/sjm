@@ -5,12 +5,15 @@ import music from './music.js';
 
 const config = {
   fpsMeterOn: false,
-  musicOn: true,
+  musicOn: false,
   nChipmunks: 36,
   chipmunkRate: 1,
   chipmunkSpeed: 0.375,
   chipmunkFleeSpeed: 1,
   shooRadius: 0.375,
+  porchShakeTime: 0.6,
+  porchDisturbancePerShoo: 1,
+  porchDisturbanceMax: 4,
 };
 
 // Get sizes from CSS
@@ -43,7 +46,11 @@ const state = {
     taken: false,
     element: qs('.money')
   },
-  porchShoos: 0,
+  porch: {
+    element: qs('.porch'),
+    shakeTimer: 0,
+    disturbance: 0,
+  },
   mountainLion: {active: false},
   nActive: 0,
 };
@@ -66,8 +73,10 @@ function startGame() {
   state.time.element.innerHTML = 0;
   state.time.lastStamp = null;
   state.money.taken = false;
-  state.porchShoos = 0;
-  qs('.porch').append(state.money.element);
+  state.shooPosition = null;
+  state.porch.shakeTimer = 0;
+  state.porch.disturbance = 0;
+  state.porch.element.append(state.money.element);
   changeSection('gameplay');
   aelo('section.gameplay', 'transitionend', () => {
     requestAnimationFrame(update);    
@@ -192,7 +201,6 @@ function shoo() {
   const onPorch = sPos.every(
     u => Math.abs(u) < config.porch
   );
-  if (onPorch) state.porchShoos++;
 
   // Handle each chipmunk
   for (const c of state.chipmunks) {
@@ -228,8 +236,16 @@ function shoo() {
   // Reset shoo position
   state.shooPosition = null;
   
-  // Mountain lion
-  if (state.porchShoos > 5) activateMountainLion();
+  // Porch and mountain lion
+  if (onPorch && ! state.money.taken) {
+    const p = state.porch;
+    p.element.classList.add('shaking');
+    p.shakeTimer = config.porchShakeTime;
+    p.disturbance += config.porchDisturbancePerShoo;
+    if (p.disturbance > config.porchDisturbanceMax) {
+      activateMountainLion();
+    }
+  }
   
 }
 
@@ -281,18 +297,32 @@ function update(timeStamp) {
     if (! c.active) state.nActive--;
 
   }
-
+  
+  // Decrease porch timers
+  {
+    const p = state.porch;
+    p.shakeTimer -= elapsed;
+    if (p.shakeTimer < 0) {
+      p.shakeTimer = 0;
+      p.element.classList.remove('shaking');
+    }
+    p.disturbance -= elapsed;
+    if (p.disturbance < 0) p.disturbance = 0;
+  }
+  
   // Shoo chipmunks
   if (state.shooPosition) shoo();
   
   // Mountain lion
-  const ml = state.mountainLion;
-  if (ml.active && state.nActive === 1) {
-    ml.position += ml.velocity * elapsed;
-    placeMountainLion(ml.position);
-    if (ml.position > 0.3) giveMountainLionMoney();
-    ml.active = ml.position < 1;
-    if (! ml.active) state.nActive--;
+  {
+    const ml = state.mountainLion;
+    if (ml.active && state.nActive === 1) {
+      ml.position += ml.velocity * elapsed;
+      placeMountainLion(ml.position);
+      if (ml.position > 0.3) giveMountainLionMoney();
+      ml.active = ml.position < 1;
+      if (! ml.active) state.nActive--;
+    }    
   }
   
   // Timekeeping
