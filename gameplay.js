@@ -5,7 +5,7 @@ import music from './music.js';
 
 const config = {
   fpsMeterOn: false,
-  musicOn: false,
+  musicOn: true,
   nChipmunks: 36,
   chipmunkRate: 1,
   chipmunkSpeed: 0.375,
@@ -134,8 +134,9 @@ function activateChipmunks(timeInterval) {
   c.active = true;
   c.fleeing = false;
   c.position = geometry.randomUnitSupNormVector();
+  const distance = Math.hypot(...c.position);
   c.velocity = c.position.map(
-    u => -u * config.chipmunkSpeed
+    u => - u * config.chipmunkSpeed / distance
   );
   placeChipmunk(c);
 }
