@@ -15,6 +15,7 @@ const config = {
   porchShakeTime: 0.6,
   porchDisturbancePerShoo: 1,
   porchDisturbanceMax: 4,
+  mountainLionSpeed: 0.75,
 };
 
 // Get sizes from CSS
@@ -170,8 +171,10 @@ function initializeMountainLion() {
   img.src = 'img/mountain-lion.png';
   element.append(img);
   qs('div.gameplay').append(element);
-  state.mountainLion.element = element;
-  state.mountainLion.velocity = 0.2;
+  const ml = state.mountainLion;
+  ml.element = element;
+  const ratio = config.boundary / config.mlTrack;
+  ml.velocity = config.mountainLionSpeed * ratio;
 }
 function activateMountainLion() {
   if (state.mountainLion.active) return;
@@ -320,15 +323,13 @@ function update(timeStamp) {
   if (state.shooPosition) shoo();
   
   // Mountain lion
-  {
+  if (state.mountainLion.active) {
     const ml = state.mountainLion;
-    if (ml.active && state.nActive === 1) {
-      ml.position += ml.velocity * elapsed;
-      placeMountainLion(ml.position);
-      if (ml.position > 0.3) giveMountainLionMoney();
-      ml.active = ml.position < 1;
-      if (! ml.active) state.nActive--;
-    }    
+    ml.position += ml.velocity * elapsed;
+    placeMountainLion(ml.position);
+    if (ml.position > 0.3) giveMountainLionMoney();
+    ml.active = ml.position < 1;
+    if (! ml.active) state.nActive--;
   }
   
   // Timekeeping
