@@ -1,5 +1,4 @@
 export default {
-
   // Get angle of vector from 0 to 2π
   angle(vector) {
     const s = Math.atan2(vector[1], vector[0]);
@@ -26,5 +25,4 @@ export default {
     const b = u & 1 ? -1 : 1;
     return u & 2 ? [a, b] : [b, a];
   },
-
 };

@@ -1,4 +1,4 @@
-import {qs, qsa, ael, aelo} from './utility.js';
+import { ael, aelo, qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import music from './music.js';
@@ -19,11 +19,11 @@ const config = {
 };
 
 // Get sizes from CSS
+function cssInt(property, selector = ':root') {
+  const s = getComputedStyle(qs(selector));
+  return parseInt(s.getPropertyValue(property));
+}
 {
-  function cssInt(property, selector = ':root') {
-    const s = getComputedStyle(qs(selector));
-    return parseInt(s.getPropertyValue(property));
-  }
   const fieldSize = cssInt('--field-size');
   const chipmunkSize = cssInt('--chipmunk-size');
   const porchSize = cssInt('--porch-size');
@@ -46,14 +46,14 @@ const state = {
   paused: false,
   money: {
     taken: false,
-    element: qs('.money')
+    element: qs('.money'),
   },
   porch: {
     element: qs('.porch'),
     shakeTimer: 0,
     disturbance: 0,
   },
-  mountainLion: {active: false},
+  mountainLion: { active: false },
   nActive: 0,
 };
 
@@ -84,19 +84,20 @@ function startGame() {
   aelo('section.gameplay', 'transitionend', () => {
     requestAnimationFrame(update);
   });
-  if (! config.fpsMeterOn) return;
+  if (!config.fpsMeterOn) return;
   fpsMeter.initialize('section.gameplay');
 }
 
 // Chipmunk functions
 function placeChipmunk(chipmunk) {
   const loc = chipmunk.position.map(
-    u => u * config.boundary
+    (u) => u * config.boundary,
   );
   const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
   chipmunk.element.style.transform = xf;
   chipmunk.element.classList.toggle(
-    'flipped', chipmunk.velocity[0] < 0
+    'flipped',
+    chipmunk.velocity[0] < 0,
   );
 }
 function makeChipmunkElement() {
@@ -112,7 +113,7 @@ function initializeChipmunks() {
   for (let i = 0; i < config.nChipmunks; i++) {
     const element = makeChipmunkElement();
     gameplayDiv.append(element);
-    const chipmunk = {element};
+    const chipmunk = { element };
     chipmunk.position = [1, 0];
     chipmunk.velocity = [0, 0];
     chipmunk.active = false;
@@ -128,24 +129,24 @@ function activateChipmunks(timeInterval) {
   if (state.nActive > t / 10) return;
   const rate = 0.1 + t * 0.03;
   let probability = rate * timeInterval;
-  if (t > 2 && ! state.nActive) probability = 1;
+  if (t > 2 && !state.nActive) probability = 1;
   if (Math.random() > probability) return;
-  const c = state.chipmunks.find(c => ! c.active);
-  if (! c) return;
+  const c = state.chipmunks.find((c) => !c.active);
+  if (!c) return;
   state.nActive++;
   c.active = true;
   c.fleeing = false;
   c.position = geometry.randomUnitSupNormVector();
   const distance = Math.hypot(...c.position);
   c.velocity = c.position.map(
-    u => - u * config.chipmunkSpeed / distance
+    (u) => -u * config.chipmunkSpeed / distance,
   );
   placeChipmunk(c);
 }
 function chaseChipmunk(chipmunk, angle = 0) {
-  const speed = chipmunk.hasMoney ?
-      config.chipmunkMoneySpeed :
-      config.chipmunkFleeSpeed;
+  const speed = chipmunk.hasMoney
+    ? config.chipmunkMoneySpeed
+    : config.chipmunkFleeSpeed;
   chipmunk.velocity[0] = Math.cos(angle) * speed;
   chipmunk.velocity[1] = Math.sin(angle) * speed;
   chipmunk.fleeing = true;
@@ -154,8 +155,8 @@ function giveChipmunkMoney(chipmunk) {
   const v = geometry.randomUnitVector();
   for (let d = 0; d < 2; d++) {
     chipmunk.position[d] = 0;
-    chipmunk.velocity[d] =
-        v[d] * config.chipmunkMoneySpeed;
+    chipmunk.velocity[d] = v[d] *
+      config.chipmunkMoneySpeed;
   }
   chipmunk.element.append(state.money.element);
   chipmunk.fleeing = true;
@@ -185,8 +186,8 @@ function activateMountainLion() {
   state.mountainLion.position = 0;
 }
 function placeMountainLion() {
-  const loc =
-      state.mountainLion.position * config.mlTrack;
+  const loc = state.mountainLion.position *
+    config.mlTrack;
   const xf = `translateX(${loc}px)`;
   state.mountainLion.element.style.transform = xf;
 }
@@ -199,27 +200,24 @@ function giveMountainLionMoney() {
 
 // Shoo function
 function shoo() {
-
   // Skip if mountain lion is active
   if (state.mountainLion.active) return;
 
   // Compute values that do not depend on chipmunk
   const sPos = state.shooPosition;
-  const sAngle = geometry.angle(sPos);
   const pi = Math.PI;
   const onPorch = sPos.every(
-    u => Math.abs(u) < config.porch
+    (u) => Math.abs(u) < config.porch,
   );
 
   // Handle each chipmunk
   for (const c of state.chipmunks) {
-
     // Skip if inactive
-    if (! c.active) continue;
+    if (!c.active) continue;
 
     // Compute values specific to chipmunk
     const cPos = c.position;
-    const dPos = [0, 1].map(i => cPos[i] - sPos[i]);
+    const dPos = [0, 1].map((i) => cPos[i] - sPos[i]);
     const dNorm = Math.hypot(...dPos);
 
     // Skip if shoo is too far away
@@ -227,7 +225,7 @@ function shoo() {
 
     // Skip if shoo is on wrong side of porch
     const csAngle = geometry.angleBetween(cPos, sPos);
-    if (! onPorch && csAngle > pi / 2) continue;
+    if (!onPorch && csAngle > pi / 2) continue;
 
     // Angles must be within π of each other
     let cAngle = geometry.angle(cPos);
@@ -239,14 +237,13 @@ function shoo() {
     const a0 = Math.max(cAngle, dAngle) - pi / 2;
     const a1 = Math.min(cAngle, dAngle) + pi / 2;
     chaseChipmunk(c, a0 + Math.random() * (a1 - a0));
-
   }
 
   // Reset shoo position
   state.shooPosition = null;
 
   // Porch and mountain lion
-  if (onPorch && ! state.money.taken) {
+  if (onPorch && !state.money.taken) {
     const p = state.porch;
     p.element.classList.add('shaking');
     p.shakeTimer = config.porchShakeTime;
@@ -255,12 +252,10 @@ function shoo() {
       activateMountainLion();
     }
   }
-
 }
 
 // Game loop function
 function update(timeStamp) {
-
   // Timekeeping
   state.time.lastStamp ??= timeStamp;
   const elapsed = 0.001 * (
@@ -268,7 +263,7 @@ function update(timeStamp) {
   );
   state.time.total += elapsed;
   state.time.element.innerHTML = Math.trunc(
-    state.time.total
+    state.time.total,
   );
 
   // Possibly activate chipmunk
@@ -276,12 +271,11 @@ function update(timeStamp) {
 
   // Deal with each chipmunk
   for (const c of state.chipmunks) {
-
     // Skip if inactive
-    if (! c.active) continue;
+    if (!c.active) continue;
 
     // Position and velocity
-    const {position, velocity} = c;
+    const { position, velocity } = c;
     const oldPosition = [...position];
 
     // Adjust chipmunk position
@@ -291,20 +285,19 @@ function update(timeStamp) {
       position[d] += velocity[d] * elapsed;
       cross ||= position[d] * oldPosition[d] < 0;
     }
-    if (cross && ! c.fleeing && ! state.money.taken) {
+    if (cross && !c.fleeing && !state.money.taken) {
       giveChipmunkMoney(c);
     }
 
     // All chipmunks flee once money is taken
-    if (! c.fleeing && state.money.taken) {
+    if (!c.fleeing && state.money.taken) {
       chaseChipmunk(c, geometry.angle(position));
     }
 
     // Place chipmunk; deactivate if out of bounds
     placeChipmunk(c);
-    c.active = position.every(u => Math.abs(u) < 1);
-    if (! c.active) state.nActive--;
-
+    c.active = position.every((u) => Math.abs(u) < 1);
+    if (!c.active) state.nActive--;
   }
 
   // Decrease porch timers
@@ -329,7 +322,7 @@ function update(timeStamp) {
     placeMountainLion(ml.position);
     if (ml.position > 0.3) giveMountainLionMoney();
     ml.active = ml.position < 1;
-    if (! ml.active) state.nActive--;
+    if (!ml.active) state.nActive--;
   }
 
   // Timekeeping
@@ -337,7 +330,7 @@ function update(timeStamp) {
   state.time.lastStamp = timeStamp;
 
   // Check if game is over
-  if (state.money.taken && ! state.nActive) {
+  if (state.money.taken && !state.nActive) {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     changeSection('game-over');
@@ -345,8 +338,7 @@ function update(timeStamp) {
   }
 
   // Loop
-  if (! state.paused) requestAnimationFrame(update);
-
+  if (!state.paused) requestAnimationFrame(update);
 }
 
 // Determine appropriate event types
@@ -375,33 +367,35 @@ ael('.show-instructions', eType.button, () => {
 for (const button of qsa('button.start-game')) {
   ael(button, eType.button, startGame);
 }
-ael('.pause', eType.button, function() {
+ael('.pause', eType.button, function () {
   this.innerHTML = state.paused ? 'Pause' : 'Play';
-  state.paused = ! state.paused;
+  state.paused = !state.paused;
   state.time.lastStamp = null;
   if (config.musicOn) {
     music.element[state.paused ? 'pause' : 'play']();
   }
   state.porch.element.classList.toggle(
-    'paused', state.paused
+    'paused',
+    state.paused,
   );
-  if (! state.paused) requestAnimationFrame(update);
+  if (!state.paused) requestAnimationFrame(update);
 });
-ael('div.gameplay', eType.shoo, function(e) {
+ael('div.gameplay', eType.shoo, function (e) {
   if (state.paused) return;
   let pxOffset;
   if (eType.shoo === 'touchstart') {
-    if (! config.fieldLocation) {
+    if (!config.fieldLocation) {
       const rect = this.getBoundingClientRect();
       config.fieldLocation = [rect.x, rect.y];
     }
     const t = e.changedTouches[0];
     const tLoc = [t.clientX, t.clientY];
     const fLoc = config.fieldLocation;
-    pxOffset = [0, 1].map(u => tLoc[u] - fLoc[u]);
+    pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
   } else pxOffset = [e.offsetX, e.offsetY];
   state.shooPosition = pxOffset.map(
-    u => (u - config.fieldSize / 2) / config.boundary
+    (u) =>
+      (u - config.fieldSize / 2) / config.boundary,
   );
 });
 

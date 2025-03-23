@@ -1,6 +1,6 @@
-import {qs, ael} from './utility.js';
+import { ael, qs } from './utility.js';
 
-export {music as default};
+export { music as default };
 const music = {
   element: qs('audio'),
   recent: [],
@@ -20,34 +20,34 @@ const music = {
     new Track(0, 'Hyperfun'),
   ],
 };
-music.start = function() {
+music.start = function () {
   const rString = localStorage.getItem('recentMusic');
   const rFull = JSON.parse(rString) ?? [];
   const msPerDay = 1000 * 60 * 60 * 24;
   const old = Date.now() - msPerDay * this.daysFresh;
-  this.recent = rFull.filter(x => x.time > old);
+  this.recent = rFull.filter((x) => x.time > old);
   const last = this.recent.shift();
-  if (! last) this.play(this.firstId);
+  if (!last) this.play(this.firstId);
   else {
-    const {id, restarts} = last;
+    const { id, restarts } = last;
     if (restarts >= this.restartsMax) this.next(id);
     else this.play(id, restarts + 1);
   }
 };
-music.play = function(id, restarts = 0) {
-  const {element, recent} = this;
+music.play = function (id, restarts = 0) {
+  const { element, recent } = this;
   element.src = this.playlist[id].src;
   element.play();
-  recent.unshift({id, time: Date.now(), restarts});
+  recent.unshift({ id, time: Date.now(), restarts });
   if (recent.length > this.recentMax) recent.pop();
   const rString = JSON.stringify(recent);
   localStorage.setItem('recentMusic', rString);
 };
-music.next = function(otherIdToAvoid) {
-  const idsToAvoid = this.recent.map(x => x.id);
+music.next = function (otherIdToAvoid) {
+  const idsToAvoid = this.recent.map((x) => x.id);
   idsToAvoid.push(otherIdToAvoid);
   const weights = this.playlist.map(
-    (e, i) => idsToAvoid.includes(i) ? 0 : 1 + e.good
+    (e, i) => idsToAvoid.includes(i) ? 0 : 1 + e.good,
   );
   const n = weights.length;
   const cdf = [];
@@ -62,11 +62,13 @@ music.next = function(otherIdToAvoid) {
   this.play(nextId);
 };
 
-function Track(good, title) {
-  this.src = `audio/${
-    title.toLowerCase().replaceAll(' ', '-')
-  }.mp3`;
-  this.good = good;
+class Track {
+  constructor(good, title) {
+    this.src = `audio/${
+      title.toLowerCase().replaceAll(' ', '-')
+    }.mp3`;
+    this.good = good;
+  }
 }
 
 ael(music.element, 'ended', () => music.next());
