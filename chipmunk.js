@@ -5,6 +5,7 @@ import state from './state.js';
 
 export default class Chipmunk {
   static gameplayDiv = qs('div.gameplay');
+
   static makeElement() {
     const element = document.createElement('div');
     element.classList.add('chipmunk');
@@ -34,9 +35,11 @@ export default class Chipmunk {
     const c = state.chipmunks.find((c) => !c.active);
     c?.activate();
   }
+
   speed = config.chipmunkSpeed;
   fleeSpeed = config.chipmunkFleeSpeed;
   moneySpeed = config.chipmunkMoneySpeed;
+
   place() {
     const { boundary } = config;
     const { position, element, velocity } = this;
@@ -57,6 +60,22 @@ export default class Chipmunk {
     );
     this.place();
   }
+  update(timeInterval) {
+    if (!this.active) return;
+    const { position: p, velocity: v } = this;
+    const pOld = [...p];
+    const delta = v.map(x => x * timeInterval);
+    for (let d = 0; d < 2; d++) p[d] += delta[d];
+    const atGoal = p.some((e, i) => e * pOld[i] < 0);
+    if (!this.fleeing) {
+      if (state.money.taken) {
+        this.chase(geometry.angle(p));
+      } else if (atGoal) this.takeMoney();
+    }
+    this.place();
+    this.active = p.every((u) => Math.abs(u) < 1);
+    if (!this.active) state.nActive--;
+  }
   chase(angle = 0) {
     const { hasMoney, fleeSpeed, moneySpeed } = this;
     const speed = hasMoney ? moneySpeed : fleeSpeed;
@@ -64,18 +83,19 @@ export default class Chipmunk {
     this.velocity[1] = Math.sin(angle) * speed;
     this.fleeing = true;
   }
-  // giveMoney() {
-  //   const { moneySpeed, element } = this;
-  //   const v = geometry.randomUnitVector();
-  //   for (let d = 0; d < 2; d++) {
-  //     this.position[d] = 0;
-  //     this.velocity[d] = v[d] * moneySpeed;
-  //   }
-  //   element.append(state.money.element);
-  //   this.fleeing = true;
-  //   this.hasMoney = true;
-  //   state.money.taken = true;
-  // }
+  takeMoney() {
+    const { moneySpeed, element } = this;
+    const v = geometry.randomUnitVector();
+    for (let d = 0; d < 2; d++) {
+      this.position[d] = 0;
+      this.velocity[d] = v[d] * moneySpeed;
+    }
+    element.append(state.money.element);
+    this.fleeing = true;
+    this.hasMoney = true;
+    state.money.taken = true;
+  }
+
   constructor() {
     this.element = Chipmunk.makeElement();
     Chipmunk.gameplayDiv.append(this.element);

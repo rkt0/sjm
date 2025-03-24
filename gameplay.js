@@ -34,20 +34,6 @@ function startGame() {
   fpsMeter.initialize('section.gameplay');
 }
 
-// Chipmunk functions
-function giveChipmunkMoney(chipmunk) {
-  const v = geometry.randomUnitVector();
-  for (let d = 0; d < 2; d++) {
-    chipmunk.position[d] = 0;
-    chipmunk.velocity[d] = v[d] *
-      config.chipmunkMoneySpeed;
-  }
-  chipmunk.element.append(state.money.element);
-  chipmunk.fleeing = true;
-  chipmunk.hasMoney = true;
-  state.money.taken = true;
-}
-
 // Mountain lion functions
 function initializeMountainLion() {
   const element = document.createElement('div');
@@ -150,40 +136,9 @@ function update(timeStamp) {
     state.time.total,
   );
 
-  // Possibly activate chipmunk
+  // Deal with chipmunks
   Chipmunk.possiblyActivate(elapsed);
-
-  // Deal with each chipmunk
-  for (const c of state.chipmunks) {
-    // Skip if inactive
-    if (!c.active) continue;
-
-    // Position and velocity
-    const { position, velocity } = c;
-    const oldPosition = [...position];
-
-    // Adjust chipmunk position
-    // while checking if it crosses origin (money)
-    let cross = false;
-    for (let d = 0; d < 2; d++) {
-      position[d] += velocity[d] * elapsed;
-      cross ||= position[d] * oldPosition[d] < 0;
-    }
-    if (cross && !c.fleeing && !state.money.taken) {
-      giveChipmunkMoney(c);
-      // Set state.money.taken = true
-    }
-
-    // All chipmunks flee once money is taken
-    if (!c.fleeing && state.money.taken) {
-      c.chase(geometry.angle(position));
-    }
-
-    // Place chipmunk; deactivate if out of bounds
-    c.place();
-    c.active = position.every((u) => Math.abs(u) < 1);
-    if (!c.active) state.nActive--;
-  }
+  for (const c of state.chipmunks) c.update(elapsed);
 
   // Decrease porch timers
   {
