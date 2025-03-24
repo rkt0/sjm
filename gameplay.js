@@ -2,37 +2,7 @@ import { ael, aelo, qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import music from './music.js';
-
-const config = {
-  fpsMeterOn: false,
-  musicOn: true,
-  nChipmunks: 36,
-  chipmunkRate: 1,
-  chipmunkSpeed: 0.375,
-  chipmunkFleeSpeed: 1,
-  chipmunkMoneySpeed: 0.625,
-  shooRadius: 0.375,
-  porchShakeTime: 0.6,
-  porchDisturbancePerShoo: 1,
-  porchDisturbanceMax: 4,
-  mountainLionSpeed: 0.75,
-};
-
-// Get sizes from CSS
-function cssInt(property, selector = ':root') {
-  const s = getComputedStyle(qs(selector));
-  return parseInt(s.getPropertyValue(property));
-}
-{
-  const fieldSize = cssInt('--field-size');
-  const chipmunkSize = cssInt('--chipmunk-size');
-  const porchSize = cssInt('--porch-size');
-  const mlSize = cssInt('--mountain-lion-size');
-  config.fieldSize = fieldSize;
-  config.boundary = (fieldSize + chipmunkSize) / 2;
-  config.porch = porchSize / 2 / config.boundary;
-  config.mlTrack = fieldSize + mlSize;
-}
+import config from './config.js';
 
 // Global object for gameplay state
 const state = {
@@ -70,6 +40,7 @@ function startGame() {
   const oldChipmunks = qsa('.gameplay .chipmunk');
   for (const c of oldChipmunks) c.remove();
   initializeChipmunks();
+  // Push chipmunks to state.chipmunks
   initializeMountainLion();
   state.time.total = 0;
   state.time.element.innerHTML = 0;
@@ -287,6 +258,7 @@ function update(timeStamp) {
     }
     if (cross && !c.fleeing && !state.money.taken) {
       giveChipmunkMoney(c);
+      // Set state.money.taken = true
     }
 
     // All chipmunks flee once money is taken
