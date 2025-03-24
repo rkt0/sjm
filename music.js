@@ -1,6 +1,15 @@
 import { ael, qs } from './utility.js';
-
 export { music as default };
+
+class Track {
+  constructor(good, title) {
+    this.src = `audio/${
+      title.toLowerCase().replaceAll(' ', '-')
+    }.mp3`;
+    this.good = good;
+  }
+}
+
 const music = {
   element: qs('audio'),
   recent: [],
@@ -61,14 +70,5 @@ music.next = function (otherIdToAvoid) {
   while (cdf[nextId] < rand) nextId++;
   this.play(nextId);
 };
-
-class Track {
-  constructor(good, title) {
-    this.src = `audio/${
-      title.toLowerCase().replaceAll(' ', '-')
-    }.mp3`;
-    this.good = good;
-  }
-}
 
 ael(music.element, 'ended', () => music.next());
