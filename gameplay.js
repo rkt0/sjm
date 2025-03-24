@@ -15,11 +15,7 @@ function changeSection(to) {
   currentSection.classList.remove('current');
 }
 function startGame() {
-  state.chipmunks.length = 0;
-  const oldChipmunks = qsa('.gameplay .chipmunk');
-  for (const c of oldChipmunks) c.remove();
-  initializeChipmunks();
-  // Push chipmunks to state.chipmunks
+  Chipmunk.initialize();
   initializeMountainLion();
   state.time.total = 0;
   state.time.element.innerHTML = 0;
@@ -39,33 +35,6 @@ function startGame() {
 }
 
 // Chipmunk functions
-function initializeChipmunks() {
-  for (let i = 0; i < config.nChipmunks; i++) {
-    const chipmunk = new Chipmunk();
-    state.chipmunks.push(chipmunk);
-  }
-}
-function activateChipmunks(timeInterval) {
-  if (state.money.taken) return;
-  if (state.mountainLion.active) return;
-  const t = state.time.total;
-  if (state.nActive > t / 10) return;
-  const rate = 0.1 + t * 0.03;
-  let probability = rate * timeInterval;
-  if (t > 2 && !state.nActive) probability = 1;
-  if (Math.random() > probability) return;
-  const c = state.chipmunks.find((c) => !c.active);
-  if (!c) return;
-  state.nActive++;
-  c.active = true;
-  c.fleeing = false;
-  c.position = geometry.randomUnitSupNormVector();
-  const distance = Math.hypot(...c.position);
-  c.velocity = c.position.map(
-    (u) => -u * config.chipmunkSpeed / distance,
-  );
-  c.place();
-}
 function giveChipmunkMoney(chipmunk) {
   const v = geometry.randomUnitVector();
   for (let d = 0; d < 2; d++) {
@@ -182,7 +151,7 @@ function update(timeStamp) {
   );
 
   // Possibly activate chipmunk
-  activateChipmunks(elapsed);
+  Chipmunk.possiblyActivate(elapsed);
 
   // Deal with each chipmunk
   for (const c of state.chipmunks) {

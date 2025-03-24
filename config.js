@@ -5,7 +5,6 @@ const config = {
   fpsMeterOn: false,
   musicOn: true,
   nChipmunks: 36,
-  chipmunkRate: 1,
   chipmunkSpeed: 0.375,
   chipmunkFleeSpeed: 1,
   chipmunkMoneySpeed: 0.625,
