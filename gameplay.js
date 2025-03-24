@@ -3,29 +3,7 @@ import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import music from './music.js';
 import config from './config.js';
-
-// Global object for gameplay state
-const state = {
-  chipmunks: [],
-  shooPosition: null,
-  time: {
-    total: 0,
-    element: qs('.gameplay .time-display'),
-    lastStamp: null,
-  },
-  paused: false,
-  money: {
-    taken: false,
-    element: qs('.money'),
-  },
-  porch: {
-    element: qs('.porch'),
-    shakeTimer: 0,
-    disturbance: 0,
-  },
-  mountainLion: { active: false },
-  nActive: 0,
-};
+import state from './state.js';
 
 // Game flow functions
 function changeSection(to) {
