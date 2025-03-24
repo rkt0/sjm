@@ -4,6 +4,7 @@ import fpsMeter from './fps-meter.js';
 import music from './music.js';
 import config from './config.js';
 import state from './state.js';
+import Chipmunk from './chipmunk.js';
 
 // Game flow functions
 function changeSection(to) {
@@ -38,36 +39,9 @@ function startGame() {
 }
 
 // Chipmunk functions
-function placeChipmunk(chipmunk) {
-  const loc = chipmunk.position.map(
-    (u) => u * config.boundary,
-  );
-  const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
-  chipmunk.element.style.transform = xf;
-  chipmunk.element.classList.toggle(
-    'flipped',
-    chipmunk.velocity[0] < 0,
-  );
-}
-function makeChipmunkElement() {
-  const element = document.createElement('div');
-  element.classList.add('chipmunk');
-  const img = document.createElement('img');
-  img.src = 'img/chipmunk.png';
-  element.append(img);
-  return element;
-}
 function initializeChipmunks() {
-  const gameplayDiv = qs('div.gameplay');
   for (let i = 0; i < config.nChipmunks; i++) {
-    const element = makeChipmunkElement();
-    gameplayDiv.append(element);
-    const chipmunk = { element };
-    chipmunk.position = [1, 0];
-    chipmunk.velocity = [0, 0];
-    chipmunk.active = false;
-    chipmunk.fleeing = false;
-    placeChipmunk(chipmunk);
+    const chipmunk = new Chipmunk();
     state.chipmunks.push(chipmunk);
   }
 }
@@ -90,15 +64,7 @@ function activateChipmunks(timeInterval) {
   c.velocity = c.position.map(
     (u) => -u * config.chipmunkSpeed / distance,
   );
-  placeChipmunk(c);
-}
-function chaseChipmunk(chipmunk, angle = 0) {
-  const speed = chipmunk.hasMoney
-    ? config.chipmunkMoneySpeed
-    : config.chipmunkFleeSpeed;
-  chipmunk.velocity[0] = Math.cos(angle) * speed;
-  chipmunk.velocity[1] = Math.sin(angle) * speed;
-  chipmunk.fleeing = true;
+  c.place();
 }
 function giveChipmunkMoney(chipmunk) {
   const v = geometry.randomUnitVector();
@@ -129,7 +95,7 @@ function initializeMountainLion() {
 function activateMountainLion() {
   if (state.mountainLion.active) return;
   if (state.money.taken) return;
-  for (const c of state.chipmunks) chaseChipmunk(c);
+  for (const c of state.chipmunks) c.chase();
   state.nActive++;
   state.mountainLion.active = true;
   state.mountainLion.position = 0;
@@ -185,7 +151,7 @@ function shoo() {
     // Chase chipmunk away from both origin and shoo
     const a0 = Math.max(cAngle, dAngle) - pi / 2;
     const a1 = Math.min(cAngle, dAngle) + pi / 2;
-    chaseChipmunk(c, a0 + Math.random() * (a1 - a0));
+    c.chase(a0 + Math.random() * (a1 - a0));
   }
 
   // Reset shoo position
@@ -241,11 +207,11 @@ function update(timeStamp) {
 
     // All chipmunks flee once money is taken
     if (!c.fleeing && state.money.taken) {
-      chaseChipmunk(c, geometry.angle(position));
+      c.chase(geometry.angle(position));
     }
 
     // Place chipmunk; deactivate if out of bounds
-    placeChipmunk(c);
+    c.place();
     c.active = position.every((u) => Math.abs(u) < 1);
     if (!c.active) state.nActive--;
   }
@@ -351,7 +317,7 @@ ael('div.gameplay', eType.shoo, function (e) {
 
 // Make title screen chipmunk
 {
-  const chipmunk = makeChipmunkElement();
+  const chipmunk = Chipmunk.makeElement();
   const money = state.money.element.cloneNode(true);
   chipmunk.append(money);
   qs('.illustration').append(chipmunk);
