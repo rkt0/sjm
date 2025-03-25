@@ -3,6 +3,7 @@ import fpsMeter from './fps-meter.js';
 import config from './config.js';
 import state from './state.js';
 import ui from './ui.js';
+import listeners from './listeners.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
 
@@ -111,9 +112,8 @@ function update(timeStamp) {
   if (!state.paused) requestAnimationFrame(update);
 }
 
-
 // Final actions
 ui.setEventTypes();
-ui.attachListeners();
 ui.makeTitleScreen();
 ui.setDisplayToFlex();
+listeners.add();

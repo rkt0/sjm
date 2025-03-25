@@ -1,4 +1,4 @@
-import { ael, aelo, qs, qsa } from './utility.js';
+import { aelo, qs, qsa } from './utility.js';
 import music from './music.js';
 import config from './config.js';
 import state from './state.js';
@@ -50,20 +50,6 @@ const ui = {
     porch.element.classList.toggle('paused', paused);
     if (!paused) requestAnimationFrame(update);
   },
-  setShooPosition(event) {
-    if (state.paused) return;
-    const { boundary, fieldSize } = config;
-    let pxOffset = [event.offsetX, event.offsetY];
-    if (ui.eventType === 'touchstart') {
-      const t = event.changedTouches[0];
-      const tLoc = [t.clientX, t.clientY];
-      const fLoc = this.fieldLocation;
-      pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
-    }
-    state.shooPosition = pxOffset.map(
-      (u) => (u - fieldSize / 2) / boundary,
-    );
-  },
   startGame() {
     Chipmunk.initialize();
     mountainLion.initialize();
@@ -76,7 +62,7 @@ const ui = {
     state.porch.disturbance = 0;
     state.porch.element.classList.remove('shaking');
     state.porch.element.append(state.money.element);
-    ui.changeToSection('gameplay');
+    this.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(update);
     });
@@ -87,19 +73,5 @@ const ui = {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     this.changeToSection('game-over');
-  },
-  attachListeners() {
-    aelo('section.front', ui.eventType, () => {
-      ui.changeToSection('title');
-      if (music.on) music.start();
-    });
-    ael('.show-instructions', ui.eventType, () => {
-      ui.changeToSection('instructions');
-    });
-    for (const button of qsa('button.start-game')) {
-      ael(button, ui.eventType, ui.startGame);
-    }
-    ael('.pause', ui.eventType, ui.togglePaused);
-    ael('.field', ui.eventType, ui.setShooPosition);
   },
 };
