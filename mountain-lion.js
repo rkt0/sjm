@@ -35,4 +35,12 @@ export default {
     this.element.append(state.money.element);
     state.money.taken = true;
   },
+  update(timeInterval) {
+    if (!this.active) return;
+    this.position += this.velocity * timeInterval;
+    this.place();
+    if (this.position > 0.3) this.takeMoney();
+    this.active = this.position < 1;
+    if (!this.active) state.nActive--;
+  },
 };

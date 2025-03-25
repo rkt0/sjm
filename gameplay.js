@@ -117,14 +117,7 @@ function update(timeStamp) {
   if (state.shooPosition) shoo();
 
   // Mountain lion
-  if (state.mountainLion.active) {
-    const ml = state.mountainLion;
-    ml.position += ml.velocity * elapsed;
-    ml.place();
-    if (ml.position > 0.3) ml.takeMoney();
-    ml.active = ml.position < 1;
-    if (!ml.active) state.nActive--;
-  }
+  state.mountainLion.update(elapsed);
 
   // Timekeeping
   if (config.fpsMeterOn) fpsMeter.tick(elapsed);
