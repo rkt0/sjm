@@ -4,11 +4,10 @@ import config from './config.js';
 import state from './state.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
-export { ui as default };
 
 import { update } from './gameplay.js';
 
-const ui = {
+export default {
   eventType: 'mousedown',
   pauseButton: qs('.pause'),
   changeToSection(section) {
@@ -78,7 +77,7 @@ const ui = {
     if (state.paused) return;
     const { boundary, fieldSize } = config;
     let pxOffset = [event.offsetX, event.offsetY];
-    if (ui.eventType === 'touchstart') {
+    if (this.eventType === 'touchstart') {
       const t = event.changedTouches[0];
       const tLoc = [t.clientX, t.clientY];
       const fLoc = this.fieldLocation;
