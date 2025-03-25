@@ -64,7 +64,7 @@ export default class Chipmunk {
     if (!this.active) return;
     const { position: p, velocity: v } = this;
     const pOld = [...p];
-    const delta = v.map(x => x * timeInterval);
+    const delta = v.map((x) => x * timeInterval);
     for (let d = 0; d < 2; d++) p[d] += delta[d];
     const atGoal = p.some((e, i) => e * pOld[i] < 0);
     if (!this.fleeing) {

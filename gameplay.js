@@ -1,15 +1,16 @@
-import { ael, aelo, qs } from './utility.js';
+import { ael, aelo } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import config from './config.js';
 import state from './state.js';
 import ui from './ui.js';
 import Chipmunk from './chipmunk.js';
+import mountainLion from './mountain-lion.js';
 
 // Game flow functions
 function startGame() {
   Chipmunk.initialize();
-  initializeMountainLion();
+  mountainLion.initialize();
   state.time.total = 0;
   state.time.element.innerHTML = 0;
   state.time.lastStamp = null;
@@ -25,40 +26,6 @@ function startGame() {
   });
   if (!config.fpsMeterOn) return;
   fpsMeter.initialize('section.gameplay');
-}
-
-// Mountain lion functions
-function initializeMountainLion() {
-  const element = document.createElement('div');
-  element.classList.add('mountain-lion');
-  const img = document.createElement('img');
-  img.src = 'img/mountain-lion.png';
-  element.append(img);
-  qs('div.gameplay').append(element);
-  const ml = state.mountainLion;
-  ml.element = element;
-  const ratio = config.boundary / config.mlTrack;
-  ml.velocity = config.mountainLionSpeed * ratio;
-}
-function activateMountainLion() {
-  if (state.mountainLion.active) return;
-  if (state.money.taken) return;
-  for (const c of state.chipmunks) c.chase();
-  state.nActive++;
-  state.mountainLion.active = true;
-  state.mountainLion.position = 0;
-}
-function placeMountainLion() {
-  const loc = state.mountainLion.position *
-    config.mlTrack;
-  const xf = `translateX(${loc}px)`;
-  state.mountainLion.element.style.transform = xf;
-}
-function giveMountainLionMoney() {
-  if (state.money.taken) return;
-  const ml = state.mountainLion;
-  ml.element.append(state.money.element);
-  state.money.taken = true;
 }
 
 // Shoo function
@@ -112,7 +79,7 @@ function shoo() {
     p.shakeTimer = config.porchShakeTime;
     p.disturbance += config.porchDisturbancePerShoo;
     if (p.disturbance > config.porchDisturbanceMax) {
-      activateMountainLion();
+      mountainLion.activate();
     }
   }
 }
@@ -153,8 +120,8 @@ function update(timeStamp) {
   if (state.mountainLion.active) {
     const ml = state.mountainLion;
     ml.position += ml.velocity * elapsed;
-    placeMountainLion(ml.position);
-    if (ml.position > 0.3) giveMountainLionMoney();
+    ml.place();
+    if (ml.position > 0.3) ml.takeMoney();
     ml.active = ml.position < 1;
     if (!ml.active) state.nActive--;
   }
