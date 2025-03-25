@@ -1,4 +1,4 @@
-import { ael, aelo, qs, qsa } from './utility.js';
+import { ael, aelo, qs } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import config from './config.js';
