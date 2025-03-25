@@ -1,4 +1,4 @@
-import { aelo, qs, qsa } from './utility.js';
+import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
 import config from './config.js';
 import state from './state.js';
@@ -73,5 +73,36 @@ const ui = {
     const gotd = qs('.game-over .time-display');
     gotd.innerHTML = state.time.element.innerHTML;
     this.changeToSection('game-over');
+  },
+  setShooPosition(event) {
+    if (state.paused) return;
+    const { boundary, fieldSize } = config;
+    let pxOffset = [event.offsetX, event.offsetY];
+    if (ui.eventType === 'touchstart') {
+      const t = event.changedTouches[0];
+      const tLoc = [t.clientX, t.clientY];
+      const fLoc = this.fieldLocation;
+      pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
+    }
+    state.shooPosition = pxOffset.map(
+      (u) => (u - fieldSize / 2) / boundary,
+    );
+  },
+  attachListeners() {
+    const { eventType: type, changeToSection } = this;
+    aelo('.front', type, () => {
+      changeToSection('title');
+      if (music.on) music.start();
+    });
+    ael('.show-instructions', type, () => {
+      changeToSection('instructions');
+    });
+    for (const button of qsa('button.start-game')) {
+      ael(button, type, () => this.startGame());
+    }
+    ael('.pause', type, () => this.togglePaused());
+    ael('.field', type, (event) => {
+      this.setShooPosition(event);
+    });
   },
 };

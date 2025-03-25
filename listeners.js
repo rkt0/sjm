@@ -35,7 +35,7 @@ export default {
     ael(
       '.field',
       eventType,
-      (e) => this.setShooPosition(e),
+      (event) => this.setShooPosition(event),
     );
   },
 };
