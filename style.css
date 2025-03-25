@@ -124,6 +124,10 @@ h1 {
   line-height: 1;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 
 
 /* Gameplay section */

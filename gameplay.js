@@ -1,19 +1,12 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
-import music from './music.js';
 import config from './config.js';
 import state from './state.js';
+import ui from './ui.js';
 import Chipmunk from './chipmunk.js';
 
 // Game flow functions
-function changeSection(to) {
-  const currentSection = qs('section.current');
-  aelo(currentSection, 'transitionend', () => {
-    qs(`section.${to}`).classList.add('current');
-  });
-  currentSection.classList.remove('current');
-}
 function startGame() {
   Chipmunk.initialize();
   initializeMountainLion();
@@ -26,7 +19,7 @@ function startGame() {
   state.porch.disturbance = 0;
   state.porch.element.classList.remove('shaking');
   state.porch.element.append(state.money.element);
-  changeSection('gameplay');
+  ui.changeToSection('gameplay');
   aelo('section.gameplay', 'transitionend', () => {
     requestAnimationFrame(update);
   });
@@ -125,6 +118,7 @@ function shoo() {
 }
 
 // Game loop function
+export { update, startGame };
 function update(timeStamp) {
   // Timekeeping
   state.time.lastStamp ??= timeStamp;
@@ -171,9 +165,7 @@ function update(timeStamp) {
 
   // Check if game is over
   if (state.money.taken && !state.nActive) {
-    const gotd = qs('.game-over .time-display');
-    gotd.innerHTML = state.time.element.innerHTML;
-    changeSection('game-over');
+    ui.gameOver();
     return;
   }
 
@@ -181,49 +173,16 @@ function update(timeStamp) {
   if (!state.paused) requestAnimationFrame(update);
 }
 
-// Determine appropriate event types
-const eType = {};
-{
-  const touch = matchMedia('(hover: none)').matches;
-  eType.front = touch ? 'touchend' : 'click';
-  eType.button = touch ? 'touchstart' : 'click';
-  eType.shoo = touch ? 'touchstart' : 'mousedown';
-  if (touch) {
-    for (const s of qsa('span.click-or-touch')) {
-      const cap = s.innerHTML.trim().startsWith('C');
-      s.innerHTML = cap ? 'Touch' : 'touch';
-    }
-  }
-}
 
-// Attach event listeners
-aelo('section.front', eType.front, () => {
-  changeSection('title');
-  if (config.musicOn) music.start();
-});
-ael('.show-instructions', eType.button, () => {
-  changeSection('instructions');
-});
-for (const button of qsa('button.start-game')) {
-  ael(button, eType.button, startGame);
-}
-ael('.pause', eType.button, function () {
-  this.innerHTML = state.paused ? 'Pause' : 'Play';
-  state.paused = !state.paused;
-  state.time.lastStamp = null;
-  if (config.musicOn) {
-    music.element[state.paused ? 'pause' : 'play']();
-  }
-  state.porch.element.classList.toggle(
-    'paused',
-    state.paused,
-  );
-  if (!state.paused) requestAnimationFrame(update);
-});
-ael('div.gameplay', eType.shoo, function (e) {
+// Final actions
+ui.setEventTypes();
+ui.attachListeners();
+ui.makeTitleScreen();
+ui.setDisplayToFlex();
+ael('div.gameplay', ui.eventType, function (e) {
   if (state.paused) return;
   let pxOffset;
-  if (eType.shoo === 'touchstart') {
+  if (ui.eventType === 'touchstart') {
     if (!config.fieldLocation) {
       const rect = this.getBoundingClientRect();
       config.fieldLocation = [rect.x, rect.y];
@@ -238,16 +197,3 @@ ael('div.gameplay', eType.shoo, function (e) {
       (u - config.fieldSize / 2) / config.boundary,
   );
 });
-
-// Make title screen chipmunk
-{
-  const chipmunk = Chipmunk.makeElement();
-  const money = state.money.element.cloneNode(true);
-  chipmunk.append(money);
-  qs('.illustration').append(chipmunk);
-}
-
-// Override display property of section style
-for (const section of qsa('section')) {
-  section.style.display = 'flex';
-}
