@@ -1,4 +1,3 @@
-import { aelo } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import config from './config.js';
