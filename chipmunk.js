@@ -4,7 +4,7 @@ import config from './config.js';
 import state from './state.js';
 
 export default class Chipmunk {
-  static gameplayDiv = qs('div.gameplay');
+  static field = qs('.field');
 
   static makeElement() {
     const element = document.createElement('div');
@@ -16,7 +16,7 @@ export default class Chipmunk {
   }
   static initialize() {
     state.chipmunks.length = 0;
-    const oldElements = qsa('.gameplay .chipmunk');
+    const oldElements = qsa('.chipmunk', this.field);
     for (const e of oldElements) e.remove();
     for (let i = 0; i < config.nChipmunks; i++) {
       const chipmunk = new Chipmunk();
@@ -98,7 +98,7 @@ export default class Chipmunk {
 
   constructor() {
     this.element = Chipmunk.makeElement();
-    Chipmunk.gameplayDiv.append(this.element);
+    Chipmunk.field.append(this.element);
     this.position = [1, 0];
     this.velocity = [0, 0];
     this.active = false;

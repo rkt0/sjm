@@ -132,7 +132,7 @@ h1 {
 
 /* Gameplay section */
 
-div.gameplay {
+.field {
   position: absolute;
   background: url(img/grass.png);
   background-size: cover;
@@ -243,7 +243,7 @@ div.gameplay {
 }
 
 @media (max-width: 959px) {
-  div.gameplay {
+  .field {
     position: relative;
   }
   .sidebar {

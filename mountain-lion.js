@@ -12,7 +12,7 @@ export default {
     const img = document.createElement('img');
     img.src = 'img/mountain-lion.png';
     element.append(img);
-    qs('div.gameplay').append(element);
+    qs('.field').append(element);
     this.element = element;
     const { speed, track } = this;
     this.velocity = config.boundary * speed / track;

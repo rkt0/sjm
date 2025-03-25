@@ -1,4 +1,4 @@
-import { ael, aelo } from './utility.js';
+import { aelo } from './utility.js';
 import geometry from './geometry.js';
 import fpsMeter from './fps-meter.js';
 import config from './config.js';
@@ -6,27 +6,6 @@ import state from './state.js';
 import ui from './ui.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
-
-// Game flow functions
-function startGame() {
-  Chipmunk.initialize();
-  mountainLion.initialize();
-  state.time.total = 0;
-  state.time.element.innerHTML = 0;
-  state.time.lastStamp = null;
-  state.money.taken = false;
-  state.shooPosition = null;
-  state.porch.shakeTimer = 0;
-  state.porch.disturbance = 0;
-  state.porch.element.classList.remove('shaking');
-  state.porch.element.append(state.money.element);
-  ui.changeToSection('gameplay');
-  aelo('section.gameplay', 'transitionend', () => {
-    requestAnimationFrame(update);
-  });
-  if (!config.fpsMeterOn) return;
-  fpsMeter.initialize('section.gameplay');
-}
 
 // Shoo function
 function shoo() {
@@ -85,7 +64,7 @@ function shoo() {
 }
 
 // Game loop function
-export { update, startGame };
+export { update };
 function update(timeStamp) {
   // Timekeeping
   state.time.lastStamp ??= timeStamp;
@@ -139,21 +118,3 @@ ui.setEventTypes();
 ui.attachListeners();
 ui.makeTitleScreen();
 ui.setDisplayToFlex();
-ael('div.gameplay', ui.eventType, function (e) {
-  if (state.paused) return;
-  let pxOffset;
-  if (ui.eventType === 'touchstart') {
-    if (!config.fieldLocation) {
-      const rect = this.getBoundingClientRect();
-      config.fieldLocation = [rect.x, rect.y];
-    }
-    const t = e.changedTouches[0];
-    const tLoc = [t.clientX, t.clientY];
-    const fLoc = config.fieldLocation;
-    pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
-  } else pxOffset = [e.offsetX, e.offsetY];
-  state.shooPosition = pxOffset.map(
-    (u) =>
-      (u - config.fieldSize / 2) / config.boundary,
-  );
-});
