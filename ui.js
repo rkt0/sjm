@@ -104,4 +104,10 @@ export default {
       this.setShooPosition(event);
     });
   },
+  initialize() {
+    this.setEventTypes();
+    this.attachListeners();
+    this.makeTitleScreen();
+    this.setDisplayToFlex();
+  },
 };

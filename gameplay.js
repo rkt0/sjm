@@ -54,8 +54,4 @@ function update(timeStamp) {
   if (!state.paused) requestAnimationFrame(update);
 }
 
-// Final actions
-ui.setEventTypes();
-ui.attachListeners();
-ui.makeTitleScreen();
-ui.setDisplayToFlex();
+ui.initialize();
