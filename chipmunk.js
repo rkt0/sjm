@@ -36,13 +36,17 @@ export default class Chipmunk {
     element.append(img);
     return element;
   }
-  static start() {
-    this.pool.length = 0;
-    const oldElements = qsa('.chipmunk', this.field);
-    for (const e of oldElements) e.remove();
+  static initialize() {
     for (let i = 0; i < this.totalNumber; i++) {
       const chipmunk = new Chipmunk();
       this.pool.push(chipmunk);
+    }
+    const element = Chipmunk.makeElement();
+    qs('.illustration').append(element);
+  }
+  static start() {
+    for (const chipmunk of this.pool) {
+      chipmunk.reset();
     }
   }
 
@@ -98,14 +102,17 @@ export default class Chipmunk {
     this.hasMoney = true;
     money.taken = true;
   }
-
-  constructor() {
-    this.element = Chipmunk.makeElement();
-    Chipmunk.field.append(this.element);
+  reset() {
     this.position = [1, 0];
     this.velocity = [0, 0];
     this.active = false;
     this.fleeing = false;
     this.place();
+  }
+
+  constructor() {
+    this.element = Chipmunk.makeElement();
+    Chipmunk.field.append(this.element);
+    this.reset();
   }
 }

@@ -14,6 +14,7 @@ const game = {
     Chipmunk.start();
     mountainLion.start();
     porch.start();
+    money.start();
     time.start();
     shoo.setPosition();
     money.taken = false;
@@ -56,6 +57,8 @@ const game = {
   },
   initialize() {
     ui.initialize();
+    Chipmunk.initialize();
+    money.initialize();
     shoo.addListener();
     const type = ui.eventType;
     for (const button of qsa('button.start-game')) {

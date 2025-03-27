@@ -1,7 +1,5 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
-import Chipmunk from './chipmunk.js';
-import money from './money.js';
 
 export default {
   eventType: 'mousedown',
@@ -12,12 +10,6 @@ export default {
     aelo(oldElement, 'transitionend', () => {
       element.classList.add('current');
     });
-  },
-  makeTitleScreen() {
-    const chipmunk = Chipmunk.makeElement();
-    const moneyClone = money.element.cloneNode(true);
-    chipmunk.append(moneyClone);
-    qs('.illustration').append(chipmunk);
   },
   setDisplayToFlex() {
     for (const section of qsa('section')) {
@@ -46,7 +38,6 @@ export default {
   initialize() {
     this.setEventTypes();
     this.addListeners();
-    this.makeTitleScreen();
     this.setDisplayToFlex();
   },
 };
