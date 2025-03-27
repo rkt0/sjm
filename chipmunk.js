@@ -2,6 +2,8 @@ import { qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import state from './state.js';
 import size from './size.js';
+import time from './time.js';
+import mountainLion from './mountain-lion.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
@@ -11,16 +13,17 @@ export default class Chipmunk {
 
   static possiblyActivate(timeInterval) {
     if (state.money.taken) return;
-    if (state.mountainLion.active) return;
-    const t = state.time.total;
+    if (mountainLion.active) return;
+    const t = time.total;
     if (state.nActive > t / 10) return;
     const rate = 0.1 + t * 0.03;
     let probability = rate * timeInterval;
     if (t > 2 && !state.nActive) probability = 1;
     if (Math.random() > probability) return;
-    const c = state.chipmunks.find((c) => !c.active);
+    const c = this.pool.find((c) => !c.active);
     c?.activate();
   }
+  static pool = [];
   static field = qs('.field');
   static makeElement() {
     const element = document.createElement('div');
@@ -31,12 +34,12 @@ export default class Chipmunk {
     return element;
   }
   static initialize() {
-    state.chipmunks.length = 0;
+    this.pool.length = 0;
     const oldElements = qsa('.chipmunk', this.field);
     for (const e of oldElements) e.remove();
     for (let i = 0; i < this.totalNumber; i++) {
       const chipmunk = new Chipmunk();
-      state.chipmunks.push(chipmunk);
+      this.pool.push(chipmunk);
     }
   }
 

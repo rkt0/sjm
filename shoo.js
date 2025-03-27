@@ -3,7 +3,9 @@ import geometry from './geometry.js';
 import state from './state.js';
 import ui from './ui.js';
 import size from './size.js';
+import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
+import porch from './porch.js';
 
 export default {
   radius: 0.375,
@@ -27,12 +29,12 @@ export default {
   execute() {
     const pi = Math.PI;
     const { position: sPos } = this;
-    if (state.mountainLion.active) return;
+    if (mountainLion.active) return;
     const porchRatio = size.porch / 2 / size.boundary;
     const onPorch = sPos.every(
       (u) => Math.abs(u) < porchRatio
     );
-    for (const chipmunk of state.chipmunks) {
+    for (const chipmunk of Chipmunk.pool) {
       if (!chipmunk.active) continue;
       const { position: cPos } = chipmunk;
       const d = [0, 1].map((i) => cPos[i] - sPos[i]);
@@ -49,11 +51,10 @@ export default {
     }
     this.position = null;
     if (!onPorch || state.money.taken) return;
-    const p = state.porch;
-    p.element.classList.add('shaking');
-    p.shakeTimer = p.shakeTime;
-    p.disturbance += p.disturbancePerShoo;
-    if (p.disturbance > p.disturbanceMax) {
+    porch.element.classList.add('shaking');
+    porch.shakeTimer = porch.shakeTime;
+    porch.disturbance += porch.disturbancePerShoo;
+    if (porch.disturbance > porch.disturbanceMax) {
       mountainLion.activate();
     }
   },

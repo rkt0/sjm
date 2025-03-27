@@ -6,6 +6,8 @@ export default {
   disturbancePerShoo: 1,
   disturbanceMax: 4,
   element: qs('.porch'),
+  shakeTimer: 0,
+  disturbance: 0,
   initialize() {
     this.shakeTimer = 0;
     this.disturbance = 0;

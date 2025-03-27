@@ -27,14 +27,14 @@ const game = {
   loop(timeStamp) {
     const elapsed = time.advance(timeStamp);
     Chipmunk.possiblyActivate(elapsed);
-    for (const chipmunk of state.chipmunks) {
+    for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
     porch.update(elapsed);
-    state.mountainLion.update(elapsed);
+    mountainLion.update(elapsed);
     if (shoo.position) shoo.execute();
     if (state.money.taken && !state.nActive) {
-      ui.gameOver();
+      ui.changeToSection('game-over');
       return;
     }
     if (state.paused) return;
@@ -42,11 +42,11 @@ const game = {
   },
   togglePause() {
     state.paused = !state.paused;
-    const { paused, porch } = state;
+    const { paused } = state;
     const pauseVerb = ['pause', 'play'];
     if (paused) pauseVerb.reverse();
     qs('.pause').innerHTML = pauseVerb[0];
-    state.time.lastStamp = null;
+    time.lastStamp = null;
     if (music.on) music.element[pauseVerb[1]]();
     porch.element.classList.toggle('paused', paused);
     if (!paused) requestAnimationFrame(game.loop);

@@ -1,9 +1,11 @@
 import { qs } from './utility.js';
 import state from './state.js';
 import size from './size.js';
+import Chipmunk from './chipmunk.js';
 
 export default {
   speed: 0.75,
+  active: false,
   initialize() {
     if (this.element) this.element.remove();
     const element = document.createElement('div');
@@ -17,7 +19,6 @@ export default {
     const path = size.field + size.mountainLion;
     this.path = path;
     this.velocity = size.boundary * this.speed / path;
-    state.mountainLion = this;
   },
   place() {
     const { element, position, path } = this;
@@ -29,7 +30,7 @@ export default {
     this.active = true;
     this.position = 0;
     state.nActive++;
-    for (const c of state.chipmunks) c.chase();
+    for (const c of Chipmunk.pool) c.chase();
   },
   takeMoney() {
     if (state.money.taken) return;

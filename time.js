@@ -1,22 +1,24 @@
+import { qs } from './utility.js';
 import fpsMeter from './fps-meter.js';
-import state from './state.js';
 
 export default {
+  gameplayElement: qs('.gameplay .time-display'),
+  gameOverElement: qs('.game-over .time-display'),
   initialize() {
-    state.time.total = 0;
-    state.time.element.innerHTML = 0;
-    state.time.lastStamp = null;
+    this.total = 0;
+    this.gameplayElement.innerHTML = 0;
+    this.lastStamp = null;
   },
   advance(timeStamp) {
-    state.time.lastStamp ??= timeStamp;
+    this.lastStamp ??= timeStamp;
     const elapsed = 0.001 * (
-      timeStamp - state.time.lastStamp
+      timeStamp - this.lastStamp
     );
-    state.time.total += elapsed;
-    state.time.element.innerHTML = Math.trunc(
-      state.time.total,
-    );
-    state.time.lastStamp = timeStamp;
+    this.total += elapsed;
+    const timeInteger = Math.trunc(this.total);
+    this.gameplayElement.innerHTML = timeInteger;
+    this.gameOverElement.innerHTML = timeInteger;
+    this.lastStamp = timeStamp;
     if (fpsMeter.on) fpsMeter.tick(elapsed);
     return elapsed;
   },

@@ -33,11 +33,6 @@ export default {
     const rect = this.getBoundingClientRect();
     this.fieldLocation = [rect.x, rect.y];
   },
-  gameOver() {
-    const gotd = qs('.game-over .time-display');
-    gotd.innerHTML = state.time.element.innerHTML;
-    this.changeToSection('game-over');
-  },
   addListeners() {
     const { eventType: type, changeToSection } = this;
     aelo('.front', type, () => {
