@@ -5,8 +5,8 @@ import state from './state.js';
 export default {
   speed: 0.75,
   track: config.mlTrack,
-  active: false,
   initialize() {
+    if (this.element) this.element.remove();
     const element = document.createElement('div');
     element.classList.add('mountain-lion');
     const img = document.createElement('img');
@@ -14,6 +14,7 @@ export default {
     element.append(img);
     qs('.field').append(element);
     this.element = element;
+    this.active = false;
     const { speed, track } = this;
     this.velocity = config.boundary * speed / track;
     state.mountainLion = this;
