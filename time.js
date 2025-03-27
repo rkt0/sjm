@@ -8,6 +8,8 @@ export default {
     this.total = 0;
     this.gameplayElement.innerHTML = 0;
     this.lastStamp = null;
+    if (!fpsMeter.on) return;
+    fpsMeter.initialize('.gameplay');
   },
   advance(timeStamp) {
     this.lastStamp ??= timeStamp;

@@ -1,6 +1,5 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
-import fpsMeter from './fps-meter.js';
 import state from './state.js';
 import ui from './ui.js';
 import time from './time.js';
@@ -22,8 +21,6 @@ const game = {
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);
     });
-    if (!fpsMeter.on) return;
-    fpsMeter.initialize('.gameplay');
   },
   loop(timeStamp) {
     const elapsed = time.advance(timeStamp);

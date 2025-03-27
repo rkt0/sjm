@@ -1,5 +1,5 @@
 export default {
-  on: false,
+  on: true,
   initialize(whereSelector) {
     this.count = 0;
     this.time = 0;
