@@ -1,7 +1,7 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
-import state from './state.js';
 import Chipmunk from './chipmunk.js';
+import money from './money.js';
 
 export default {
   eventType: 'mousedown',
@@ -15,8 +15,8 @@ export default {
   },
   makeTitleScreen() {
     const chipmunk = Chipmunk.makeElement();
-    const money = state.money.element.cloneNode(true);
-    chipmunk.append(money);
+    const moneyClone = money.element.cloneNode(true);
+    chipmunk.append(moneyClone);
     qs('.illustration').append(chipmunk);
   },
   setDisplayToFlex() {

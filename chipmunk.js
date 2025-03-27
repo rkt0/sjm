@@ -1,9 +1,9 @@
 import { qs, qsa } from './utility.js';
 import geometry from './geometry.js';
-import state from './state.js';
 import size from './size.js';
 import time from './time.js';
 import mountainLion from './mountain-lion.js';
+import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
@@ -12,7 +12,7 @@ export default class Chipmunk {
   moneySpeed = 0.625;
 
   static possiblyActivate(timeInterval) {
-    if (state.money.taken) return;
+    if (money.taken) return;
     if (mountainLion.active) return;
     const t = time.total;
     if (this.nActive() > t / 10) return;
@@ -72,7 +72,7 @@ export default class Chipmunk {
     for (let d = 0; d < 2; d++) p[d] += delta[d];
     const atGoal = p.some((e, i) => e * pOld[i] < 0);
     if (!this.fleeing) {
-      if (state.money.taken) {
+      if (money.taken) {
         this.chase(geometry.angle(p));
       } else if (atGoal) this.takeMoney();
     }
@@ -93,10 +93,10 @@ export default class Chipmunk {
       this.position[d] = 0;
       this.velocity[d] = v[d] * moneySpeed;
     }
-    element.append(state.money.element);
+    element.append(money.element);
     this.fleeing = true;
     this.hasMoney = true;
-    state.money.taken = true;
+    money.taken = true;
   }
 
   constructor() {

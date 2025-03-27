@@ -1,5 +1,5 @@
 import { qs } from './utility.js';
-import state from './state.js';
+import money from './money.js';
 
 export default {
   shakeTime: 0.6,
@@ -12,8 +12,7 @@ export default {
     this.shakeTimer = 0;
     this.disturbance = 0;
     this.element.classList.remove('shaking');
-    this.element.append(state.money.element);
-    state.porch = this;
+    this.element.append(money.element);
   },
   update(elapsed) {
     this.shakeTimer -= elapsed;

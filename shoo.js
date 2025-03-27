@@ -1,11 +1,11 @@
 import { ael } from './utility.js';
 import geometry from './geometry.js';
-import state from './state.js';
 import ui from './ui.js';
 import size from './size.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
 import porch from './porch.js';
+import money from './money.js';
 
 export default {
   radius: 0.375,
@@ -49,7 +49,7 @@ export default {
       );
     }
     this.position = null;
-    if (!onPorch || state.money.taken) return;
+    if (!onPorch || money.taken) return;
     porch.element.classList.add('shaking');
     porch.shakeTimer = porch.shakeTime;
     porch.disturbance += porch.disturbancePerShoo;

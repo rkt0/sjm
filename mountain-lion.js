@@ -1,7 +1,7 @@
 import { qs } from './utility.js';
-import state from './state.js';
 import size from './size.js';
 import Chipmunk from './chipmunk.js';
+import money from './money.js';
 
 export default {
   speed: 0.75,
@@ -26,15 +26,15 @@ export default {
     element.style.transform = `translateX(${x}px)`;
   },
   activate() {
-    if (this.active || state.money.taken) return;
+    if (this.active || money.taken) return;
     this.active = true;
     this.position = 0;
     for (const c of Chipmunk.pool) c.chase();
   },
   takeMoney() {
-    if (state.money.taken) return;
-    this.element.append(state.money.element);
-    state.money.taken = true;
+    if (money.taken) return;
+    this.element.append(money.element);
+    money.taken = true;
   },
   update(timeInterval) {
     if (!this.active) return;

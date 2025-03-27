@@ -1,11 +1,11 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
-import state from './state.js';
 import ui from './ui.js';
 import time from './time.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
 import porch from './porch.js';
+import money from './money.js';
 import shoo from './shoo.js';
 
 const game = {
@@ -16,7 +16,7 @@ const game = {
     porch.initialize();
     time.initialize();
     shoo.setPosition();
-    state.money.taken = false;
+    money.taken = false;
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);
@@ -33,7 +33,7 @@ const game = {
     if (shoo.position) shoo.execute();
     const animalsActive = Chipmunk.nActive() ||
       mountainLion.active;
-    if (state.money.taken && !animalsActive) {
+    if (money.taken && !animalsActive) {
       ui.changeToSection('game-over');
       return;
     }
