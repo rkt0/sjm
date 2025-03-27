@@ -34,7 +34,9 @@ const game = {
     porch.update(elapsed);
     mountainLion.update(elapsed);
     if (shoo.position) shoo.execute();
-    if (state.money.taken && !state.nActive) {
+    const animalsActive = Chipmunk.nActive() ||
+      mountainLion.active;
+    if (state.money.taken && !animalsActive) {
       ui.changeToSection('game-over');
       return;
     }

@@ -4,5 +4,4 @@ export default {
     taken: false,
     element: qs('.money'),
   },
-  nActive: 0,
 };

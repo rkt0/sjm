@@ -15,15 +15,18 @@ export default class Chipmunk {
     if (state.money.taken) return;
     if (mountainLion.active) return;
     const t = time.total;
-    if (state.nActive > t / 10) return;
+    if (this.nActive() > t / 10) return;
     const rate = 0.1 + t * 0.03;
     let probability = rate * timeInterval;
-    if (t > 2 && !state.nActive) probability = 1;
+    if (t > 2 && !this.nActive()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active);
     c?.activate();
   }
   static pool = [];
+  static nActive() {
+    return this.pool.filter(c => c.active).length;
+  }
   static field = qs('.field');
   static makeElement() {
     const element = document.createElement('div');
@@ -52,7 +55,6 @@ export default class Chipmunk {
     element.classList.toggle('flipped', isMovingLeft);
   }
   activate() {
-    state.nActive++;
     this.active = true;
     this.fleeing = false;
     const vector = geometry.randomUnitSupNormVector();
@@ -76,7 +78,6 @@ export default class Chipmunk {
     }
     this.place();
     this.active = p.every((u) => Math.abs(u) < 1);
-    if (!this.active) state.nActive--;
   }
   chase(angle = 0) {
     const { hasMoney, fleeSpeed, moneySpeed } = this;

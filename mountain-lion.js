@@ -29,7 +29,6 @@ export default {
     if (this.active || state.money.taken) return;
     this.active = true;
     this.position = 0;
-    state.nActive++;
     for (const c of Chipmunk.pool) c.chase();
   },
   takeMoney() {
@@ -43,6 +42,5 @@ export default {
     this.place();
     if (this.position > 0.3) this.takeMoney();
     this.active = this.position < 1;
-    if (!this.active) state.nActive--;
   },
 };
