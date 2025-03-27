@@ -3,9 +3,9 @@ import config from './config.js';
 import state from './state.js';
 
 export default {
-  active: false,
+  speed: 0.75,
   track: config.mlTrack,
-  speed: config.mountainLionSpeed,
+  active: false,
   initialize() {
     const element = document.createElement('div');
     element.classList.add('mountain-lion');

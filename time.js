@@ -1,5 +1,4 @@
 import fpsMeter from './fps-meter.js';
-import config from './config.js';
 import state from './state.js';
 
 export default {
@@ -18,7 +17,7 @@ export default {
       state.time.total,
     );
     state.time.lastStamp = timeStamp;
-    if (config.fpsMeterOn) fpsMeter.tick(elapsed);
+    if (fpsMeter.on) fpsMeter.tick(elapsed);
     return elapsed;
   },
 };

@@ -1,5 +1,4 @@
 import { ael, qs } from './utility.js';
-import config from './config.js';
 export { music as default };
 
 class Track {
@@ -12,7 +11,7 @@ class Track {
 }
 
 const music = {
-  on: config.musicOn,
+  on: true,
   element: qs('audio'),
   recent: [],
   recentMax: 4,

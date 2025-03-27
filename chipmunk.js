@@ -4,25 +4,11 @@ import config from './config.js';
 import state from './state.js';
 
 export default class Chipmunk {
-  static field = qs('.field');
+  static totalNumber = 36;
+  speed = 0.375;
+  fleeSpeed = 1;
+  moneySpeed = 0.625;
 
-  static makeElement() {
-    const element = document.createElement('div');
-    element.classList.add('chipmunk');
-    const img = document.createElement('img');
-    img.src = 'img/chipmunk.png';
-    element.append(img);
-    return element;
-  }
-  static initialize() {
-    state.chipmunks.length = 0;
-    const oldElements = qsa('.chipmunk', this.field);
-    for (const e of oldElements) e.remove();
-    for (let i = 0; i < config.nChipmunks; i++) {
-      const chipmunk = new Chipmunk();
-      state.chipmunks.push(chipmunk);
-    }
-  }
   static possiblyActivate(timeInterval) {
     if (state.money.taken) return;
     if (state.mountainLion.active) return;
@@ -35,10 +21,24 @@ export default class Chipmunk {
     const c = state.chipmunks.find((c) => !c.active);
     c?.activate();
   }
-
-  speed = config.chipmunkSpeed;
-  fleeSpeed = config.chipmunkFleeSpeed;
-  moneySpeed = config.chipmunkMoneySpeed;
+  static field = qs('.field');
+  static makeElement() {
+    const element = document.createElement('div');
+    element.classList.add('chipmunk');
+    const img = document.createElement('img');
+    img.src = 'img/chipmunk.png';
+    element.append(img);
+    return element;
+  }
+  static initialize() {
+    state.chipmunks.length = 0;
+    const oldElements = qsa('.chipmunk', this.field);
+    for (const e of oldElements) e.remove();
+    for (let i = 0; i < this.totalNumber; i++) {
+      const chipmunk = new Chipmunk();
+      state.chipmunks.push(chipmunk);
+    }
+  }
 
   place() {
     const { boundary } = config;

@@ -2,17 +2,10 @@ import { qs } from './utility.js';
 export { config as default };
 
 const config = {
-  fpsMeterOn: false,
-  musicOn: true,
-  nChipmunks: 36,
-  chipmunkSpeed: 0.375,
-  chipmunkFleeSpeed: 1,
-  chipmunkMoneySpeed: 0.625,
   shooRadius: 0.375,
   porchShakeTime: 0.6,
   porchDisturbancePerShoo: 1,
   porchDisturbanceMax: 4,
-  mountainLionSpeed: 0.75,
 };
 
 // Get sizes from CSS
