@@ -39,25 +39,7 @@ export default {
     gotd.innerHTML = state.time.element.innerHTML;
     this.changeToSection('game-over');
   },
-  setShooPosition(event) {
-    if (!event) {
-      state.shooPosition = null;
-      return;
-    }
-    if (state.paused) return;
-    const { boundary, fieldSize } = config;
-    let pxOffset = [event.offsetX, event.offsetY];
-    if (this.eventType === 'touchstart') {
-      const t = event.changedTouches[0];
-      const tLoc = [t.clientX, t.clientY];
-      const fLoc = this.fieldLocation;
-      pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
-    }
-    state.shooPosition = pxOffset.map(
-      (u) => (u - fieldSize / 2) / boundary,
-    );
-  },
-  attachListeners() {
+  addListeners() {
     const { eventType: type, changeToSection } = this;
     aelo('.front', type, () => {
       changeToSection('title');
@@ -66,13 +48,10 @@ export default {
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
     });
-    ael('.field', type, (event) => {
-      this.setShooPosition(event);
-    });
   },
   initialize() {
     this.setEventTypes();
-    this.attachListeners();
+    this.addListeners();
     this.makeTitleScreen();
     this.setDisplayToFlex();
   },

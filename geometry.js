@@ -9,9 +9,9 @@ export default {
 
   // Get information about angles of two vectors,
   // adjusted to be within π of each other
-  anglePair(vectors) {
-    let a0 = this.angle(vectors[0]);
-    let a1 = this.angle(vectors[1]);
+  anglePair(vector0, vector1) {
+    let a0 = this.angle(vector0);
+    let a1 = this.angle(vector1);
     if (a0 - a1 > pi) a0 -= 2 * pi;
     if (a1 - a0 > pi) a1 -= 2 * pi;
     return {

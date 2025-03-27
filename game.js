@@ -15,7 +15,7 @@ const game = {
     mountainLion.initialize();
     porch.initialize();
     time.initialize();
-    ui.setShooPosition();
+    shoo.setPosition();
     state.money.taken = false;
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
@@ -32,7 +32,7 @@ const game = {
     }
     porch.update(elapsed);
     state.mountainLion.update(elapsed);
-    if (state.shooPosition) shoo();
+    if (shoo.position) shoo.execute();
     if (state.money.taken && !state.nActive) {
       ui.gameOver();
       return;
@@ -53,6 +53,7 @@ const game = {
   },
   initialize() {
     ui.initialize();
+    shoo.addListener();
     const type = ui.eventType;
     for (const button of qsa('button.start-game')) {
       ael(button, type, () => game.start());
