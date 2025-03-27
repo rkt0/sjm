@@ -13,6 +13,7 @@ const game = {
   start() {
     Chipmunk.initialize();
     mountainLion.initialize();
+    porch.initialize();
     time.initialize();
     ui.setShooPosition();
     state.money.taken = false;
