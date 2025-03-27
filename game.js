@@ -13,7 +13,6 @@ const game = {
     money.start();
     time.start();
     shoo.setPosition();
-    money.taken = false;
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);

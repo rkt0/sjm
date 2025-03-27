@@ -15,6 +15,6 @@ export default {
   },
   start() {
     qs('.porch').append(this.element);
+    this.taken = false;
   },
-  taken: false,
 };
