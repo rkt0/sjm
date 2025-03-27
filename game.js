@@ -4,7 +4,6 @@ import ui from './ui.js';
 import time from './time.js';
 import Chipmunk from './chipmunk.js';
 import mountainLion from './mountain-lion.js';
-import porch from './porch.js';
 import money from './money.js';
 import shoo from './shoo.js';
 
@@ -13,7 +12,6 @@ const game = {
   start() {
     Chipmunk.start();
     mountainLion.start();
-    porch.start();
     money.start();
     time.start();
     shoo.setPosition();
@@ -29,7 +27,6 @@ const game = {
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
-    porch.update(elapsed);
     mountainLion.update(elapsed);
     if (shoo.position) shoo.execute();
     const animalsActive = Chipmunk.nActive() ||
@@ -49,7 +46,6 @@ const game = {
     qs('.pause').innerHTML = pauseVerb[0];
     time.lastStamp = null;
     if (music.on) music.element[pauseVerb[1]]();
-    porch.element.classList.toggle('paused', paused);
     if (!paused) {
       shoo.setPosition();
       requestAnimationFrame(game.loop);

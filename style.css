@@ -156,20 +156,6 @@ h1 {
   border: solid 1px #555;
   pointer-events: none;
 }
-.porch.shaking {
-  animation-name: shake-porch;
-  animation-duration: 0.2s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-.porch.shaking.paused {
-  animation-play-state: paused;
-}
-@keyframes shake-porch {
-  0%, 50%, 100% {transform: translateY(0);}
-  25% {transform: translateY(6px);}
-  75% {transform: translateY(-6px);}
-}
 
 .money {
   box-sizing: border-box;

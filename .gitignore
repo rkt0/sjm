@@ -1,2 +1,4 @@
 scrap/
+old/
 .DS_Store
+.gitignore
