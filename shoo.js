@@ -14,7 +14,6 @@ export default {
       this.position = null;
       return;
     }
-    if (state.paused) return;
     let pxOffset = [event.offsetX, event.offsetY];
     if (ui.eventType === 'touchstart') {
       const t = event.changedTouches[0];

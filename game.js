@@ -10,6 +10,7 @@ import porch from './porch.js';
 import shoo from './shoo.js';
 
 const game = {
+  paused: false,
   start() {
     Chipmunk.initialize();
     mountainLion.initialize();
@@ -37,19 +38,22 @@ const game = {
       ui.changeToSection('game-over');
       return;
     }
-    if (state.paused) return;
+    if (game.paused) return;
     requestAnimationFrame(game.loop);
   },
   togglePause() {
-    state.paused = !state.paused;
-    const { paused } = state;
+    this.paused = !this.paused;
+    const { paused } = this;
     const pauseVerb = ['pause', 'play'];
     if (paused) pauseVerb.reverse();
     qs('.pause').innerHTML = pauseVerb[0];
     time.lastStamp = null;
     if (music.on) music.element[pauseVerb[1]]();
     porch.element.classList.toggle('paused', paused);
-    if (!paused) requestAnimationFrame(game.loop);
+    if (!paused) {
+      shoo.setPosition();
+      requestAnimationFrame(game.loop);
+    }
   },
   initialize() {
     ui.initialize();
