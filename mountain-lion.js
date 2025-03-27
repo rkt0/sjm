@@ -6,7 +6,7 @@ import money from './money.js';
 export default {
   speed: 0.75,
   active: false,
-  initialize() {
+  start() {
     if (this.element) this.element.remove();
     const element = document.createElement('div');
     element.classList.add('mountain-lion');

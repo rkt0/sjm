@@ -36,7 +36,7 @@ export default class Chipmunk {
     element.append(img);
     return element;
   }
-  static initialize() {
+  static start() {
     this.pool.length = 0;
     const oldElements = qsa('.chipmunk', this.field);
     for (const e of oldElements) e.remove();

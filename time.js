@@ -4,12 +4,12 @@ import fpsMeter from './fps-meter.js';
 export default {
   gameplayElement: qs('.gameplay .time-display'),
   gameOverElement: qs('.game-over .time-display'),
-  initialize() {
+  start() {
     this.total = 0;
     this.gameplayElement.innerHTML = 0;
     this.lastStamp = null;
     if (!fpsMeter.on) return;
-    fpsMeter.initialize('.gameplay');
+    fpsMeter.start('.gameplay');
   },
   advance(timeStamp) {
     this.lastStamp ??= timeStamp;

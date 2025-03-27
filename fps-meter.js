@@ -1,6 +1,6 @@
 export default {
   on: false,
-  initialize(whereSelector) {
+  start(whereSelector) {
     this.count = 0;
     this.time = 0;
     if (this.element) {

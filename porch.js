@@ -8,7 +8,7 @@ export default {
   element: qs('.porch'),
   shakeTimer: 0,
   disturbance: 0,
-  initialize() {
+  start() {
     this.shakeTimer = 0;
     this.disturbance = 0;
     this.element.classList.remove('shaking');

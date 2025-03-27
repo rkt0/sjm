@@ -11,10 +11,10 @@ import shoo from './shoo.js';
 const game = {
   paused: false,
   start() {
-    Chipmunk.initialize();
-    mountainLion.initialize();
-    porch.initialize();
-    time.initialize();
+    Chipmunk.start();
+    mountainLion.start();
+    porch.start();
+    time.start();
     shoo.setPosition();
     money.taken = false;
     ui.changeToSection('gameplay');
