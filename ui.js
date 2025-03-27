@@ -1,5 +1,4 @@
 import { ael, aelo, qs, qsa } from './utility.js';
-import music from './music.js';
 
 export default {
   eventType: 'mousedown',
@@ -29,7 +28,6 @@ export default {
     const { eventType: type, changeToSection } = this;
     aelo('.front', type, () => {
       changeToSection('title');
-      if (music.on) music.start();
     });
     ael('.show-instructions', type, () => {
       changeToSection('instructions');

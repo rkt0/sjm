@@ -1,4 +1,4 @@
-import { ael, qs } from './utility.js';
+import { ael, aelo, qs } from './utility.js';
 export { music as default };
 
 class Track {
@@ -73,3 +73,6 @@ music.next = function (otherIdToAvoid) {
 };
 
 ael(music.element, 'ended', () => music.next());
+aelo('.front', 'transitionstart', () => {
+  if (music.on) music.start();
+});
