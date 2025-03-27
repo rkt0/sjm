@@ -1,20 +1,25 @@
+import { qs } from './utility.js';
 import state from './state.js';
 
 export default {
+  shakeTime: 0.6,
+  disturbancePerShoo: 1,
+  disturbanceMax: 4,
+  element: qs('.porch'),
   initialize() {
-    state.porch.shakeTimer = 0;
-    state.porch.disturbance = 0;
-    state.porch.element.classList.remove('shaking');
-    state.porch.element.append(state.money.element);
+    this.shakeTimer = 0;
+    this.disturbance = 0;
+    this.element.classList.remove('shaking');
+    this.element.append(state.money.element);
+    state.porch = this;
   },
   update(elapsed) {
-    const { porch } = state;
-    porch.shakeTimer -= elapsed;
-    if (porch.shakeTimer < 0) {
-      porch.shakeTimer = 0;
-      porch.element.classList.remove('shaking');
+    this.shakeTimer -= elapsed;
+    if (this.shakeTimer < 0) {
+      this.shakeTimer = 0;
+      this.element.classList.remove('shaking');
     }
-    porch.disturbance -= elapsed;
-    if (porch.disturbance < 0) porch.disturbance = 0;
+    this.disturbance -= elapsed;
+    if (this.disturbance < 0) this.disturbance = 0;
   },
 };

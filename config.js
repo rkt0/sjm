@@ -1,12 +1,7 @@
 import { qs } from './utility.js';
 export { config as default };
 
-const config = {
-  shooRadius: 0.375,
-  porchShakeTime: 0.6,
-  porchDisturbancePerShoo: 1,
-  porchDisturbanceMax: 4,
-};
+const config = {};
 
 // Get sizes from CSS
 function cssInt(property, selector = ':root') {

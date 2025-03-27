@@ -3,9 +3,10 @@ import config from './config.js';
 import state from './state.js';
 import mountainLion from './mountain-lion.js';
 
-const pi = Math.PI;
-
 export default function () {
+  const shooRadius = 0.375;
+
+  const pi = Math.PI;
   const { shooPosition } = state;
   if (state.mountainLion.active) return;
   const onPorch = shooPosition.every(
@@ -17,8 +18,7 @@ export default function () {
     const vector = [0, 1].map(
       (i) => position[i] - shooPosition[i],
     );
-    const distance = Math.hypot(...vector);
-    const tooFar = distance > config.shooRadius;
+    const tooFar = Math.hypot(...vector) > shooRadius;
     const onOtherSide = geometry.anglePair([
       position, shooPosition,
     ]).diff > pi / 2;
@@ -34,9 +34,9 @@ export default function () {
   if (onPorch && !state.money.taken) {
     const p = state.porch;
     p.element.classList.add('shaking');
-    p.shakeTimer = config.porchShakeTime;
-    p.disturbance += config.porchDisturbancePerShoo;
-    if (p.disturbance > config.porchDisturbanceMax) {
+    p.shakeTimer = p.shakeTime;
+    p.disturbance += p.disturbancePerShoo;
+    if (p.disturbance > p.disturbanceMax) {
       mountainLion.activate();
     }
   }
