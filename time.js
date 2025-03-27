@@ -3,6 +3,11 @@ import config from './config.js';
 import state from './state.js';
 
 export default {
+  initialize() {
+    state.time.total = 0;
+    state.time.element.innerHTML = 0;
+    state.time.lastStamp = null;
+  },
   advance(timeStamp) {
     state.time.lastStamp ??= timeStamp;
     const elapsed = 0.001 * (

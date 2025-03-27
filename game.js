@@ -14,15 +14,9 @@ const game = {
   start() {
     Chipmunk.initialize();
     mountainLion.initialize();
-    state.time.total = 0;
-    state.time.element.innerHTML = 0;
-    state.time.lastStamp = null;
+    time.initialize();
+    ui.setShooPosition();
     state.money.taken = false;
-    state.shooPosition = null;
-    state.porch.shakeTimer = 0;
-    state.porch.disturbance = 0;
-    state.porch.element.classList.remove('shaking');
-    state.porch.element.append(state.money.element);
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);

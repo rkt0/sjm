@@ -40,6 +40,10 @@ export default {
     this.changeToSection('game-over');
   },
   setShooPosition(event) {
+    if (!event) {
+      state.shooPosition = null;
+      return;
+    }
     if (state.paused) return;
     const { boundary, fieldSize } = config;
     let pxOffset = [event.offsetX, event.offsetY];
