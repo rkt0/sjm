@@ -1,7 +1,7 @@
 import { qs, qsa } from './utility.js';
 import geometry from './geometry.js';
-import config from './config.js';
 import state from './state.js';
+import size from './size.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
@@ -41,10 +41,9 @@ export default class Chipmunk {
   }
 
   place() {
-    const { boundary } = config;
     const { position, element, velocity } = this;
-    const loc = position.map((u) => u * boundary);
-    const xf = `translate(${loc[0]}px, ${loc[1]}px)`;
+    const p = position.map((u) => u * size.boundary);
+    const xf = `translate(${p[0]}px, ${p[1]}px)`;
     element.style.transform = xf;
     const isMovingLeft = velocity[0] < 0;
     element.classList.toggle('flipped', isMovingLeft);

@@ -1,10 +1,9 @@
 import { qs } from './utility.js';
-import config from './config.js';
 import state from './state.js';
+import size from './size.js';
 
 export default {
   speed: 0.75,
-  track: config.mlTrack,
   initialize() {
     if (this.element) this.element.remove();
     const element = document.createElement('div');
@@ -15,13 +14,14 @@ export default {
     qs('.field').append(element);
     this.element = element;
     this.active = false;
-    const { speed, track } = this;
-    this.velocity = config.boundary * speed / track;
+    const path = size.field + size.mountainLion;
+    this.path = path;
+    this.velocity = size.boundary * this.speed / path;
     state.mountainLion = this;
   },
   place() {
-    const { element, position, track } = this;
-    const x = position * track;
+    const { element, position, path } = this;
+    const x = position * path;
     element.style.transform = `translateX(${x}px)`;
   },
   activate() {

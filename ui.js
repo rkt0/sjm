@@ -1,6 +1,5 @@
 import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
-import config from './config.js';
 import state from './state.js';
 import Chipmunk from './chipmunk.js';
 

@@ -1,8 +1,8 @@
 import { ael } from './utility.js';
 import geometry from './geometry.js';
-import config from './config.js';
 import state from './state.js';
 import ui from './ui.js';
+import size from './size.js';
 import mountainLion from './mountain-lion.js';
 
 export default {
@@ -13,7 +13,6 @@ export default {
       return;
     }
     if (state.paused) return;
-    const { boundary, fieldSize } = config;
     let pxOffset = [event.offsetX, event.offsetY];
     if (ui.eventType === 'touchstart') {
       const t = event.changedTouches[0];
@@ -22,16 +21,16 @@ export default {
       pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
     }
     this.position = pxOffset.map(
-      (u) => (u - fieldSize / 2) / boundary,
+      (u) => (u - size.field / 2) / size.boundary,
     );
   },
   execute() {
     const pi = Math.PI;
-    // const { anglePair } = geometry;
     const { position: sPos } = this;
     if (state.mountainLion.active) return;
+    const porchRatio = size.porch / 2 / size.boundary;
     const onPorch = sPos.every(
-      (u) => Math.abs(u) < config.porch,
+      (u) => Math.abs(u) < porchRatio
     );
     for (const chipmunk of state.chipmunks) {
       if (!chipmunk.active) continue;
