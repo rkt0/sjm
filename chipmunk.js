@@ -1,4 +1,4 @@
-import { qs, qsa } from './utility.js';
+import { qs } from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 import time from './time.js';
