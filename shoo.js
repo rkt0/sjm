@@ -3,7 +3,6 @@ import geometry from './geometry.js';
 import ui from './ui.js';
 import size from './size.js';
 import Chipmunk from './chipmunk.js';
-import mountainLion from './mountain-lion.js';
 
 export default {
   radius: 0.375,
@@ -26,7 +25,6 @@ export default {
   execute() {
     const pi = Math.PI;
     const { position: sPos } = this;
-    if (mountainLion.active) return;
     const porchRatio = size.porch / 2 / size.boundary;
     const onPorch = sPos.every(
       (u) => Math.abs(u) < porchRatio

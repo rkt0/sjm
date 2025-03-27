@@ -14,8 +14,6 @@
     (var(--field-size) - var(--chipmunk-size)) / 2
   );
   --porch-size: 108px;
-  --mountain-lion-size: 360px;
-  --mountain-lion-top: 210px;
 
 }
 
@@ -33,8 +31,6 @@
     --field-size: 360px;
     --chipmunk-size: 40px;
     --porch-size: 72px;
-    --mountain-lion-size: 240px;
-    --mountain-lion-top: 140px;
   }
 }
 
@@ -198,22 +194,6 @@ h1 {
 .chipmunk.flipped .money {
   left: calc(-1 * var(--lr-offset));
   transform: rotate(calc(-1 * var(--rotation)));
-}
-
-.mountain-lion {
-  position: absolute;
-  width: var(--mountain-lion-size);
-  left: calc(var(--mountain-lion-size) * -1);
-  top: var(--mountain-lion-top);
-}
-.mountain-lion img {
-  width: 100%;
-}
-.mountain-lion .money {
-  position: absolute;
-  top: calc(0.14 * var(--mountain-lion-size));
-  left: calc(0.9 * var(--mountain-lion-size));
-  transform: rotate(-15deg);
 }
 
 .sidebar {

@@ -8,11 +8,9 @@ function cssInt(property, selector = ':root') {
 const fieldSize = cssInt('--field-size');
 const chipmunkSize = cssInt('--chipmunk-size');
 const porchSize = cssInt('--porch-size');
-const mlSize = cssInt('--mountain-lion-size');
 
 export default {
   field: fieldSize,
   boundary: (fieldSize + chipmunkSize) / 2,
   porch: porchSize,
-  mountainLion: mlSize,
 };

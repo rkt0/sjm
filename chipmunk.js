@@ -2,7 +2,6 @@ import { qs } from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 import time from './time.js';
-import mountainLion from './mountain-lion.js';
 import money from './money.js';
 
 export default class Chipmunk {
@@ -13,7 +12,6 @@ export default class Chipmunk {
 
   static possiblyActivate(timeInterval) {
     if (money.taken) return;
-    if (mountainLion.active) return;
     const t = time.total;
     if (this.nActive() > t / 10) return;
     const rate = 0.1 + t * 0.03;

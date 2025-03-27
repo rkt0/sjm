@@ -3,7 +3,6 @@ import music from './music.js';
 import ui from './ui.js';
 import time from './time.js';
 import Chipmunk from './chipmunk.js';
-import mountainLion from './mountain-lion.js';
 import money from './money.js';
 import shoo from './shoo.js';
 
@@ -11,7 +10,6 @@ const game = {
   paused: false,
   start() {
     Chipmunk.start();
-    mountainLion.start();
     money.start();
     time.start();
     shoo.setPosition();
@@ -27,11 +25,8 @@ const game = {
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
-    mountainLion.update(elapsed);
     if (shoo.position) shoo.execute();
-    const animalsActive = Chipmunk.nActive() ||
-      mountainLion.active;
-    if (money.taken && !animalsActive) {
+    if (money.taken && !Chipmunk.nActive()) {
       ui.changeToSection('game-over');
       return;
     }
