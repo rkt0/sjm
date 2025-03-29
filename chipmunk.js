@@ -18,12 +18,12 @@ export default class Chipmunk {
     let probability = rate * timeInterval;
     if (t > 2 && !this.nActive()) probability = 1;
     if (Math.random() > probability) return;
-    const c = this.pool.find((c) => !c.active);
+    const c = this.pool.find((c) => !c.active());
     c?.activate();
   }
   static pool = [];
   static nActive() {
-    return this.pool.filter(c => c.active).length;
+    return this.pool.filter((c) => c.active()).length;
   }
   static field = qs('.field');
   static makeElement() {
@@ -56,30 +56,50 @@ export default class Chipmunk {
     const isMovingLeft = velocity[0] < 0;
     element.classList.toggle('flipped', isMovingLeft);
   }
+  setTarget(targetPosition) {
+    if (!targetPosition) {
+      this.target = null;
+      return;
+    }
+    this.target = [...targetPosition];
+    this.velocity = geometry.vMult(
+      geometry.direction(this.position, this.target),
+      this.speed,
+    );
+  }
   activate() {
-    this.active = true;
     this.fleeing = false;
     const vector = geometry.randomUnitSupNormVector();
     this.position = vector;
-    this.velocity = vector.map(
-      (u) => -u * this.speed / Math.hypot(...vector),
-    );
+    this.setTarget(money.position);
     this.place();
   }
+  active() {
+    return geometry.supNorm(this.position) <= 1;
+  }
   update(timeInterval) {
-    if (!this.active) return;
-    const { position: p, velocity: v } = this;
-    const pOld = [...p];
-    const delta = v.map((x) => x * timeInterval);
-    for (let d = 0; d < 2; d++) p[d] += delta[d];
-    const atGoal = p.some((e, i) => e * pOld[i] < 0);
+    if (!this.active()) return;
+    if (this.fleeing) this.setTarget(null);
+    else this.setTarget(money.position);
+    const { position: p, velocity: v, target } = this;
+    const delta = geometry.vMult(v, timeInterval);
+    this.position = geometry.vSum(p, delta);
+    if (target) {
+      const distance = geometry.distance(p, target);
+      if (Math.hypot(...delta) > distance) {
+        this.position = target;
+      }
+    }
+    const atMoney = geometry.vEqual(
+      this.position,
+      money.position,
+    );
     if (!this.fleeing) {
       if (money.taken) {
-        this.chase(geometry.angle(p));
-      } else if (atGoal) this.takeMoney();
+        this.chase(geometry.angle(this.position));
+      } else if (atMoney) this.takeMoney();
     }
     this.place();
-    this.active = p.every((u) => Math.abs(u) < 1);
   }
   chase(angle = 0) {
     const { hasMoney, fleeSpeed, moneySpeed } = this;
@@ -89,21 +109,19 @@ export default class Chipmunk {
     this.fleeing = true;
   }
   takeMoney() {
-    const { moneySpeed, element } = this;
-    const v = geometry.randomUnitVector();
-    for (let d = 0; d < 2; d++) {
-      this.position[d] = 0;
-      this.velocity[d] = v[d] * moneySpeed;
-    }
-    element.append(money.element);
+    this.velocity = geometry.vMult(
+      geometry.randomUnitVector(),
+      this.moneySpeed,
+    );
+    this.element.append(money.element);
     this.fleeing = true;
     this.hasMoney = true;
     money.taken = true;
+    money.center();
   }
   reset() {
-    this.position = [1, 0];
+    this.position = [2, 0];
     this.velocity = [0, 0];
-    this.active = false;
     this.fleeing = false;
     this.place();
   }

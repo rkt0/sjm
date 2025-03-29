@@ -3,6 +3,7 @@ import geometry from './geometry.js';
 import ui from './ui.js';
 import size from './size.js';
 import Chipmunk from './chipmunk.js';
+import money from './money.js';
 
 export default {
   radius: 0.375,
@@ -30,9 +31,9 @@ export default {
       (u) => Math.abs(u) < porchRatio
     );
     for (const chipmunk of Chipmunk.pool) {
-      if (!chipmunk.active) continue;
+      if (!chipmunk.active()) continue;
       const { position: cPos } = chipmunk;
-      const d = [0, 1].map((i) => cPos[i] - sPos[i]);
+      const d = geometry.vDiff(cPos, sPos);
       const tooFar = Math.hypot(...d) > this.radius;
       const wrongSide = !onPorch &&
         geometry.anglePair(cPos, sPos).diff > pi / 2;
@@ -45,6 +46,8 @@ export default {
       );
     }
     this.position = null;
+    if (!onPorch) return;
+    money.knock();
   },
   addListener() {
     ael('.field', ui.eventType, (event) => {

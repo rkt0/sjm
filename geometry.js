@@ -29,6 +29,44 @@ export default {
     return Math.acos(dotProduct / norms);
   },
 
+  // Check if vectors are equal
+  vEqual(vector0, vector1) {
+    return vector0.every((e, i) => e === vector1[i]);
+  },
+
+  // Get elementwise sum of vectors
+  vSum(vector0, vector1) {
+    return vector0.map((e, i) => e + vector1[i]);
+  },
+
+  // Get elementwise difference of vectors
+  vDiff(vector0, vector1) {
+    return vector0.map((e, i) => e - vector1[i]);
+  },
+
+  // Get product of vector and scalar
+  vMult(vector, scalar) {
+    return vector.map((e) => e * scalar);
+  },
+
+  // Get distance between two points
+  distance(from, to) {
+    return Math.hypot(...this.vDiff(to, from));
+  },
+
+  // Get unit vector of direction from point to point
+  direction(from, to) {
+    const vector = this.vDiff(to, from);
+    const norm = Math.hypot(...vector);
+    return this.vMult(vector, 1 / norm);
+  },
+
+  // Get sup norm of vector
+  supNorm(vector) {
+    const vAbs = vector.map((u) => Math.abs(u));
+    return Math.max(...vAbs);
+  },
+
   // Generate random unit vector
   randomUnitVector() {
     const theta = Math.random() * 2 * Math.PI;
