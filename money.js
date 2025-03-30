@@ -23,6 +23,7 @@ export default {
   },
   center() {
     this.position = [0, 0];
+    this.velocity = [0, 0];
     this.element.style.transform = null;
   },
   place() {
@@ -31,12 +32,28 @@ export default {
     const xf = `translate(${p[0]}px, ${p[1]}px)`;
     element.style.transform = xf;
   },
+  update(timeInterval) {
+    if (this.taken) return;
+    const dragEffect = 0.001;
+    const porchRatio = size.porch / 2 / size.boundary;
+    const { position: p, velocity: v } = this;
+    const delta = geometry.vMult(v, timeInterval);
+    this.position = geometry.vSum(p, delta);
+    this.position = this.position.map((u) =>
+      Math.max(Math.min(u, porchRatio), -porchRatio)
+    );
+    this.place();
+    const speed = Math.hypot(...v);
+    if (dragEffect > speed) this.velocity = [0, 0];
+    else {
+      const speedRatio = (speed - dragEffect) / speed;
+      this.velocity = geometry.vMult(v, speedRatio);
+    }
+  },
   knock() {
     if (this.taken) return;
-    const porchRatio = size.porch / 2 / size.boundary;
-    const vector = geometry.randomUnitSupNormVector();
-    this.position = vector.map((u) => u * porchRatio);
-    this.place();
+    const vector = geometry.randomUnitVector();
+    this.velocity = geometry.vMult(vector, 0.1);
   },
   spin() {
     const { classList } = this.element;

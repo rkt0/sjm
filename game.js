@@ -24,6 +24,7 @@ const game = {
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
+    money.update(elapsed);
     if (shoo.position) shoo.execute();
     if (money.taken && !Chipmunk.nActive()) {
       ui.changeToSection('game-over');
