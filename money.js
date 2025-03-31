@@ -24,17 +24,33 @@ export default {
   center() {
     this.position = [0, 0];
     this.velocity = [0, 0];
+    this.angle = 0;
+    this.spin = 0;
     this.element.style.transform = null;
   },
   place() {
     const { position, element } = this;
     const p = position.map((u) => u * size.boundary);
-    const xf = `translate(${p[0]}px, ${p[1]}px)`;
-    element.style.transform = xf;
+    const xl = `translate(${p[0]}px, ${p[1]}px)`;
+    const rot = `rotate(${this.angle}turn)`;
+    element.style.transform = `${xl} ${rot}`;
+  },
+  imposeDrag() {
+    const dragSpeed = 0.001;
+    const speed = Math.hypot(...this.velocity);
+    if (dragSpeed > speed) this.velocity = [0, 0];
+    else {
+      this.velocity = geometry.vMult(
+        this.velocity,
+        (speed - dragSpeed) / speed,
+      );
+    }
+    const dragSpin = 0.001;
+    if (dragSpin > Math.abs(this.spin)) this.spin = 0;
+    else this.spin -= dragSpin * Math.sign(this.spin);
   },
   update(timeInterval) {
     if (this.taken) return;
-    const dragEffect = 0.001;
     const porchRatio = size.porch / 2 / size.boundary;
     const { position: p, velocity: v } = this;
     const delta = geometry.vMult(v, timeInterval);
@@ -42,25 +58,14 @@ export default {
     this.position = this.position.map((u) =>
       Math.max(Math.min(u, porchRatio), -porchRatio)
     );
+    this.angle += this.spin * timeInterval;
     this.place();
-    const speed = Math.hypot(...v);
-    if (dragEffect > speed) this.velocity = [0, 0];
-    else {
-      const speedRatio = (speed - dragEffect) / speed;
-      this.velocity = geometry.vMult(v, speedRatio);
-    }
+    this.imposeDrag();
   },
   knock() {
     if (this.taken) return;
     const vector = geometry.randomUnitVector();
     this.velocity = geometry.vMult(vector, 0.1);
-  },
-  spin() {
-    const { classList } = this.element;
-    if (classList.contains('spinning')) return;
-    classList.add('spinning');
-    aelo(this.element, 'animationend', () => {
-      classList.remove('spinning');
-    });
+    this.spin = Math.random() < 0.5 ? -0.1 : 0.1;
   },
 };
