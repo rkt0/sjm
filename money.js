@@ -35,26 +35,22 @@ export default {
     const rot = `rotate(${this.angle}turn)`;
     element.style.transform = `${xl} ${rot}`;
   },
-  maxVelocity: 0.2,
-  maxSpin: 1,
-  stopTime: 1,
   imposeDrag(timeInterval) {
     if (!timeInterval) return;
-    const { maxVelocity, maxSpin, stopTime } = this;
-    const dragSpeed = maxVelocity / stopTime *
-      timeInterval;
     const speed = Math.hypot(...this.velocity);
-    if (dragSpeed > speed) this.velocity = [0, 0];
+    const absSpin = Math.abs(this.spin);
+    if (!speed && !absSpin) return;
+    const deltaSpeed = this.dragSpeed * timeInterval;
+    if (deltaSpeed > speed) this.velocity = [0, 0];
     else {
       this.velocity = geometry.vMult(
         this.velocity,
-        (speed - dragSpeed) / speed,
+        (speed - deltaSpeed) / speed,
       );
     }
-    const dragSpin = maxSpin / stopTime *
-      timeInterval;
-    if (dragSpin > Math.abs(this.spin)) this.spin = 0;
-    else this.spin -= dragSpin * Math.sign(this.spin);
+    const deltaSpin = this.dragSpin * timeInterval;
+    if (deltaSpin > absSpin) this.spin = 0;
+    else this.spin *= (absSpin - deltaSpin) / absSpin;
   },
   update(timeInterval) {
     if (this.taken) return;
@@ -71,11 +67,14 @@ export default {
   },
   knock() {
     if (this.taken) return;
+    const speed = 0.2;
     this.velocity = geometry.vMult(
       geometry.randomUnitVector(),
-      this.maxVelocity,
+      speed,
     );
-    this.spin = this.maxSpin;
-    this.spin *= Math.random() < 0.5 ? -1 : 1;
+    this.spin = 1 * (Math.random() < 0.5 ? -1 : 1);
+    const stopTime = 1;
+    this.dragSpeed = speed / stopTime;
+    this.dragSpin = Math.abs(this.spin) / stopTime;
   },
 };
