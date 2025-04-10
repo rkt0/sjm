@@ -1,4 +1,4 @@
-import { aelo, qs } from './utility.js';
+import { qs } from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 
@@ -35,8 +35,14 @@ export default {
     const rot = `rotate(${this.angle}turn)`;
     element.style.transform = `${xl} ${rot}`;
   },
-  imposeDrag() {
-    const dragSpeed = 0.001;
+  maxVelocity: 0.2,
+  maxSpin: 1,
+  stopTime: 1,
+  imposeDrag(timeInterval) {
+    if (!timeInterval) return;
+    const { maxVelocity, maxSpin, stopTime } = this;
+    const dragSpeed = maxVelocity / stopTime *
+      timeInterval;
     const speed = Math.hypot(...this.velocity);
     if (dragSpeed > speed) this.velocity = [0, 0];
     else {
@@ -45,7 +51,8 @@ export default {
         (speed - dragSpeed) / speed,
       );
     }
-    const dragSpin = 0.001;
+    const dragSpin = maxSpin / stopTime *
+      timeInterval;
     if (dragSpin > Math.abs(this.spin)) this.spin = 0;
     else this.spin -= dragSpin * Math.sign(this.spin);
   },
@@ -60,12 +67,15 @@ export default {
     );
     this.angle += this.spin * timeInterval;
     this.place();
-    this.imposeDrag();
+    this.imposeDrag(timeInterval);
   },
   knock() {
     if (this.taken) return;
-    const vector = geometry.randomUnitVector();
-    this.velocity = geometry.vMult(vector, 0.1);
-    this.spin = Math.random() < 0.5 ? -0.1 : 0.1;
+    this.velocity = geometry.vMult(
+      geometry.randomUnitVector(),
+      this.maxVelocity,
+    );
+    this.spin = this.maxSpin;
+    this.spin *= Math.random() < 0.5 ? -1 : 1;
   },
 };
