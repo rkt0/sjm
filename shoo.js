@@ -6,7 +6,8 @@ import Chipmunk from './chipmunk.js';
 import money from './money.js';
 
 export default {
-  radius: 0.375,
+  radiusChipmunk: 0.375,
+  radiusMoney: 0.2,
   setPosition(event) {
     if (!event) {
       this.position = null;
@@ -28,26 +29,31 @@ export default {
     const { position: sPos } = this;
     const porchRatio = size.porch / 2 / size.boundary;
     const onPorch = sPos.every(
-      (u) => Math.abs(u) < porchRatio
+      (u) => Math.abs(u) < porchRatio,
     );
     for (const chipmunk of Chipmunk.pool) {
       if (!chipmunk.active()) continue;
       const { position: cPos } = chipmunk;
-      const d = geometry.vDiff(cPos, sPos);
-      const tooFar = Math.hypot(...d) > this.radius;
+      const vectorCS = geometry.vDiff(cPos, sPos);
+      const dCS = Math.hypot(...vectorCS);
+      const tooFar = dCS > this.radiusChipmunk;
       const wrongSide = !onPorch &&
         geometry.anglePair(cPos, sPos).diff > pi / 2;
       if (tooFar || wrongSide) continue;
       // Chase chipmunk away from both origin and shoo
-      const chaseAngles = geometry.anglePair(cPos, d);
-      const { max, diff } = chaseAngles;
+      const { max, diff } = geometry.anglePair(
+        cPos,
+        vectorCS,
+      );
       chipmunk.chase(
         max - pi / 2 + Math.random() * (pi - diff),
       );
     }
+    const { position: mPos } = money;
+    const vectorMS = geometry.vDiff(mPos, sPos);
+    const dMS = Math.hypot(...vectorMS);
+    if (dMS < this.radiusMoney) money.knock();
     this.position = null;
-    if (!onPorch) return;
-    money.knock();
   },
   addListener() {
     ael('.field', ui.eventType, (event) => {
