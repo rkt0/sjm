@@ -69,12 +69,14 @@ export default {
   },
   knock(strength) {
     if (this.taken) return;
-    const speed = 0.6 * strength;
+    const maxSpeed = 0.6;
+    const speed = maxSpeed * strength;
     this.velocity = geometry.vMult(
       geometry.randomUnitVector(),
       speed,
     );
-    this.spin = 3 * strength;
+    const maxSpin = 3;
+    this.spin = maxSpin * strength;
     this.spin *= Math.random() < 0.5 ? -1 : 1;
     const stopTime = 1;
     this.dragSpeed = speed / stopTime;
