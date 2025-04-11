@@ -58,8 +58,10 @@ export default {
     const { position: p, velocity: v } = this;
     const delta = geometry.vMult(v, timeInterval);
     this.position = geometry.vSum(p, delta);
+    const porchPadding = 0.05;
+    const limit = porchRatio - porchPadding;
     this.position = this.position.map((u) =>
-      Math.max(Math.min(u, porchRatio), -porchRatio)
+      Math.max(Math.min(u, limit), -limit)
     );
     this.angle += this.spin * timeInterval;
     this.place();
