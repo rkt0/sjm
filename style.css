@@ -13,7 +13,7 @@
   --o: calc(
     (var(--field-size) - var(--chipmunk-size)) / 2
   );
-  --porch-size: 108px;
+  --porch-size: 200px;
 
 }
 
