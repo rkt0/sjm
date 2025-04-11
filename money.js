@@ -71,15 +71,20 @@ export default {
     if (this.taken) return;
     const maxSpeed = 0.6;
     const speed = maxSpeed * strength;
-    this.velocity = geometry.vMult(
+    const deltaVelocity = geometry.vMult(
       geometry.randomUnitVector(),
       speed,
     );
+    this.velocity = geometry.vSum(
+      this.velocity,
+      deltaVelocity,
+    );
     const maxSpin = 3;
-    this.spin = maxSpin * strength;
-    this.spin *= Math.random() < 0.5 ? -1 : 1;
+    const spinSign = Math.random() < 0.5 ? -1 : 1;
+    this.spin += maxSpin * strength * spinSign;
     const stopTime = 1;
-    this.dragSpeed = speed / stopTime;
+    this.dragSpeed = Math.hypot(...this.velocity) /
+      stopTime;
     this.dragSpin = Math.abs(this.spin) / stopTime;
   },
 };
