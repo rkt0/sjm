@@ -65,14 +65,15 @@ export default {
     this.place();
     this.imposeDrag(timeInterval);
   },
-  knock() {
+  knock(strength) {
     if (this.taken) return;
-    const speed = 0.2;
+    const speed = 0.6 * strength;
     this.velocity = geometry.vMult(
       geometry.randomUnitVector(),
       speed,
     );
-    this.spin = 1 * (Math.random() < 0.5 ? -1 : 1);
+    this.spin = 3 * strength;
+    this.spin *= Math.random() < 0.5 ? -1 : 1;
     const stopTime = 1;
     this.dragSpeed = speed / stopTime;
     this.dragSpin = Math.abs(this.spin) / stopTime;

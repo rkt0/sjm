@@ -52,7 +52,8 @@ export default {
     const { position: mPos } = money;
     const vectorMS = geometry.vDiff(mPos, sPos);
     const dMS = Math.hypot(...vectorMS);
-    if (dMS < this.radiusMoney) money.knock();
+    const strength = 1 - dMS / this.radiusMoney;
+    if (strength > 0) money.knock(strength);
     this.position = null;
   },
   addListener() {
