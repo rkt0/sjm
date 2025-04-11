@@ -32,7 +32,9 @@ export default {
       (u) => Math.abs(u) < porchRatio,
     );
     for (const chipmunk of Chipmunk.pool) {
-      if (!chipmunk.active()) continue;
+      const active = chipmunk.active();
+      const { hiding, emerging } = chipmunk;
+      if (!active || hiding || emerging) continue;
       const { position: cPos } = chipmunk;
       const vectorCS = geometry.vDiff(cPos, sPos);
       const dCS = Math.hypot(...vectorCS);

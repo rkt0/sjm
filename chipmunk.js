@@ -13,17 +13,20 @@ export default class Chipmunk {
   static possiblyActivate(timeInterval) {
     if (money.taken) return;
     const t = time.total;
-    if (this.nActive() > t / 10) return;
+    if (this.nMoving() > t / 10) return;
     const rate = 0.1 + t * 0.03;
     let probability = rate * timeInterval;
-    if (t > 2 && !this.nActive()) probability = 1;
+    if (t > 2 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active());
     c?.activate();
   }
   static pool = [];
-  static nActive() {
-    return this.pool.filter((c) => c.active()).length;
+  static nMoving() {
+    return this.pool.filter((chipmunk) =>
+      chipmunk.active() &&
+      geometry.supNorm(chipmunk.velocity)
+    ).length;
   }
   static field = qs('.field');
   static makeElement() {
@@ -62,13 +65,17 @@ export default class Chipmunk {
       return;
     }
     this.target = [...targetPosition];
+    if (geometry.vEqual(this.position, this.target)) {
+      this.velocity = [0, 0];
+      return;
+    }
     this.velocity = geometry.vMult(
       geometry.direction(this.position, this.target),
       this.speed,
     );
   }
   activate() {
-    this.fleeing = false;
+    this.reset();
     const vector = geometry.randomUnitSupNormVector();
     this.position = vector;
     this.setTarget(money.position);
@@ -77,28 +84,62 @@ export default class Chipmunk {
   active() {
     return geometry.supNorm(this.position) <= 1;
   }
-  update(timeInterval) {
-    if (!this.active()) return;
+  adjustTarget() {
     if (this.fleeing) this.setTarget(null);
+    else if (this.hiding) this.setTarget([0, 0]);
     else this.setTarget(money.position);
-    const { position: p, velocity: v, target } = this;
-    const delta = geometry.vMult(v, timeInterval);
-    this.position = geometry.vSum(p, delta);
-    if (target) {
-      const distance = geometry.distance(p, target);
+  }
+  move(timeInterval) {
+    const delta = geometry.vMult(
+      this.velocity,
+      timeInterval,
+    );
+    this.position = geometry.vSum(
+      this.position,
+      delta,
+    );
+    if (this.target) {
+      const distance = geometry.distance(
+        this.position,
+        this.target,
+      );
       if (Math.hypot(...delta) > distance) {
-        this.position = target;
+        this.position = [...this.target];
+        this.target = null;
       }
     }
+  }
+  checkPorch() {
+    const porchBoundary =
+      (size.porch + size.chipmunk) / 2;
+    this.atPorch = geometry.supNorm(this.position) <
+      porchBoundary / size.boundary;
+    this.reachedPorch ||= this.atPorch;
+    const { reachedPorch, atPorch } = this;
+    if (reachedPorch && !atPorch && !money.taken) {
+      if (this.fleeing) {
+        this.hiding = true;
+        this.element.classList.add('under');
+      } else if (this.emerging) this.emerging = false;
+      this.fleeing = false;
+    }
+  }
+  checkMoney() {
+    if (this.fleeing || this.hiding) return;
     const atMoney = geometry.vEqual(
       this.position,
       money.position,
     );
-    if (!this.fleeing) {
-      if (money.taken) {
-        this.chase(geometry.angle(this.position));
-      } else if (atMoney) this.takeMoney();
-    }
+    if (money.taken) {
+      this.chase(geometry.angle(this.position));
+    } else if (atMoney) this.takeMoney();
+  }
+  update(timeInterval) {
+    if (!this.active()) return;
+    this.adjustTarget();
+    this.move(timeInterval);
+    this.checkPorch();
+    this.checkMoney();
     this.place();
   }
   chase(angle = 0) {
@@ -123,6 +164,9 @@ export default class Chipmunk {
     this.position = [2, 0];
     this.velocity = [0, 0];
     this.fleeing = false;
+    this.hiding = false;
+    this.emerging = false;
+    this.atPorch = false;
     this.place();
   }
 

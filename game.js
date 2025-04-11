@@ -26,7 +26,7 @@ const game = {
     }
     money.update(elapsed);
     if (shoo.position) shoo.execute();
-    if (money.taken && !Chipmunk.nActive()) {
+    if (money.taken && !Chipmunk.nMoving()) {
       ui.changeToSection('game-over');
       return;
     }

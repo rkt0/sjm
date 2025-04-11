@@ -11,6 +11,7 @@ const porchSize = cssInt('--porch-size');
 
 export default {
   field: fieldSize,
+  chipmunk: chipmunkSize,
   boundary: (fieldSize + chipmunkSize) / 2,
   porch: porchSize,
 };
