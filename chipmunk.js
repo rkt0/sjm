@@ -101,10 +101,14 @@ export default class Chipmunk {
   emerge() {
     this.hiding = false;
     this.emerging = true;
-    this.setTarget(geometry.vMult(
-      geometry.randomUnitSupNormVector(),
-      Chipmunk.porchBoundary,
-    ));
+    const smartProbability = 0.5;
+    let point = geometry.randomUnitSupNormVector();
+    const m = geometry.supNorm(money.position);
+    if (Math.random() < smartProbability && m) {
+      point = geometry.vMult(money.position, 1 / m);
+    }
+    const p = Chipmunk.porchBoundary;
+    this.setTarget(geometry.vMult(point, p));
   }
   adjustTarget() {
     if (this.emerging) return;
