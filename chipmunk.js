@@ -139,17 +139,23 @@ export default class Chipmunk {
   checkPorch() {
     this.atPorch = geometry.supNorm(this.position) <
       Chipmunk.porchBoundary / size.boundary;
-    this.reachedPorch ||= this.atPorch;
-    const { reachedPorch, atPorch } = this;
-    if (reachedPorch && !atPorch && !money.taken) {
+    this.stayPorch ||= this.atPorch;
+    const { stayPorch, atPorch } = this;
+    if (stayPorch && !atPorch && !money.taken) {
       if (this.fleeing) {
+        const hideProbability = 0.5;
+        if (Math.random() > hideProbability) {
+          this.stayPorch = false;
+          return;
+        }
+        this.fleeing = false;
         this.hiding = true;
         this.element.classList.add('under');
       } else if (this.emerging) {
+        this.fleeing = false;
         this.emerging = false;
         this.element.classList.remove('under');
       }
-      this.fleeing = false;
     }
   }
   checkMoney() {
@@ -199,7 +205,7 @@ export default class Chipmunk {
     this.hiding = false;
     this.emerging = false;
     this.atPorch = false;
-    this.reachedPorch = false;
+    this.stayPorch = false;
     this.place();
     this.element.classList.remove('under');
   }
