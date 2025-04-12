@@ -25,6 +25,10 @@ export default {
     );
   },
   execute() {
+    if (money.taken) {
+      this.position = null;
+      return;
+    }
     const pi = Math.PI;
     const { position: sPos } = this;
     const porchRatio = size.porch / 2 / size.boundary;
