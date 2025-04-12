@@ -21,6 +21,7 @@ const game = {
   loop(timeStamp) {
     const elapsed = time.advance(timeStamp);
     Chipmunk.possiblyActivate(elapsed);
+    Chipmunk.possiblyEmerge(elapsed);
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }

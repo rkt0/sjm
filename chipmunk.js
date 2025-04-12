@@ -21,6 +21,18 @@ export default class Chipmunk {
     const c = this.pool.find((c) => !c.active());
     c?.activate();
   }
+  static possiblyEmerge(timeInterval) {
+    if (money.taken) return;
+    const emergeRate = 0.5;
+    const probability = emergeRate * timeInterval;
+    for (const chipmunk of this.pool) {
+      const available = chipmunk.hiding &&
+        !geometry.supNorm(chipmunk.position);
+      if (!available) continue;
+      if (Math.random() > probability) continue;
+      chipmunk.emerge();
+    }
+  }
   static pool = [];
   static nMoving() {
     return this.pool.filter((chipmunk) =>
@@ -50,6 +62,8 @@ export default class Chipmunk {
       chipmunk.reset();
     }
   }
+  static porchBoundary =
+    (size.porch + size.chipmunk) / 2;
 
   place() {
     const { position, element, velocity } = this;
@@ -84,7 +98,16 @@ export default class Chipmunk {
   active() {
     return geometry.supNorm(this.position) <= 1;
   }
+  emerge() {
+    this.hiding = false;
+    this.emerging = true;
+    this.setTarget(geometry.vMult(
+      geometry.randomUnitSupNormVector(),
+      Chipmunk.porchBoundary,
+    ));
+  }
   adjustTarget() {
+    if (this.emerging) return;
     if (this.fleeing) this.setTarget(null);
     else if (this.hiding) this.setTarget([0, 0]);
     else this.setTarget(money.position);
@@ -110,17 +133,18 @@ export default class Chipmunk {
     }
   }
   checkPorch() {
-    const porchBoundary =
-      (size.porch + size.chipmunk) / 2;
     this.atPorch = geometry.supNorm(this.position) <
-      porchBoundary / size.boundary;
+      Chipmunk.porchBoundary / size.boundary;
     this.reachedPorch ||= this.atPorch;
     const { reachedPorch, atPorch } = this;
     if (reachedPorch && !atPorch && !money.taken) {
       if (this.fleeing) {
         this.hiding = true;
         this.element.classList.add('under');
-      } else if (this.emerging) this.emerging = false;
+      } else if (this.emerging) {
+        this.emerging = false;
+        this.element.classList.remove('under');
+      }
       this.fleeing = false;
     }
   }
@@ -171,6 +195,7 @@ export default class Chipmunk {
     this.hiding = false;
     this.emerging = false;
     this.atPorch = false;
+    this.reachedPorch = false;
     this.place();
     this.element.classList.remove('under');
   }
