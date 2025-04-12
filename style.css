@@ -224,7 +224,7 @@ h1 {
     justify-content: space-around;
     margin-top: 30px;
   }
-  .sidebar .half.time-area {
+  .sidebar .half.score-area {
     width: 90px;
   }
 }
@@ -278,7 +278,7 @@ section.instructions .zone {
 div.result {
   height: 360px;
 }
-div.result .time-display {
+div.result .score-display {
   font-size: 60px;
   font-weight: 800;
 }
