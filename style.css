@@ -238,7 +238,7 @@ section.front .zone {
   height: 120px;
 }
 
-section.title .zone {
+section:is(.title, .game-over) .zone {
   height: min(100%, 592px);
 }
 .illustration {
@@ -275,9 +275,6 @@ section.instructions .zone {
 
 /* Game-over section */
 
-div.result {
-  height: 360px;
-}
 div.result .score-display {
   font-size: 60px;
   font-weight: 800;

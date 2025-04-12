@@ -1,4 +1,4 @@
-import { qs } from './utility.js';
+import { qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 import time from './time.js';
@@ -54,8 +54,10 @@ export default class Chipmunk {
       const chipmunk = new Chipmunk();
       this.pool.push(chipmunk);
     }
-    const element = Chipmunk.makeElement();
-    qs('.illustration').append(element);
+    for (const illustration of qsa('.illustration')) {
+      const chipmunkElement = Chipmunk.makeElement();
+      illustration.append(chipmunkElement);
+    }
   }
   static start() {
     for (const chipmunk of this.pool) {
