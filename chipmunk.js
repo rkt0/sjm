@@ -125,14 +125,18 @@ export default class Chipmunk {
     }
   }
   checkMoney() {
-    if (this.fleeing || this.hiding) return;
+    if (this.fleeing) return;
     const atMoney = geometry.vEqual(
       this.position,
       money.position,
     );
+    const canTake = !this.hiding && !this.emerging;
     if (money.taken) {
-      this.chase(geometry.angle(this.position));
-    } else if (atMoney) this.takeMoney();
+      const origin = !geometry.supNorm(this.position);
+      let angle = geometry.angle(this.position);
+      if (origin) angle = Math.random() * 2 * Math.PI;
+      this.chase(angle);
+    } else if (atMoney && canTake) this.takeMoney();
   }
   update(timeInterval) {
     if (!this.active()) return;
@@ -168,6 +172,7 @@ export default class Chipmunk {
     this.emerging = false;
     this.atPorch = false;
     this.place();
+    this.element.classList.remove('under');
   }
 
   constructor() {
