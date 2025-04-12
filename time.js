@@ -17,12 +17,15 @@ export default {
       timeStamp - this.lastStamp
     );
     this.total += elapsed;
+    if (!this.stopScore) this.updateScore();
+    this.lastStamp = timeStamp;
+    if (fpsMeter.on) fpsMeter.tick(elapsed);
+    return elapsed;
+  },
+  updateScore() {
     const scoreRate = 10;
     const score = Math.trunc(this.total * scoreRate);
     this.gameplayElement.innerHTML = score;
     this.gameOverElement.innerHTML = score;
-    this.lastStamp = timeStamp;
-    if (fpsMeter.on) fpsMeter.tick(elapsed);
-    return elapsed;
   },
 };

@@ -19,6 +19,7 @@ const game = {
     });
   },
   loop(timeStamp) {
+    time.stopScore = money.taken;
     const elapsed = time.advance(timeStamp);
     Chipmunk.possiblyActivate(elapsed);
     Chipmunk.possiblyEmerge(elapsed);
