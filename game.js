@@ -8,6 +8,7 @@ import shoo from './shoo.js';
 
 const game = {
   paused: false,
+  timesPlayed: 0,
   start() {
     Chipmunk.start();
     money.start();
@@ -29,6 +30,8 @@ const game = {
     money.update(elapsed);
     if (shoo.position) shoo.execute();
     if (money.taken && !Chipmunk.nMoving()) {
+      game.timesPlayed++;
+      ui.embellishGameOver(game.timesPlayed);
       ui.changeToSection('game-over');
       return;
     }

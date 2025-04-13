@@ -38,4 +38,7 @@ export default {
     this.addListeners();
     this.setDisplayToFlex();
   },
+  embellishGameOver(n) {
+    console.log(`played ${n} times`);
+  },
 };
