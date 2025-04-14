@@ -231,16 +231,28 @@ h1 {
 
 
 
-/* Preliminary sections */
+/* Non-gameplay sections */
 
 section.front .zone {
   width: 300px;
   height: 120px;
 }
-
 section:is(.title, .game-over) .zone {
   height: min(100%, 592px);
 }
+section.instructions .zone {
+  height: 480px;
+}
+
+div.result .score-display {
+  font-size: 60px;
+  font-weight: 800;
+}
+
+
+
+/* Illustrations */
+
 .illustration {
   box-sizing: border-box;
   --bdr-width: 3px;
@@ -259,6 +271,7 @@ section:is(.title, .game-over) .zone {
   position: relative;
   left: 0; top: 0;
   transform: translate(-5px, -5px) scale(4);
+  z-index: 7;
 }
 .illustration .money {
   background: var(--lightest);
@@ -266,16 +279,55 @@ section:is(.title, .game-over) .zone {
   font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)
       rotate(-15deg);
-}
-section.instructions .zone {
-  height: 480px;
+  z-index: 8;
 }
 
+.illustration .coin-pile {
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.coins {
+  width: 270px;
+  margin: 0 -90px;
+}
 
-
-/* Game-over section */
-
-div.result .score-display {
-  font-size: 60px;
-  font-weight: 800;
+.illustration .top-hat {
+  position: absolute;
+  top: 5px;
+  right: 45px;
+  z-index: 9;
+  width: 100px;
+}
+.illustration .monocle {
+  position: absolute;
+  top: 67px;
+  right: 78px;
+  z-index: 8;
+  width: 60px;
+}
+.illustration .rolls {
+  position: absolute;
+  top: 70px;
+  left: -80px;
+  z-index: 6;
+  width: 200px;
+}
+.illustration .lambo {
+  position: absolute;
+  top: 80px;
+  left: 85px;
+  z-index: 6;
+  width: 300px;
+}
+.illustration .yacht {
+  position: absolute;
+  top: -180px;
+  right: -40px;
+  z-index: 5;
+  width: 400px;
 }

@@ -27,7 +27,8 @@ export default {
   addListeners() {
     const { eventType: type, changeToSection } = this;
     aelo('.front', type, () => {
-      changeToSection('title');
+      // changeToSection('title');
+      changeToSection('game-over');
     });
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
