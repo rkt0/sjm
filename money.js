@@ -1,4 +1,4 @@
-import { qs } from './utility.js';
+import { qs, qsa } from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 
@@ -11,9 +11,10 @@ export default {
   },
   initialize() {
     this.element = this.makeElement();
-    qs('.illustration .chipmunk').append(
-      this.makeElement(),
-    );
+    const cElements = qsa('.illustration .chipmunk');
+    for (const cElement of cElements) {
+      cElement.append(this.makeElement());
+    }
   },
   start() {
     qs('.porch').append(this.element);
