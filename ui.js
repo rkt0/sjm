@@ -27,8 +27,7 @@ export default {
   addListeners() {
     const { eventType: type, changeToSection } = this;
     aelo('.front', type, () => {
-      // changeToSection('title');
-      changeToSection('game-over');
+      changeToSection('title');
     });
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
@@ -40,6 +39,11 @@ export default {
     this.setDisplayToFlex();
   },
   embellishGameOver(n) {
-    console.log(`played ${n} times`);
+    const nMax = 8;
+    for (let i = 1; i <= nMax; i++) {
+      for (const element of qsa(`.e-${i}`)) {
+        element.hidden = i > n;
+      }
+    }
   },
 };

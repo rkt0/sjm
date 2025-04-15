@@ -244,6 +244,9 @@ section.instructions .zone {
   height: 480px;
 }
 
+div.result .score-area {
+  line-height: 1.2;
+}
 div.result .score-display {
   font-size: 60px;
   font-weight: 800;
@@ -271,7 +274,7 @@ div.result .score-display {
   position: relative;
   left: 0; top: 0;
   transform: translate(-5px, -5px) scale(4);
-  z-index: 7;
+  z-index: 3;
 }
 .illustration .money {
   background: var(--lightest);
@@ -279,17 +282,21 @@ div.result .score-display {
   font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)
       rotate(-15deg);
-  z-index: 8;
+  z-index: 5;
 }
 
 .illustration .coin-pile {
   position: absolute;
-  bottom: -10px;
+  bottom: -25px;
   width: 100%;
-  z-index: 9;
+  z-index: 8;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.illustration .coin-pile.rear {
+  bottom: 25px;
+  z-index: 7;
 }
 .coins {
   width: 270px;
@@ -300,34 +307,34 @@ div.result .score-display {
   position: absolute;
   top: 5px;
   right: 45px;
-  z-index: 9;
+  z-index: 6;
   width: 100px;
 }
 .illustration .monocle {
   position: absolute;
   top: 67px;
   right: 78px;
-  z-index: 8;
+  z-index: 4;
   width: 60px;
 }
 .illustration .rolls {
   position: absolute;
   top: 70px;
   left: -80px;
-  z-index: 6;
+  z-index: 1;
   width: 200px;
 }
 .illustration .lambo {
   position: absolute;
   top: 80px;
   left: 85px;
-  z-index: 6;
+  z-index: 2;
   width: 300px;
 }
 .illustration .yacht {
   position: absolute;
   top: -180px;
   right: -40px;
-  z-index: 5;
+  z-index: 0;
   width: 400px;
 }
