@@ -338,3 +338,18 @@ div.result .score-display {
   z-index: 0;
   width: 400px;
 }
+
+.illustration .ending-message {
+  position: absolute;
+  z-index: 9;
+  font-size: 24px;
+  width: 400px;
+  top: 240px;
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 1s 3s;
+}
+.illustration .ending-message.active {
+  opacity: 1;
+  transition-delay: 1.6s;
+}

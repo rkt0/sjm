@@ -45,5 +45,13 @@ export default {
         element.hidden = i > n;
       }
     }
+    if (n < nMax) return;
+    const message = qs('.ending-message');
+    aelo('section.game-over', 'transitionend', () => {
+      message.classList.add('active');
+    });
+    aelo(message, 'transitionend', () => {
+      message.classList.remove('active');
+    });
   },
 };
