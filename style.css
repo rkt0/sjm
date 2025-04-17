@@ -164,8 +164,13 @@ h1 {
   height: calc(var(--chipmunk-size) * 0.5);
   margin: 0 calc(var(--chipmunk-size) * 0.1);
   border: solid 1px var(--darkest);
-  font-size: calc(var(--chipmunk-size) * 0.25);
+  font-size: calc(var(--chipmunk-size) * 0.2);
   font-weight: 400;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.money > .name {
+  font-size: calc(var(--chipmunk-size) * 0.15);
 }
 
 .chipmunk {
@@ -279,7 +284,6 @@ div.result .score-display {
 .illustration .money {
   background: var(--lightest);
   border-width: 0.75px;
-  font-size: calc(var(--chipmunk-size) * 0.2);
   transform: scale(0.75) translateX(-22px)
       rotate(-15deg);
   z-index: 5;

@@ -6,7 +6,13 @@ export default {
   makeElement() {
     const element = document.createElement('div');
     element.classList.add('money', 'centered');
-    element.innerHTML = '$35';
+    const nameDiv = document.createElement('div');
+    nameDiv.innerHTML = 'Smith';
+    nameDiv.classList.add('name');
+    const amountDiv = document.createElement('div');
+    amountDiv.innerHTML = '$35';
+    amountDiv.classList.add('amount');
+    element.append(nameDiv, amountDiv);
     return element;
   },
   initialize() {
