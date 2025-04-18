@@ -21,7 +21,7 @@ export default {
     for (const s of qsa('span.click-or-touch')) {
       s.innerHTML = 'touch';
     }
-    const rect = this.getBoundingClientRect();
+    const rect = qs('.field').getBoundingClientRect();
     this.fieldLocation = [rect.x, rect.y];
   },
   addListeners() {
