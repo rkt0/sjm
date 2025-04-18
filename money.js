@@ -7,8 +7,7 @@ export default {
     const element = document.createElement('div');
     element.classList.add('money', 'centered');
     const nameDiv = document.createElement('div');
-    nameDiv.innerHTML = 'Smith';
-    nameDiv.classList.add('name');
+    nameDiv.classList.add('last-name');
     const amountDiv = document.createElement('div');
     amountDiv.innerHTML = '$35';
     amountDiv.classList.add('amount');
@@ -17,6 +16,7 @@ export default {
   },
   initialize() {
     this.element = this.makeElement();
+    qs('.porch').append(this.element);
     const cElements = qsa('.illustration .chipmunk');
     for (const cElement of cElements) {
       cElement.append(this.makeElement());
@@ -26,7 +26,6 @@ export default {
     qs('.porch').append(this.element);
     this.center();
     this.taken = false;
-    this.offPorch = false;
   },
   center() {
     this.position = [0, 0];

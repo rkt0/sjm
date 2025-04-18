@@ -26,7 +26,17 @@ export default {
   },
   addListeners() {
     const { eventType: type, changeToSection } = this;
-    aelo('.front', type, () => {
+    ael('input', 'input', function() {
+      const button = qs('.enter-name');
+      button.disabled = !this.value;
+      button.style.opacity = +(!!this.value);
+    })
+    aelo('.enter-name', type, () => {
+      const lastName = qs('input').value;
+      const nameDivs = qsa('.last-name');
+      for (const div of nameDivs) {
+        div.innerHTML = lastName;
+      }
       changeToSection('title');
     });
     ael('.show-instructions', type, () => {
