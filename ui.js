@@ -37,15 +37,21 @@ export default {
       for (const div of nameDivs) {
         div.innerHTML = lastName;
       }
+      localStorage.setItem('lastName', lastName);
       changeToSection('title');
     });
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
     });
   },
+  fillName() {
+    const lastName = localStorage.getItem('lastName');
+    if (lastName) qs('input').value = lastName;
+  },
   initialize() {
     this.setEventTypes();
     this.addListeners();
+    this.fillName();
     this.setDisplayToFlex();
   },
   embellishGameOver(n) {
