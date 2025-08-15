@@ -235,13 +235,14 @@ h1 {
   border-width: 0px;
 }
 .shoo-circle {
+  --transition-time: 0.2s;
   box-sizing: border-box;
   border-radius: 50%;
   border: dotted white 5px;
   transition:
-    width 0.2s ease-out,
-    height 0.2s ease-out,
-    opacity 0.2s ease-in;
+    width var(--transition-time) ease-out,
+    height var(--transition-time) ease-out,
+    opacity var(--transition-time) ease-in;
   width: 0;
   height: 0;
 }
