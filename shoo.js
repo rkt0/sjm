@@ -73,13 +73,17 @@ export default {
   makeIndicators() {
     const field = qs('.field');
     for (let i = 0; i < this.nIndicators; i++) {
-      const element = document.createElement('div');
-      element.classList.add('shoo-indicator');
-      ael(element, 'transitionend', () => {
-        element.classList.remove('active');
+      const indicator = document.createElement('div');
+      indicator.classList.add('shoo-indicator');
+      const circle = document.createElement('div');
+      circle.classList.add('shoo-circle');
+      ael(circle, 'transitionend', () => {
+        const parent = circle.parentElement;
+        parent.classList.remove('active');
       });
-      field.append(element);
-      this.indicatorPool.push(element);
+      indicator.append(circle);
+      field.append(indicator);
+      this.indicatorPool.push(indicator);
     }
   },
   placeIndicator(position) {
