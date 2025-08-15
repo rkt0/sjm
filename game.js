@@ -55,7 +55,7 @@ const game = {
     ui.initialize();
     Chipmunk.initialize();
     money.initialize();
-    shoo.addListener();
+    shoo.initialize();
     const type = ui.eventType;
     for (const button of qsa('button.start-game')) {
       ael(button, type, () => game.start());

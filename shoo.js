@@ -1,4 +1,4 @@
-import { ael } from './utility.js';
+import { ael, qs } from './utility.js';
 import geometry from './geometry.js';
 import ui from './ui.js';
 import size from './size.js';
@@ -60,11 +60,40 @@ export default {
     const dMS = Math.hypot(...vectorMS);
     const strength = 1 - dMS / this.radiusMoney;
     if (strength > 0) money.knock(strength);
+    this.placeIndicator(this.position);
     this.position = null;
   },
   addListener() {
     ael('.field', ui.eventType, (event) => {
       this.setPosition(event);
     });
+  },
+  nIndicators: 12,
+  indicatorPool: [],
+  makeIndicators() {
+    const field = qs('.field');
+    for (let i = 0; i < this.nIndicators; i++) {
+      const element = document.createElement('div');
+      element.classList.add('shoo-indicator');
+      ael(element, 'transitionend', () => {
+        element.classList.remove('active');
+      });
+      field.append(element);
+      this.indicatorPool.push(element);
+    }
+  },
+  placeIndicator(position) {
+    const element = this.indicatorPool.find(
+      (c) => !c.classList.contains('active'),
+    );
+    if (!element) return;
+    const p = position.map((u) => u * size.boundary);
+    const xf = `translate(${p[0]}px, ${p[1]}px)`;
+    element.style.transform = xf;
+    element.classList.add('active');
+  },
+  initialize() {
+    this.addListener();
+    this.makeIndicators();
   },
 };

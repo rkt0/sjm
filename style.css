@@ -11,8 +11,12 @@
 
   --field-size: 540px;
   --chipmunk-size: 60px;
-  --o: calc(
+  --chipmunk-offset: calc(
     (var(--field-size) - var(--chipmunk-size)) / 2
+  );
+  --shoo-size: 100px;
+  --shoo-offset: calc(
+    (var(--field-size) - var(--shoo-size)) / 2
   );
   --porch-size: 200px;
 
@@ -180,8 +184,8 @@ h1 {
 
 .chipmunk {
   position: absolute;
-  left: var(--o);
-  top: var(--o);
+  left: var(--chipmunk-offset);
+  top: var(--chipmunk-offset);
   width: var(--chipmunk-size);
   height: var(--chipmunk-size);
   pointer-events: none;
@@ -211,6 +215,25 @@ h1 {
 .chipmunk.flipped .money {
   left: calc(-1 * var(--lr-offset));
   transform: rotate(calc(-1 * var(--rotation)));
+}
+
+.shoo-indicator {
+  box-sizing: border-box;
+  position: absolute;
+  left: var(--shoo-offset);
+  top: var(--shoo-offset);
+  width: var(--shoo-size);
+  height: var(--shoo-size);
+  pointer-events: none;
+  z-index: 4;
+  border-radius: 50%;
+  opacity: 0;
+  border: solid white 5px;
+  transition: border-width 0.3s linear;
+}
+.shoo-indicator.active {
+  opacity: 0.5;
+  border-width: 0px;
 }
 
 .sidebar {
