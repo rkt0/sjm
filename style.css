@@ -297,7 +297,10 @@ input {
 }
 .enter-name {
   opacity: 0;
-  transition: opacity 1s;
+  transition: opacity 0.5s;
+}
+.enter-name:not([disabled]) {
+  opacity: 1;
 }
 
 section.front .zone {

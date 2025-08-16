@@ -26,11 +26,9 @@ export default {
   },
   addListeners() {
     const { eventType: type, changeToSection } = this;
-    ael('input', 'input', function() {
-      const button = qs('.enter-name');
-      button.disabled = !this.value;
-      button.style.opacity = +(!!this.value);
-    })
+    ael('input', 'input', function () {
+      qs('.enter-name').disabled = !this.value;
+    });
     aelo('.enter-name', type, () => {
       const lastName = qs('input').value;
       const nameDivs = qsa('.last-name');
@@ -47,6 +45,7 @@ export default {
   fillName() {
     const lastName = localStorage.getItem('lastName');
     if (lastName) qs('input').value = lastName;
+    qs('input').dispatchEvent(new Event('input'));
   },
   initialize() {
     this.setEventTypes();
