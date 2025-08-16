@@ -238,13 +238,14 @@ h1 {
   --transition-time: 0.2s;
   box-sizing: border-box;
   border-radius: 50%;
-  border: dotted white 5px;
+  border: dotted #fff 6px;
   transition:
     width var(--transition-time) ease-out,
     height var(--transition-time) ease-out,
     opacity var(--transition-time) ease-in;
   width: 0;
   height: 0;
+  opacity: 1;
 }
 .shoo-indicator.active .shoo-circle {
   width: 100%;

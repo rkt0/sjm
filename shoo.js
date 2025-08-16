@@ -68,18 +68,22 @@ export default {
       this.setPosition(event);
     });
   },
-  nIndicators: 12,
+  nIndicators: 24,
   indicatorPool: [],
   makeIndicators() {
     const field = qs('.field');
     for (let i = 0; i < this.nIndicators; i++) {
       const indicator = document.createElement('div');
       indicator.classList.add('shoo-indicator');
+      indicator.id = `shoo-indicator-${i}`;
       const circle = document.createElement('div');
       circle.classList.add('shoo-circle');
-      ael(circle, 'transitionend', () => {
-        const parent = circle.parentElement;
-        parent.classList.remove('active');
+      ael(circle, 'transitionend', function(e) {
+        if (e.propertyName !== 'opacity') return;
+        const { classList } = this.parentElement;
+        if (classList.contains('active')) {
+          classList.remove('active');
+        } else classList.add('ready');
       });
       indicator.append(circle);
       field.append(indicator);
@@ -88,16 +92,24 @@ export default {
   },
   placeIndicator(position) {
     const element = this.indicatorPool.find(
-      (c) => !c.classList.contains('active'),
+      (c) => c.classList.contains('ready'),
     );
     if (!element) return;
     const p = position.map((u) => u * size.boundary);
     const xf = `translate(${p[0]}px, ${p[1]}px)`;
     element.style.transform = xf;
+    element.classList.remove('ready');
     element.classList.add('active');
   },
   initialize() {
     this.addListener();
     this.makeIndicators();
+  },
+  start() {
+    this.setPosition();
+    for (const element of this.indicatorPool) {
+      element.classList.remove('active');
+      element.classList.add('ready');
+    }
   },
 };

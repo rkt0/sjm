@@ -13,7 +13,7 @@ const game = {
     Chipmunk.start();
     money.start();
     time.start();
-    shoo.setPosition();
+    shoo.start();
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);
