@@ -24,42 +24,49 @@ export default {
       (u) => (u - size.field / 2) / size.boundary,
     );
   },
-  execute() {
-    if (money.taken) {
-      this.position = null;
-      return;
-    }
-    const pi = Math.PI;
+  handleMoney() {
     const { position: sPos } = this;
-    const porchRatio = size.porch / 2 / size.boundary;
-    const onPorch = sPos.every(
-      (u) => Math.abs(u) < porchRatio,
-    );
-    for (const chipmunk of Chipmunk.pool) {
-      const active = chipmunk.active();
-      const { hiding, emerging } = chipmunk;
-      if (!active || hiding || emerging) continue;
-      const { position: cPos } = chipmunk;
-      const vectorCS = geometry.vDiff(cPos, sPos);
-      const dCS = Math.hypot(...vectorCS);
-      const tooFar = dCS > this.radiusChipmunk;
-      const wrongSide = !onPorch &&
-        geometry.anglePair(cPos, sPos).diff > pi / 2;
-      if (tooFar || wrongSide) continue;
-      // Chase chipmunk away from both origin and shoo
-      const { max, diff } = geometry.anglePair(
-        cPos,
-        vectorCS,
-      );
-      chipmunk.chase(
-        max - pi / 2 + Math.random() * (pi - diff),
-      );
-    }
     const { position: mPos } = money;
     const vectorMS = geometry.vDiff(mPos, sPos);
     const dMS = Math.hypot(...vectorMS);
     const strength = 1 - dMS / this.radiusMoney;
     if (strength > 0) money.knock(strength);
+  },
+  handleChipmunk(chipmunk) {
+    const active = chipmunk.active();
+    const { hiding, emerging } = chipmunk;
+    if (!active || hiding || emerging) return;
+    const { position: cPos } = chipmunk;
+    const { position: sPos } = this;
+    // const { position: mPos } = money;
+    const vectorCS = geometry.vDiff(cPos, sPos);
+    const dCS = Math.hypot(...vectorCS);
+    if (dCS > this.radiusChipmunk) return;
+    const porchRatio = size.porch / 2 / size.boundary;
+    const shooOnPorch = sPos.every(
+      (u) => Math.abs(u) < porchRatio,
+    );
+    const pi = Math.PI;
+    const wrongSide = !shooOnPorch &&
+      geometry.anglePair(cPos, sPos).diff > pi / 2;
+    if (wrongSide) return;
+    const { max, diff } = geometry.anglePair(
+      cPos,
+      vectorCS,
+    );
+    chipmunk.chase(
+      max - pi / 2 + Math.random() * (pi - diff),
+    );
+  },
+  execute() {
+    if (money.taken) {
+      this.position = null;
+      return;
+    }
+    this.handleMoney();
+    for (const chipmunk of Chipmunk.pool) {
+      this.handleChipmunk(chipmunk);
+    }
     this.placeIndicator(this.position);
     this.position = null;
   },
