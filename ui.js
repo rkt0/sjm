@@ -30,6 +30,7 @@ export default {
       qs('.enter-name').disabled = !this.value;
     });
     aelo('.enter-name', type, () => {
+      document.title = "Save Jeff's Money"
       const lastName = qs('input').value;
       const nameDivs = qsa('.last-name');
       for (const div of nameDivs) {
