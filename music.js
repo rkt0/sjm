@@ -27,7 +27,6 @@ const music = {
     new Track(0, 'Wagon Wheel'),
     new Track(0, 'Lively Lumpsucker'),
     new Track(0, 'Merry Go'),
-    new Track(0, 'Hyperfun'),
   ],
 };
 music.start = function () {
