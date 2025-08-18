@@ -57,9 +57,9 @@ export default {
   arcIxn(a, b) {
     if (!a || !b) return null;
     if (a[0] > a[1] || b[0] > b[1]) return null;
-    if (a[1] > a[0] + pi || b[1] > b[0] + pi) {
-      throw new Error('argument has length > π');
-    }
+    // if (a[1] > a[0] + pi || b[1] > b[0] + pi) {
+    //   throw new Error('argument has length > π');
+    // }
     const aMid = (a[0] + a[1]) / 2;
     const bMid = (b[0] + b[1]) / 2;
     const bMidAdj = this.adjustAngle(bMid, aMid);
