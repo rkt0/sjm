@@ -29,9 +29,55 @@ export default {
     return Math.acos(dotProduct / norms);
   },
 
+  // Get half-circle angle interval around midpoint
+  halfCircle(midpoint) {
+    return [midpoint - pi / 2, midpoint + pi / 2];
+  },
+
+  // Adjust angle to be within desired angle interval
+  adjustAngle(angle, midpoint = pi) {
+    let result = angle;
+    while (Math.abs(result - midpoint) > pi) {
+      result -= 2 * pi * Math.sign(result - midpoint);
+    }
+    return result;
+  },
+
+  // Get intersection of two (linear) intervals
+  intervalIxn(interval0, interval1) {
+    if (!interval0 || !interval1) return null;
+    const raw = [
+      Math.max(interval0[0], interval1[0]),
+      Math.min(interval0[1], interval1[1]),
+    ];
+    return raw[0] <= raw[1] ? raw : null;
+  },
+
+  // Get intersection of angle intervals (length ≤ π)
+  arcIxn(a, b) {
+    if (!a || !b) return null;
+    if (a[0] > a[1] || b[0] > b[1]) return null;
+    if (a[1] > a[0] + pi || b[1] > b[0] + pi) {
+      throw new Error('argument has length > π');
+    }
+    const aMid = (a[0] + a[1]) / 2;
+    const bMid = (b[0] + b[1]) / 2;
+    const bMidAdj = this.adjustAngle(bMid, aMid);
+    const bAdj = b.map((e) => e + bMidAdj - bMid);
+    return this.intervalIxn(a, bAdj);
+  },
+
   // Check if vectors are equal
   vEqual(vector0, vector1) {
     return vector0.every((e, i) => e === vector1[i]);
+  },
+
+  // Get dot product of two vectors
+  dotProd(vector0, vector1) {
+    return vector0.reduce(
+      (total, e, i) => total + e * vector1[i],
+      0,
+    );
   },
 
   // Get elementwise sum of vectors

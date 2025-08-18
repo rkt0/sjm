@@ -189,6 +189,10 @@ export default class Chipmunk {
     this.velocity[1] = Math.sin(angle) * speed;
     this.fleeing = true;
   }
+  anglesAwayFrom(point = [0, 0]) {
+    const v = geometry.vDiff(this.position, point);
+    return geometry.halfCircle(geometry.angle(v));
+  }
   takeMoney() {
     this.velocity = geometry.vMult(
       geometry.randomUnitVector(),

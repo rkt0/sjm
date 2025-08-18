@@ -25,38 +25,36 @@ export default {
     );
   },
   handleMoney() {
-    const { position: sPos } = this;
-    const { position: mPos } = money;
-    const vectorMS = geometry.vDiff(mPos, sPos);
-    const dMS = Math.hypot(...vectorMS);
-    const strength = 1 - dMS / this.radiusMoney;
+    const s = this.position;
+    const m = money.position;
+    const d = Math.hypot(...geometry.vDiff(m, s));
+    const strength = 1 - d / this.radiusMoney;
     if (strength > 0) money.knock(strength);
   },
   handleChipmunk(chipmunk) {
     const active = chipmunk.active();
     const { hiding, emerging } = chipmunk;
     if (!active || hiding || emerging) return;
-    const { position: cPos } = chipmunk;
-    const { position: sPos } = this;
-    // const { position: mPos } = money;
-    const vectorCS = geometry.vDiff(cPos, sPos);
-    const dCS = Math.hypot(...vectorCS);
+    const c = chipmunk.position;
+    const s = this.position;
+    const dCS = geometry.distance(c, s);
     if (dCS > this.radiusChipmunk) return;
-    const porchRatio = size.porch / 2 / size.boundary;
-    const shooOnPorch = sPos.every(
-      (u) => Math.abs(u) < porchRatio,
-    );
-    const pi = Math.PI;
-    const wrongSide = !shooOnPorch &&
-      geometry.anglePair(cPos, sPos).diff > pi / 2;
-    if (wrongSide) return;
-    const { max, diff } = geometry.anglePair(
-      cPos,
-      vectorCS,
-    );
-    chipmunk.chase(
-      max - pi / 2 + Math.random() * (pi - diff),
-    );
+    if (geometry.supNorm(s) > size.porchRatio) {
+      const vCM = geometry.vDiff(c, money.position);
+      const vSM = geometry.vDiff(s, money.position);
+      if (geometry.dotProd(vCM, vSM) < 0) return;
+    }
+    const away = {
+      m: chipmunk.anglesAwayFrom(money.position),
+      s: chipmunk.anglesAwayFrom(this.position),
+      flip: geometry.halfCircle(
+        chipmunk.velocity[0] < 0 ? 0 : Math.PI,
+      ),
+    };
+    const ixnM = geometry.arcIxn(away.flip, away.m);
+    const ixnAll = geometry.arcIxn(ixnM, away.s);
+    const [x0, x1] = ixnAll ?? ixnM;
+    chipmunk.chase(x0 + Math.random() * (x1 - x0));
   },
   execute() {
     if (money.taken) {
@@ -85,7 +83,7 @@ export default {
       indicator.id = `shoo-indicator-${i}`;
       const circle = document.createElement('div');
       circle.classList.add('shoo-circle');
-      ael(circle, 'transitionend', function(e) {
+      ael(circle, 'transitionend', function (e) {
         if (e.propertyName !== 'opacity') return;
         const { classList } = this.parentElement;
         if (classList.contains('active')) {
