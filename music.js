@@ -2,11 +2,11 @@ import { ael, qs } from './utility.js';
 export { music as default };
 
 class Track {
-  constructor(good, title) {
+  constructor(weight, title) {
     this.src = `audio/${
       title.toLowerCase().replaceAll(' ', '-')
     }.mp3`;
-    this.good = good;
+    this.weight = weight;
   }
 }
 
@@ -19,14 +19,14 @@ const music = {
   firstId: 0,
   restartsMax: 1,
   playlist: [
-    new Track(1, 'The Entertainer'),
-    new Track(1, 'Maple Leaf Rag'),
-    new Track(1, 'Onion Capers'),
-    new Track(0, 'Frogs Legs Rag'),
-    new Track(0, 'Gold Rush'),
-    new Track(0, 'Wagon Wheel'),
-    new Track(0, 'Lively Lumpsucker'),
-    new Track(0, 'Merry Go'),
+    new Track(4, 'The Entertainer'),
+    new Track(4, 'Maple Leaf Rag'),
+    new Track(4, 'Onion Capers'),
+    new Track(1, 'Frogs Legs Rag'),
+    new Track(1, 'Gold Rush'),
+    new Track(1, 'Wagon Wheel'),
+    new Track(1, 'Lively Lumpsucker'),
+    new Track(1, 'Merry Go'),
   ],
 };
 music.start = function () {
@@ -57,7 +57,7 @@ music.play = function (id, restarts = 0) {
 music.next = function () {
   const recentIds = this.recent.map((x) => x.id);
   const weights = this.playlist.map((e, i) =>
-    recentIds.includes(i) ? 0 : 1 + e.good
+    recentIds.includes(i) ? 0 : e.weight
   );
   const n = weights.length;
   const cdf = [];
