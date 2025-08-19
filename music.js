@@ -17,7 +17,7 @@ const music = {
   recentMax: 4,
   daysFresh: 7,
   firstId: 0,
-  restartsMax: 2,
+  restartsMax: 1,
   playlist: [
     new Track(1, 'The Entertainer'),
     new Track(1, 'Maple Leaf Rag'),
