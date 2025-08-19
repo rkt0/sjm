@@ -49,7 +49,6 @@ music.play = function (id, restarts = 0) {
   const { element, recent } = this;
   element.src = this.playlist[id].src;
   element.play();
-  console.log(`now playing: ${element.src}`);
   recent.unshift({ id, time: Date.now(), restarts });
   if (recent.length > this.recentMax) recent.pop();
   const rString = JSON.stringify(recent);
@@ -74,13 +73,3 @@ music.next = function () {
 };
 
 ael(music.element, 'ended', () => music.next());
-ael(document, 'keydown', (e) => {
-  switch (e.key) {
-    case 'n':
-      music.next();
-      break;
-    case 'm':
-      console.table(music.recent);
-      break;
-  }
-});
