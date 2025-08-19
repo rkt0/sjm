@@ -1,4 +1,4 @@
-import { ael, aelo, qs } from './utility.js';
+import { ael, qs } from './utility.js';
 export { music as default };
 
 class Track {
