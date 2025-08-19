@@ -1,4 +1,5 @@
 import { ael, aelo, qs, qsa } from './utility.js';
+import music from './music.js';
 
 export default {
   eventType: 'mousedown',
@@ -31,6 +32,7 @@ export default {
     });
     aelo('.enter-name', type, () => {
       document.title = "Save Jeff's Money"
+      if (music.on) music.start();
       const lastName = qs('input').value;
       const nameDivs = qsa('.last-name');
       for (const div of nameDivs) {

@@ -3,5 +3,4 @@ difficulty level
 score
 embellishments
 title (and icon?) on front page
-bug with music starting on front page
 bug with better music tracks being avoided

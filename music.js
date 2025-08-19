@@ -72,6 +72,3 @@ music.next = function (otherIdToAvoid) {
 };
 
 ael(music.element, 'ended', () => music.next());
-aelo('.front', 'transitionstart', () => {
-  if (music.on) music.start();
-});
