@@ -39,24 +39,26 @@ music.start = function () {
   if (!last) this.play(this.firstId);
   else {
     const { id, restarts } = last;
-    if (restarts >= this.restartsMax) this.next(id);
-    else this.play(id, restarts + 1);
+    if (restarts >= this.restartsMax) {
+      this.recent.unshift(last);
+      this.next();
+    } else this.play(id, restarts + 1);
   }
 };
 music.play = function (id, restarts = 0) {
   const { element, recent } = this;
   element.src = this.playlist[id].src;
   element.play();
+  console.log(`now playing: ${element.src}`);
   recent.unshift({ id, time: Date.now(), restarts });
   if (recent.length > this.recentMax) recent.pop();
   const rString = JSON.stringify(recent);
   localStorage.setItem('recentMusic', rString);
 };
-music.next = function (otherIdToAvoid) {
-  const idsToAvoid = this.recent.map((x) => x.id);
-  idsToAvoid.push(otherIdToAvoid);
-  const weights = this.playlist.map(
-    (e, i) => idsToAvoid.includes(i) ? 0 : 1 + e.good,
+music.next = function () {
+  const recentIds = this.recent.map((x) => x.id);
+  const weights = this.playlist.map((e, i) =>
+    recentIds.includes(i) ? 0 : 1 + e.good
   );
   const n = weights.length;
   const cdf = [];
@@ -72,3 +74,13 @@ music.next = function (otherIdToAvoid) {
 };
 
 ael(music.element, 'ended', () => music.next());
+ael(document, 'keydown', (e) => {
+  switch (e.key) {
+    case 'n':
+      music.next();
+      break;
+    case 'm':
+      console.table(music.recent);
+      break;
+  }
+});
