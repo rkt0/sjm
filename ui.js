@@ -31,7 +31,7 @@ export default {
       qs('.enter-name').disabled = !this.value;
     });
     aelo('.enter-name', type, () => {
-      document.title = "Save Jeff's Money"
+      document.title = "Save Jeff's Money";
       if (music.on) music.start();
       const lastName = qs('input').value;
       const nameDivs = qsa('.last-name');
@@ -57,19 +57,25 @@ export default {
     this.setDisplayToFlex();
   },
   embellishGameOver(n) {
-    const nMax = 8;
-    for (let i = 1; i <= nMax; i++) {
-      for (const element of qsa(`.e-${i}`)) {
-        element.hidden = i > n;
-      }
+    const message = qs('.message');
+    message.style.display = 'none';
+    message.classList.remove('active');
+    message.style.display = '';
+    if (n === 1) return;
+    const content = qs(`span.e-${n}`)?.innerHTML;
+    if (content) {
+      message.innerHTML = content;
+      aelo('.game-over', 'transitionend', () => {
+        message.classList.add('active');
+      });
     }
-    if (n < nMax) return;
-    const message = qs('.ending-message');
-    aelo('section.game-over', 'transitionend', () => {
-      message.classList.add('active');
-    });
-    aelo(message, 'transitionend', () => {
-      message.classList.remove('active');
-    });
+    const items = qsa(`img.e-${n}`);
+    // const nMax = 8;
+    // for (let i = 1; i <= nMax; i++) {
+    //   for (const element of qsa(`.e-${i}`)) {
+    //     element.hidden = i > n;
+    //   }
+    // }
+    // if (n < nMax) return;
   },
 };

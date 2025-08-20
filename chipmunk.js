@@ -6,9 +6,12 @@ import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
-  speed = 0.375;
-  fleeSpeed = 1;
-  moneySpeed = 0.625;
+  speed = 10;
+  fleeSpeed = 10;
+  moneySpeed = 10;
+  // speed = 0.375;
+  // fleeSpeed = 1;
+  // moneySpeed = 0.625;
 
   static possiblyActivate(timeInterval) {
     if (money.taken) return;
@@ -16,7 +19,8 @@ export default class Chipmunk {
     if (this.nMoving() > t / 10) return;
     const rate = 0.1 + t * 0.03;
     let probability = rate * timeInterval;
-    if (t > 2 && !this.nMoving()) probability = 1;
+    // if (t > 2 && !this.nMoving()) probability = 1;
+    if (t > 0 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active());
     c?.activate();
@@ -44,9 +48,15 @@ export default class Chipmunk {
   static makeElement() {
     const element = document.createElement('div');
     element.classList.add('chipmunk');
-    const img = document.createElement('img');
-    img.src = 'img/chipmunk.png';
-    element.append(img);
+    const items = ['chipmunk', 'top-hat', 'monocle'];
+    for (const item of items) {
+      const img = document.createElement('img');
+      img.src = `img/${item}.png`;
+      if (item !== 'chipmunk') {
+        img.classList.add('accessory');
+      }
+      element.append(img);
+    }
     return element;
   }
   static initialize() {
