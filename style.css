@@ -80,9 +80,11 @@ button {
   border: solid var(--bdr-width) var(--bdr);
   outline: none;
   cursor: pointer;
+  transition: opacity 0.6s;
 }
 button[disabled] {
   cursor: default;
+  opacity: 0;
 }
 
 :where(section, .zone, .centered) {
@@ -319,13 +321,6 @@ input {
   outline: none;
   cursor: pointer;
 }
-.enter-name {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-.enter-name:not([disabled]) {
-  opacity: 1;
-}
 
 section.front .zone {
   width: 300px;
@@ -378,32 +373,31 @@ div.result .score-display {
   z-index: 5;
 }
 
-.game-over .accessory {
-  transition: opacity 2s ease-in 1s;
+.game-over :is(.accessory, .addition) {
+  transition: opacity 2s ease-in 1.5s;
 }
 .addition {
   position: absolute;
   opacity: 0;
-  transition: opacity 1s ease-in;
 }
 .addition.active {
   opacity: 1;
 }
 
 [src*="rolls"] {
-  top: 70px;
+  top: 80px;
   left: -80px;
   z-index: 1;
   width: 200px;
 }
 [src*="lambo"] {
-  top: 80px;
+  top: 95px;
   left: 85px;
   z-index: 2;
   width: 300px;
 }
 [src*="yacht"] {
-  top: -180px;
+  top: -175px;
   right: -40px;
   z-index: 0;
   width: 400px;
@@ -411,22 +405,16 @@ div.result .score-display {
 
 .illustration .message {
   position: absolute;
-  z-index: 9;
+  box-sizing: border-box;
+  z-index: 6;
   font-size: 24px;
-  width: 400px;
-  top: 240px;
+  width: 100%;
+  bottom: -4px;
+  padding: 10px 20px;
   background: var(--bg);
   opacity: 0;
   transition: opacity 1s ease-in;
 }
 .illustration .message.active {
-  opacity: 1;
-}
-
-.game-over button {
-  opacity: 0;
-  transition: opacity 1s;
-}
-.game-over button:not([disabled]) {
   opacity: 1;
 }
