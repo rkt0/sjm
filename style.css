@@ -87,7 +87,7 @@ button[disabled] {
   opacity: 0;
 }
 
-:where(section, .zone, .centered) {
+:where(section, .zone, .centered, .overlay) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,11 +322,12 @@ input {
   cursor: pointer;
 }
 
-section.front .zone {
-  width: 300px;
-}
-section:is(.title, .instructions, .game-over) .zone {
+.zone {
   height: min(100%, 592px);
+}
+section.front .zone {
+  height: auto;
+  width: 300px;
 }
 
 div.result .score-area {
@@ -337,7 +338,7 @@ div.result .score-display {
   font-weight: 800;
 }
 
-.message-content {
+:is(.message-content, .explanation-content) {
   display: none;
 }
 
@@ -417,4 +418,23 @@ div.result .score-display {
 }
 .illustration .message.active {
   opacity: 1;
+}
+
+.overlay {
+  visibility: hidden;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 100%;
+  flex-direction: column;
+  z-index: 6;
+  background: var(--bg);
+  transition: top 1s;
+}
+.overlay.active {
+  top: 0;
+  transition-delay: 1s;
+}
+.overlay .zone {
+  justify-content: space-evenly;
 }

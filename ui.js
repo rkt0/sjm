@@ -55,6 +55,14 @@ export default {
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
     });
+    ael('.hide-overlay', type, function () {
+      const overlay = this.closest('.overlay');
+      overlay.classList.remove('active');
+      waitForTransition(overlay);
+      aelo(overlay, 'transitionend', function () {
+        this.style.visibility = 'hidden';
+      })
+    });
   },
   fillName() {
     const lastName = localStorage.getItem('lastName');
@@ -101,7 +109,12 @@ export default {
         const chipmunk = qs('.game-over .chipmunk');
         chipmunk.classList.add('rich');
         waitForTransition(chipmunk);
-        this.showPlayAgainButton(chipmunk);
+        aelo(chipmunk, 'ready', () => {
+          const overlay = qs('.overlay.rich');
+          overlay.style.visibility = 'visible';
+          overlay.classList.add('active');
+        });
+        this.showPlayAgainButton('.overlay.rich');
       });
       return;
     }
