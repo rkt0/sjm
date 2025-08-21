@@ -66,12 +66,9 @@
   <div class="result zone">
     <h1>Game Over</h1>
     <div class="illustration centered">
-      <!-- <img class="top-hat e-4" src="img/top-hat.png"> -->
-      <!-- <img class="monocle e-4" src="img/monocle.png"> -->
-      <!-- <img class="rolls e-6" src="img/rolls.png"> -->
-      <!-- <img class="lambo e-7" src="img/lambo.png"> -->
-      <!-- <img class="yacht e-8" src="img/yacht.png"> -->
-      <div class="message"></div>
+      <img class="addition e-6" src="img/rolls.png">
+      <img class="addition e-8" src="img/lambo.png">
+      <img class="addition e-10" src="img/yacht.png">
       <span class="message-content e-2">
         Chipmunks are getting richer…
       </span>
@@ -83,10 +80,24 @@
       Score:<br>
       <span class="score-display">0</span><br>
     </div>
-    <button type="button" class="start-game">
+    <button type="button" class="start-game" disabled>
       Play Again
     </button>
   </div>
 </section>
 <audio></audio>
+<script>
+  const ss = document.querySelectorAll('section');
+  let t;
+  for (const s of [...ss]) {
+    s.addEventListener('gone', function () {
+      console.log(`section gone: ${this.classList}`);
+      t = Date.now();
+    });
+    s.addEventListener('ready', function () {
+      console.log(`section ready: ${this.classList}`);
+      console.log(`${Date.now() - t} ms elapsed`);
+    });
+  }
+</script>
 </html>

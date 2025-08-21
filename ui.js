@@ -3,11 +3,21 @@ import music from './music.js';
 
 export default {
   eventType: 'mousedown',
+  addSectionListeners() {
+    for (const section of qsa('section')) {
+      ael(section, 'transitionend', function (e) {
+        if (e.target !== this) return;
+        const up = this.classList.contains('current');
+        const status = up ? 'ready' : 'gone';
+        this.dispatchEvent(new Event(status));
+      });
+    }
+  },
   changeToSection(section) {
     const oldElement = qs('section.current');
     const element = qs(`section.${section}`);
     oldElement.classList.remove('current');
-    aelo(oldElement, 'transitionend', () => {
+    aelo(oldElement, 'gone', () => {
       element.classList.add('current');
     });
   },
@@ -26,6 +36,7 @@ export default {
     this.fieldLocation = [rect.x, rect.y];
   },
   addListeners() {
+    this.addSectionListeners();
     const { eventType: type, changeToSection } = this;
     ael('input', 'input', function () {
       qs('.enter-name').disabled = !this.value;
@@ -57,25 +68,62 @@ export default {
     this.setDisplayToFlex();
   },
   embellishGameOver(n) {
-    const message = qs('.message');
-    message.style.display = 'none';
-    message.classList.remove('active');
-    message.style.display = '';
-    if (n === 1) return;
-    const content = qs(`span.e-${n}`)?.innerHTML;
-    if (content) {
-      message.innerHTML = content;
-      aelo('.game-over', 'transitionend', () => {
-        message.classList.add('active');
-      });
+    qs('.message')?.remove();
+    this.hidePlayAgainButton();
+    if (n === 1) {
+      this.showPlayAgainButton();
+      return;
     }
-    const items = qsa(`img.e-${n}`);
-    // const nMax = 8;
-    // for (let i = 1; i <= nMax; i++) {
-    //   for (const element of qsa(`.e-${i}`)) {
-    //     element.hidden = i > n;
-    //   }
-    // }
-    // if (n < nMax) return;
+    const content = qs(`.message-content.e-${n}`);
+    if (content) {
+      const message = document.createElement('div');
+      message.classList.add('message');
+      message.innerHTML = content.innerHTML;
+      qs('.game-over .illustration').append(message);
+      aelo('.game-over', 'ready', () => {
+        message.classList.add('active');
+        waitForTransition(message);
+        this.showPlayAgainButton(message);
+      });
+      return;
+    }
+    const addition = qs(`.addition.e-${n}`);
+    if (addition) {
+      aelo('.game-over', 'ready', () => {
+        addition.classList.add('active');
+        waitForTransition(addition);
+        this.showPlayAgainButton(addition);
+      });
+      return;
+    }
+    if (n === 4) {
+      aelo('.game-over', 'ready', () => {
+        const chipmunk = qs('.game-over .chipmunk');
+        chipmunk.classList.add('rich');
+        waitForTransition(chipmunk);
+        this.showPlayAgainButton(chipmunk);
+      });
+      return;
+    }
+    this.showPlayAgainButton();
+  },
+  hidePlayAgainButton() {
+    const button = qs('.game-over button');
+    button.style.display = 'none';
+    button.disabled = true;
+    button.style.display = '';
+  },
+  showPlayAgainButton(triggerElement) {
+    const trigger = triggerElement ?? '.game-over';
+    aelo(trigger, 'ready', () => {
+      qs('.game-over button').disabled = false;
+    });
   },
 };
+
+function waitForTransition(x) {
+  const element = typeof x === 'object' ? x : qs(x);
+  aelo(element, 'transitionend', function () {
+    element.dispatchEvent(new Event('ready'));
+  });
+}

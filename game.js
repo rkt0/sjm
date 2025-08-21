@@ -31,8 +31,8 @@ const game = {
     if (shoo.position) shoo.execute();
     if (money.taken && !Chipmunk.nMoving()) {
       game.timesPlayed++;
-      ui.embellishGameOver(game.timesPlayed);
       ui.changeToSection('game-over');
+      ui.embellishGameOver(game.timesPlayed);
       return;
     }
     if (game.paused) return;
