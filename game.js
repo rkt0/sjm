@@ -2,6 +2,7 @@ import { ael, aelo, qs, qsa } from './utility.js';
 import music from './music.js';
 import ui from './ui.js';
 import time from './time.js';
+import score from './score.js';
 import Chipmunk from './chipmunk.js';
 import money from './money.js';
 import shoo from './shoo.js';
@@ -22,13 +23,14 @@ const game = {
   loop(timeStamp) {
     time.stopScore = money.taken;
     const elapsed = time.advance(timeStamp);
+    if (shoo.position) shoo.execute();
+    score.update();
     Chipmunk.possiblyActivate(elapsed, game.count);
     Chipmunk.possiblyEmerge(elapsed);
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
     money.update(elapsed);
-    if (shoo.position) shoo.execute();
     if (money.taken && !Chipmunk.nMoving()) {
       game.count++;
       ui.changeToSection('game-over');

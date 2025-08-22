@@ -1,21 +1,22 @@
-import { qs, aelo } from './utility.js';
+import { aelo, qs } from './utility.js';
 
 export default {
   perSecond: 1,
   perChipmunk: 5,
   multipliers: { rich: 2 },
+  winTarget: 100,
+  almostTarget: 50,
   gameplayElement: qs('.gameplay .score-display'),
   gameOverElement: qs('.game-over .score-display'),
   start() {
     this.raw = 0;
-    this.updateElements(true);
+    this.update(true);
     aelo('.gameplay', 'ready', () => {
-      this.updateElements();
+      this.update();
     });
   },
   addForTime(seconds) {
     this.raw += seconds * this.perSecond;
-    this.updateElements();
   },
   addForChipmunk(chipmunk) {
     let points = this.perChipmunk;
@@ -23,12 +24,14 @@ export default {
       if (chipmunk[x]) points *= this.multipliers[x];
     }
     this.raw += points;
-    this.updateElements();
   },
-  updateElements(gameplayOnly) {
-    const truncated = Math.trunc(this.raw);
-    this.gameplayElement.innerHTML = truncated;
+  update(gameplayOnly) {
+    const displayed = Math.min(
+      Math.trunc(this.raw),
+      this.winTarget,
+    );
+    this.gameplayElement.innerHTML = displayed;
     if (gameplayOnly) return;
-    this.gameOverElement.innerHTML = truncated;
+    this.gameOverElement.innerHTML = displayed;
   },
-}
+};
