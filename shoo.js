@@ -61,8 +61,8 @@ export default {
     } else {
       chipmunk.willHide = Math.random() < this.pHide;
     }
-    if (! chipmunk.willHide) {
-      score.addForChipmunk(chipmunk.rich);
+    if (!chipmunk.willHide) {
+      score.addForChipmunk(chipmunk);
     }
     chipmunk.chase(x0 + Math.random() * (x1 - x0));
   },

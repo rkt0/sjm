@@ -2,7 +2,8 @@ import { qs, aelo } from './utility.js';
 
 export default {
   perSecond: 1,
-  perChipmunk: { normal: 5, rich: 10 },
+  perChipmunk: 5,
+  multipliers: { rich: 2 },
   gameplayElement: qs('.gameplay .score-display'),
   gameOverElement: qs('.game-over .score-display'),
   start() {
@@ -16,9 +17,11 @@ export default {
     this.raw += seconds * this.perSecond;
     this.updateElements();
   },
-  addForChipmunk(rich) {
-    let points = this.perChipmunk.normal;
-    if (rich) points = this.perChipmunk.rich;
+  addForChipmunk(chipmunk) {
+    let points = this.perChipmunk;
+    for (const x of Object.keys(this.multipliers)) {
+      if (chipmunk[x]) points *= this.multipliers[x];
+    }
     this.raw += points;
     this.updateElements();
   },
