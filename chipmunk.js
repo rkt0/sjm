@@ -164,12 +164,7 @@ export default class Chipmunk {
     const { stayPorch, atPorch } = this;
     if (stayPorch && !atPorch && !money.taken) {
       if (this.fleeing) {
-        if (this.rich) return;
-        const hideProbability = 0.5;
-        if (Math.random() > hideProbability) {
-          this.stayPorch = false;
-          return;
-        }
+        if (this.rich || !this.willHide) return;
         this.fleeing = false;
         this.hiding = true;
         this.element.classList.add('under');

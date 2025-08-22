@@ -4,10 +4,12 @@ import ui from './ui.js';
 import size from './size.js';
 import Chipmunk from './chipmunk.js';
 import money from './money.js';
+import score from './score.js';
 
 export default {
   radiusChipmunk: 0.375,
   radiusMoney: 0.2,
+  pHide: 0.5,
   setPosition(event) {
     if (!event) {
       this.position = null;
@@ -54,6 +56,14 @@ export default {
     const ixnM = geometry.arcIxn(away.flip, away.m);
     const ixnAll = geometry.arcIxn(ixnM, away.s);
     const [x0, x1] = ixnAll ?? ixnM;
+    if (geometry.supNorm(c) >= size.porchRatio) {
+      chipmunk.willHide = false;
+    } else {
+      chipmunk.willHide = Math.random() < this.pHide;
+    }
+    if (! chipmunk.willHide) {
+      score.addForChipmunk(chipmunk.rich);
+    }
     chipmunk.chase(x0 + Math.random() * (x1 - x0));
   },
   execute() {
