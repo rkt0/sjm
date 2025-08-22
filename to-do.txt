@@ -1,7 +1,4 @@
 difficulty level
 score
-embellishments
-icon in button
 title (and icon?) on front page
-high score tracker?
 win condition?
