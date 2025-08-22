@@ -34,9 +34,9 @@ export default {
     if (strength > 0) money.knock(strength);
   },
   handleChipmunk(chipmunk) {
-    const active = chipmunk.active();
-    const { hiding, emerging } = chipmunk;
-    if (!active || hiding || emerging) return;
+    if (!chipmunk.active()) return;
+    const { hiding, emerging, fleeing } = chipmunk;
+    if (hiding || emerging || fleeing) return;
     const c = chipmunk.position;
     const s = this.position;
     const dCS = geometry.distance(c, s);
