@@ -1,4 +1,4 @@
-import { qs } from './utility.js';
+import { qs, aelo } from './utility.js';
 
 export default {
   perSecond: 1,
@@ -7,7 +7,10 @@ export default {
   gameOverElement: qs('.game-over .score-display'),
   start() {
     this.raw = 0;
-    this.updateElements();
+    this.updateElements(true);
+    aelo('.gameplay', 'ready', () => {
+      this.updateElements();
+    });
   },
   addForTime(seconds) {
     this.raw += seconds * this.perSecond;
@@ -19,9 +22,10 @@ export default {
     this.raw += points;
     this.updateElements();
   },
-  updateElements() {
+  updateElements(gameplayOnly) {
     const truncated = Math.trunc(this.raw);
     this.gameplayElement.innerHTML = truncated;
+    if (gameplayOnly) return;
     this.gameOverElement.innerHTML = truncated;
   },
 }
