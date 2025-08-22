@@ -1,4 +1,3 @@
 difficulty level
-score
 title (and icon?) on front page
 win condition?
