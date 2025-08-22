@@ -15,7 +15,7 @@ export default {
       timeStamp - this.lastStamp
     );
     this.total += elapsed;
-    if (!this.stopScore) score.add(elapsed);
+    if (!this.stopScore) score.addForTime(elapsed);
     this.lastStamp = timeStamp;
     if (fpsMeter.on) fpsMeter.tick(elapsed);
     return elapsed;
