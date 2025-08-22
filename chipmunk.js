@@ -39,7 +39,7 @@ export default class Chipmunk {
     }
   }
   static richProbability(count) {
-    return count >= 4 ? 0.5 : 0;
+    return count >= 3 ? 0.5 : 0;
   }
   static pool = [];
   static nMoving() {
