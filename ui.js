@@ -104,7 +104,7 @@ export default {
       });
       return;
     }
-    if (n === 4) {
+    if (n === 3) {
       aelo('.game-over', 'ready', () => {
         const chipmunk = qs('.game-over .chipmunk');
         chipmunk.classList.add('rich');

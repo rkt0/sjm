@@ -8,7 +8,7 @@ import shoo from './shoo.js';
 
 const game = {
   paused: false,
-  count: 3,
+  count: 0,
   start() {
     Chipmunk.start();
     money.start();
