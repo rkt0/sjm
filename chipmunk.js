@@ -6,14 +6,14 @@ import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
-  speed = 10;
-  fleeSpeed = 10;
-  moneySpeed = 10;
-  // speed = 0.375;
-  // fleeSpeed = 1;
-  // moneySpeed = 0.625;
+  // speed = 10;
+  // fleeSpeed = 10;
+  // moneySpeed = 10;
+  speed = 0.375;
+  fleeSpeed = 1;
+  moneySpeed = 0.625;
 
-  static possiblyActivate(timeInterval) {
+  static possiblyActivate(timeInterval, count) {
     if (money.taken) return;
     const t = time.total;
     if (this.nMoving() > t / 10) return;
@@ -22,8 +22,9 @@ export default class Chipmunk {
     // if (t > 2 && !this.nMoving()) probability = 1;
     if (t > 0 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
+    const pRich = this.richProbability(count);
     const c = this.pool.find((c) => !c.active());
-    c?.activate();
+    c?.activate(Math.random() < pRich);
   }
   static possiblyEmerge(timeInterval) {
     if (money.taken) return;
@@ -36,6 +37,9 @@ export default class Chipmunk {
       if (Math.random() > probability) continue;
       chipmunk.emerge();
     }
+  }
+  static richProbability(count) {
+    return count >= 4 ? 0.5 : 0;
   }
   static pool = [];
   static nMoving() {
@@ -100,8 +104,13 @@ export default class Chipmunk {
       this.speed,
     );
   }
-  activate() {
+  setRich(isRich) {
+    this.rich = isRich;
+    this.element.classList.toggle('rich', isRich);
+  }
+  activate(isRich) {
     this.reset();
+    this.setRich(isRich);
     const vector = geometry.randomUnitSupNormVector();
     this.position = vector;
     this.setTarget(money.position);
@@ -155,6 +164,7 @@ export default class Chipmunk {
     const { stayPorch, atPorch } = this;
     if (stayPorch && !atPorch && !money.taken) {
       if (this.fleeing) {
+        if (this.rich) return;
         const hideProbability = 0.5;
         if (Math.random() > hideProbability) {
           this.stayPorch = false;

@@ -8,7 +8,7 @@ import shoo from './shoo.js';
 
 const game = {
   paused: false,
-  timesPlayed: 0,
+  count: 3,
   start() {
     Chipmunk.start();
     money.start();
@@ -22,7 +22,7 @@ const game = {
   loop(timeStamp) {
     time.stopScore = money.taken;
     const elapsed = time.advance(timeStamp);
-    Chipmunk.possiblyActivate(elapsed);
+    Chipmunk.possiblyActivate(elapsed, game.count);
     Chipmunk.possiblyEmerge(elapsed);
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
@@ -30,9 +30,9 @@ const game = {
     money.update(elapsed);
     if (shoo.position) shoo.execute();
     if (money.taken && !Chipmunk.nMoving()) {
-      game.timesPlayed++;
+      game.count++;
       ui.changeToSection('game-over');
-      ui.embellishGameOver(game.timesPlayed);
+      ui.embellishGameOver(game.count);
       return;
     }
     if (game.paused) return;
