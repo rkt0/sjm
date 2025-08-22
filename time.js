@@ -1,13 +1,11 @@
-import { qs } from './utility.js';
+import score from './score.js';
 import fpsMeter from './fps-meter.js';
 
 export default {
-  gameplayElement: qs('.gameplay .score-display'),
-  gameOverElement: qs('.game-over .score-display'),
   start() {
     this.total = 0;
-    this.gameplayElement.innerHTML = 0;
     this.lastStamp = null;
+    score.start();
     if (!fpsMeter.on) return;
     fpsMeter.start('.gameplay');
   },
@@ -17,15 +15,9 @@ export default {
       timeStamp - this.lastStamp
     );
     this.total += elapsed;
-    if (!this.stopScore) this.updateScore();
+    if (!this.stopScore) score.add(elapsed);
     this.lastStamp = timeStamp;
     if (fpsMeter.on) fpsMeter.tick(elapsed);
     return elapsed;
-  },
-  updateScore() {
-    const scoreRate = 10;
-    const score = Math.trunc(this.total * scoreRate);
-    this.gameplayElement.innerHTML = score;
-    this.gameOverElement.innerHTML = score;
   },
 };
