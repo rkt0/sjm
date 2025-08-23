@@ -38,6 +38,7 @@ export default {
     this.totalElementGP.innerHTML = total;
     if (gameplayOnly) return;
     this.scoreElementGO.innerHTML = result;
+    this.totalElementGO.innerHTML = total;
   },
   checkWin() {
     return this.raw >= this.winTarget;

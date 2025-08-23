@@ -316,6 +316,11 @@ h1 {
   }
 }
 
+:is(.score-display, .total-display) {
+  font-size: 36px;
+  font-weight: 800;
+}
+
 
 
 /* Non-gameplay sections */
@@ -343,10 +348,9 @@ section.front .zone {
 
 div.result .score-area {
   line-height: 1.2;
-}
-div.result .score-display {
-  font-size: 60px;
-  font-weight: 800;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 :is(.message-content, .explanation-content) {
