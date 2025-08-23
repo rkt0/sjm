@@ -438,3 +438,11 @@ div.result .score-display {
 .overlay .zone {
   justify-content: space-evenly;
 }
+
+.win p {
+  font-size: 30px;
+  text-align: center;
+}
+.win span {
+  font-size: 36px;
+}

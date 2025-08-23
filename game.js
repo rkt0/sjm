@@ -25,20 +25,26 @@ const game = {
     const elapsed = time.advance(timeStamp);
     if (shoo.position) shoo.execute();
     score.update();
-    Chipmunk.possiblyActivate(elapsed, game.count);
-    Chipmunk.possiblyEmerge(elapsed);
+    if (score.checkWin()) game.win();
+    // if (score.checkAlmost()) null;
+    if (!game.won) {
+      Chipmunk.possiblyActivate(elapsed, game.count);
+      Chipmunk.possiblyEmerge(elapsed);
+    }
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.update(elapsed);
     }
     money.update(elapsed);
-    if (money.taken && !Chipmunk.nMoving()) {
+    const allGone = !Chipmunk.nMoving();
+    if (game.won && allGone) {
+      ui.win(game.count * money.amount);
+    } else if (money.taken && allGone) {
       game.count++;
       ui.changeToSection('game-over');
       ui.embellishGameOver(game.count);
-      return;
+    } else if (!game.paused) {
+      requestAnimationFrame(game.loop);
     }
-    if (game.paused) return;
-    requestAnimationFrame(game.loop);
   },
   togglePause() {
     this.paused = !this.paused;
@@ -63,6 +69,12 @@ const game = {
       ael(button, type, () => game.start());
     }
     ael('.pause', type, () => game.togglePause());
+  },
+  win() {
+    this.won = true;
+    for (const chipmunk of Chipmunk.pool) {
+      chipmunk.chase();
+    }
   },
 };
 

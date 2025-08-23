@@ -3,13 +3,14 @@ import geometry from './geometry.js';
 import size from './size.js';
 
 export default {
+  amount: 35,
   makeElement() {
     const element = document.createElement('div');
     element.classList.add('money', 'centered');
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('last-name');
     const amountDiv = document.createElement('div');
-    amountDiv.innerHTML = '$35';
+    amountDiv.innerHTML = `$${this.amount}`;
     amountDiv.classList.add('amount');
     element.append(nameDiv, amountDiv);
     return element;

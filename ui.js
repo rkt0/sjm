@@ -61,7 +61,7 @@ export default {
       waitForTransition(overlay);
       aelo(overlay, 'transitionend', function () {
         this.style.visibility = 'hidden';
-      })
+      });
     });
   },
   fillName() {
@@ -131,6 +131,13 @@ export default {
     aelo(trigger, 'ready', () => {
       qs('.game-over button').disabled = false;
     });
+  },
+  win(amount) {
+    const span = qs('.overlay.win span');
+    span.innerHTML = `$${amount}`;
+    const overlay = qs('.overlay.win');
+    overlay.style.visibility = 'visible';
+    overlay.classList.add('active');
   },
 };
 

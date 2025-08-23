@@ -4,8 +4,8 @@ export default {
   perSecond: 1,
   perChipmunk: 5,
   multipliers: { rich: 2 },
-  winTarget: 100,
-  almostTarget: 50,
+  winTarget: 20,
+  almostTarget: 10,
   gameplayElement: qs('.gameplay .score-display'),
   gameOverElement: qs('.game-over .score-display'),
   start() {
@@ -33,5 +33,11 @@ export default {
     this.gameplayElement.innerHTML = displayed;
     if (gameplayOnly) return;
     this.gameOverElement.innerHTML = displayed;
+  },
+  checkWin() {
+    return this.raw >= this.winTarget;
+  },
+  checkAlmost() {
+    return this.raw >= this.almostTarget;
   },
 };
