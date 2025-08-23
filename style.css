@@ -290,6 +290,12 @@ h1 {
 .sidebar button {
   width: 100%;
 }
+.sidebar .score-area {
+  height: calc(var(--field-size) / 2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
 
 @media (max-width: 959px) {
   .field {
@@ -297,11 +303,16 @@ h1 {
   }
   .sidebar {
     width: var(--field-size);
-    justify-content: space-around;
+    justify-content: between;
     margin-top: 30px;
   }
-  .sidebar .half.score-area {
-    width: 90px;
+  .sidebar .score-area {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+  }
+  .sidebar .score-area > div {
+    width: 150px;
   }
 }
 
