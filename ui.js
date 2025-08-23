@@ -65,6 +65,7 @@ export default {
         });
       });
     }
+    ael('.start-over', type, () => location.reload());
   },
   fillName() {
     const lastName = localStorage.getItem('lastName');
