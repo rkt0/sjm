@@ -5,6 +5,7 @@ export default {
   start() {
     this.total = 0;
     this.lastStamp = null;
+    this.stopScore = false;
     score.start();
     if (!fpsMeter.on) return;
     fpsMeter.start('.gameplay');

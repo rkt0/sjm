@@ -158,6 +158,7 @@ export default class Chipmunk {
     }
   }
   checkPorch() {
+    if (this.exiting) return;
     this.atPorch = geometry.supNorm(this.position) <
       Chipmunk.porchBoundary / size.boundary;
     this.stayPorch ||= this.atPorch;
@@ -182,7 +183,7 @@ export default class Chipmunk {
       money.position,
     );
     const canTake = !this.hiding && !this.emerging;
-    if (money.taken) this.chase();
+    if (money.taken) this.exit();
     else if (atMoney && canTake) this.takeMoney();
   }
   update(timeInterval) {
@@ -196,15 +197,19 @@ export default class Chipmunk {
   chase(angle) {
     const { hasMoney, fleeSpeed, moneySpeed } = this;
     const speed = hasMoney ? moneySpeed : fleeSpeed;
-    let a = angle;
-    if (a === undefined) {
-      if (geometry.supNorm(this.position)) {
-        a = geometry.angle(this.position);
-      } else a = Math.random() * 2 * Math.PI;
-    }
-    this.velocity[0] = Math.cos(a) * speed;
-    this.velocity[1] = Math.sin(a) * speed;
+    this.velocity[0] = Math.cos(angle) * speed;
+    this.velocity[1] = Math.sin(angle) * speed;
     this.fleeing = true;
+    this.hiding = false;
+    this.emerging = false;
+  }
+  exit() {
+    let angle = geometry.angle(this.position);
+    if (!geometry.supNorm(this.position)) {
+      angle = Math.random() * 2 * Math.PI;
+    }
+    this.exiting = true;
+    this.chase(angle);
   }
   anglesAwayFrom(point = [0, 0]) {
     const v = geometry.vDiff(this.position, point);
@@ -224,6 +229,7 @@ export default class Chipmunk {
   reset() {
     this.position = [2, 0];
     this.velocity = [0, 0];
+    this.exiting = false;
     this.fleeing = false;
     this.hiding = false;
     this.emerging = false;

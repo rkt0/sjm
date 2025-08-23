@@ -88,13 +88,10 @@
 <div class="overlay rich">
   <div class="zone">
     <div>
-      <p>
-        Some chipmunks are now rich chipmunks.
-      <p>
-        Rich chipmunks are worth double points.
-      <p>
-        Rich chipmunks are also too snobbish
-        to hide under the porch.
+      <p>Some chipmunks are now rich chipmunks.
+      <p>Rich chipmunks are worth double points.
+      <p>Rich chipmunks are also too snobbish
+         to hide under the porch.
     </div>
     <button type="button" class="hide-overlay">
       Continue
@@ -104,13 +101,10 @@
 <div class="overlay almost">
   <div class="zone">
     <div>
-      <p>
-        Jeff is in the neighborhood!
-      <p>
-        You've almost made it!
-      <p>
-        Try to reach
-        <span class="win-target">100</span> points!
+      <p>Jeff is in the neighborhood!
+      <p>You've almost made it!
+      <p>Try to reach <br><span></span><br>
+         total points!
     </div>
     <button type="button" class="hide-overlay">
       Continue
@@ -121,28 +115,24 @@
   <div class="zone">
     <div>
       <h1>You Win!</h1>
-      <p>
-        Jeff arrived and got his money!
-      <p>
-        Amount stolen by chipmunks:
-        <br>
-        <span>$350</span>
+      <p>Jeff arrived and got his money!
+      <p>Amount stolen by chipmunks:<br><span></span>
     </div>
   </div>
 </div>
 <audio></audio>
-<script>
-  const ss = document.querySelectorAll('section');
-  let t;
-  for (const s of [...ss]) {
-    s.addEventListener('gone', function () {
-      console.log(`section gone: ${this.classList}`);
-      t = Date.now();
-    });
-    s.addEventListener('ready', function () {
-      console.log(`section ready: ${this.classList}`);
-      console.log(`${Date.now() - t} ms elapsed`);
-    });
-  }
-</script>
+<!-- <script> -->
+<!--   const ss = document.querySelectorAll('section'); -->
+<!--   let t; -->
+<!--   for (const s of [...ss]) { -->
+<!--     s.addEventListener('gone', function () { -->
+<!--       console.log(`section gone: ${this.classList}`); -->
+<!--       t = Date.now(); -->
+<!--     }); -->
+<!--     s.addEventListener('ready', function () { -->
+<!--       console.log(`section ready: ${this.classList}`); -->
+<!--       console.log(`${Date.now() - t} ms elapsed`); -->
+<!--     }); -->
+<!--   } -->
+<!-- </script> -->
 </html>

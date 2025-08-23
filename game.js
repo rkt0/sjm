@@ -10,6 +10,9 @@ import shoo from './shoo.js';
 const game = {
   paused: false,
   count: 0,
+  won: false,
+  preAlmost: false,
+  postAlmost: false,
   start() {
     Chipmunk.start();
     money.start();
@@ -21,13 +24,15 @@ const game = {
     });
   },
   loop(timeStamp) {
-    time.stopScore = money.taken;
+    time.stopScore ||= money.taken;
     const elapsed = time.advance(timeStamp);
     if (shoo.position) shoo.execute();
     score.update();
     if (score.checkWin()) game.win();
-    // if (score.checkAlmost()) null;
-    if (!game.won) {
+    else if (!game.preAlmost && !game.postAlmost) {
+      if (score.checkAlmost()) game.almost();
+    }
+    if (!game.won && !game.preAlmost) {
       Chipmunk.possiblyActivate(elapsed, game.count);
       Chipmunk.possiblyEmerge(elapsed);
     }
@@ -42,7 +47,16 @@ const game = {
       game.count++;
       ui.changeToSection('game-over');
       ui.embellishGameOver(game.count);
-    } else if (!game.paused) {
+    } else {
+      if (game.preAlmost && allGone) {
+        time.stopScore = true;
+        for (const chipmunk of Chipmunk.pool) {
+          chipmunk.reset();
+        }
+        ui.almost(score.winTarget);
+        return;
+      }
+      if (game.paused) return;
       requestAnimationFrame(game.loop);
     }
   },
@@ -73,9 +87,22 @@ const game = {
   win() {
     this.won = true;
     for (const chipmunk of Chipmunk.pool) {
-      chipmunk.chase();
+      chipmunk.exit();
     }
   },
+  almost() {
+    this.preAlmost = true;
+    for (const chipmunk of Chipmunk.pool) {
+      chipmunk.exit();
+    }
+    ael('.overlay.almost', 'ready', () => {
+      time.stopScore = false;
+      this.preAlmost = false;
+      this.postAlmost = true;
+      time.lastStamp = null;
+      requestAnimationFrame(game.loop);
+    })
+  }
 };
 
 game.initialize();

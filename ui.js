@@ -55,14 +55,16 @@ export default {
     ael('.show-instructions', type, () => {
       changeToSection('instructions');
     });
-    ael('.hide-overlay', type, function () {
-      const overlay = this.closest('.overlay');
-      overlay.classList.remove('active');
-      waitForTransition(overlay);
-      aelo(overlay, 'transitionend', function () {
-        this.style.visibility = 'hidden';
+    for (const button of qsa('.hide-overlay')) {
+      ael(button, type, function () {
+        const overlay = this.closest('.overlay');
+        overlay.classList.remove('active');
+        waitForTransition(overlay);
+        aelo(overlay, 'transitionend', function () {
+          this.style.visibility = 'hidden';
+        });
       });
-    });
+    }
   },
   fillName() {
     const lastName = localStorage.getItem('lastName');
@@ -136,6 +138,13 @@ export default {
     const span = qs('.overlay.win span');
     span.innerHTML = `$${amount}`;
     const overlay = qs('.overlay.win');
+    overlay.style.visibility = 'visible';
+    overlay.classList.add('active');
+  },
+  almost(target) {
+    const span = qs('.overlay.almost span');
+    span.innerHTML = target;
+    const overlay = qs('.overlay.almost');
     overlay.style.visibility = 'visible';
     overlay.classList.add('active');
   },

@@ -439,10 +439,10 @@ div.result .score-display {
   justify-content: space-evenly;
 }
 
-.win p {
+:is(.win, .almost) p {
   font-size: 30px;
   text-align: center;
 }
-.win span {
+:is(.win, .almost) span {
   font-size: 36px;
 }

@@ -4,8 +4,8 @@ export default {
   perSecond: 1,
   perChipmunk: 5,
   multipliers: { rich: 2 },
-  winTarget: 20,
-  almostTarget: 10,
+  winTarget: 300,
+  almostTarget: 200,
   gameplayElement: qs('.gameplay .score-display'),
   gameOverElement: qs('.game-over .score-display'),
   start() {
