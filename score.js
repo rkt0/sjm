@@ -6,9 +6,13 @@ export default {
   multipliers: { rich: 2 },
   winTarget: 300,
   almostTarget: 200,
-  gameplayElement: qs('.gameplay .score-display'),
-  gameOverElement: qs('.game-over .score-display'),
+  scoreElementGP: qs('.gameplay .score-display'),
+  scoreElementGO: qs('.game-over .score-display'),
+  totalElementGP: qs('.gameplay .total-display'),
+  totalElementGO: qs('.game-over .total-display'),
   start() {
+    this.prior ??= 0;
+    this.prior += Math.trunc(this.raw ?? 0);
     this.raw = 0;
     this.update(true);
     aelo('.gameplay', 'ready', () => {
@@ -26,13 +30,14 @@ export default {
     this.raw += points;
   },
   update(gameplayOnly) {
-    const displayed = Math.min(
-      Math.trunc(this.raw),
-      this.winTarget,
+    const { raw, prior, winTarget } = this;
+    const [result, total] = [raw, prior + raw].map(
+      (x) => Math.min(Math.trunc(x), winTarget),
     );
-    this.gameplayElement.innerHTML = displayed;
+    this.scoreElementGP.innerHTML = result;
+    this.totalElementGP.innerHTML = total;
     if (gameplayOnly) return;
-    this.gameOverElement.innerHTML = displayed;
+    this.scoreElementGO.innerHTML = result;
   },
   checkWin() {
     return this.raw >= this.winTarget;
