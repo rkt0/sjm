@@ -442,6 +442,7 @@ div.result .score-display {
 :is(.win, .almost) p {
   font-size: 30px;
   text-align: center;
+  padding-left: 0;
 }
 :is(.win, .almost) span {
   font-size: 36px;
