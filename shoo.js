@@ -58,6 +58,8 @@ export default {
     const [x0, x1] = ixnAll ?? ixnM;
     if (geometry.supNorm(c) >= size.porchRatio) {
       chipmunk.willHide = false;
+    } else if (chipmunk.rich) {
+      chipmunk.willHide = false;
     } else {
       chipmunk.willHide = Math.random() < this.pHide;
     }
