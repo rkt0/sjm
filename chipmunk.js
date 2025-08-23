@@ -182,12 +182,8 @@ export default class Chipmunk {
       money.position,
     );
     const canTake = !this.hiding && !this.emerging;
-    if (money.taken) {
-      const origin = !geometry.supNorm(this.position);
-      let angle = geometry.angle(this.position);
-      if (origin) angle = Math.random() * 2 * Math.PI;
-      this.chase(angle);
-    } else if (atMoney && canTake) this.takeMoney();
+    if (money.taken) this.chase();
+    else if (atMoney && canTake) this.takeMoney();
   }
   update(timeInterval) {
     if (!this.active()) return;
@@ -197,11 +193,17 @@ export default class Chipmunk {
     this.checkMoney();
     this.place();
   }
-  chase(angle = 0) {
+  chase(angle) {
     const { hasMoney, fleeSpeed, moneySpeed } = this;
     const speed = hasMoney ? moneySpeed : fleeSpeed;
-    this.velocity[0] = Math.cos(angle) * speed;
-    this.velocity[1] = Math.sin(angle) * speed;
+    let a = angle;
+    if (a === undefined) {
+      if (geometry.supNorm(this.position)) {
+        a = geometry.angle(this.position);
+      } else a = Math.random() * 2 * Math.PI;
+    }
+    this.velocity[0] = Math.cos(a) * speed;
+    this.velocity[1] = Math.sin(a) * speed;
     this.fleeing = true;
   }
   anglesAwayFrom(point = [0, 0]) {
