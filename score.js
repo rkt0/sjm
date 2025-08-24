@@ -41,9 +41,9 @@ export default {
     this.totalElementGO.innerHTML = total;
   },
   checkWin() {
-    return this.raw >= this.winTarget;
+    return this.prior + this.raw >= this.winTarget;
   },
   checkAlmost() {
-    return this.raw >= this.almostTarget;
+    return this.prior + this.raw >= this.almostTarget;
   },
 };
