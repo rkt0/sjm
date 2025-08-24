@@ -1,3 +1,4 @@
 difficulty level
-title (and icon?) on front page
-win condition?
+icon
+formatting, layout, sizes
+revolution
