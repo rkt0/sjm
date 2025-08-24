@@ -83,6 +83,11 @@ export default {
     this.hidePlayAgainButton();
     if (n === 1) {
       this.showPlayAgainButton();
+      aelo('.game-over', 'gone', () => {
+        for (const element of qsa('.first-absent')) {
+          element.classList.remove('first-absent');
+        }
+      });
       return;
     }
     const content = qs(`.message-content.e-${n}`);

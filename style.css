@@ -321,6 +321,10 @@ h1 {
   font-weight: 800;
 }
 
+.first-absent {
+  display: none;
+}
+
 
 
 /* Non-gameplay sections */
