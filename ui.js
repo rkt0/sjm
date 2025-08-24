@@ -112,9 +112,9 @@ export default {
       });
       return;
     }
+    const chipmunk = qs('.game-over .chipmunk');
     if (n === 3) {
       aelo('.game-over', 'ready', () => {
-        const chipmunk = qs('.game-over .chipmunk');
         chipmunk.classList.add('rich');
         waitForTransition(chipmunk);
         aelo(chipmunk, 'ready', () => {
@@ -123,6 +123,22 @@ export default {
           overlay.classList.add('active');
         });
         this.showPlayAgainButton('.overlay.rich');
+      });
+      return;
+    }
+    if (n === 8) {
+      aelo('.game-over', 'ready', () => {
+        for (const addition of qsa('.addition')) {
+          addition.classList.remove('active');
+        }
+        chipmunk.classList.remove('rich');
+        waitForTransition(chipmunk);
+        aelo(chipmunk, 'ready', () => {
+          const overlay = qs('.revolution');
+          overlay.style.visibility = 'visible';
+          overlay.classList.add('active');
+        });
+        this.showPlayAgainButton('.revolution');
       });
       return;
     }
