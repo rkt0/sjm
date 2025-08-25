@@ -23,8 +23,13 @@ export default class Chipmunk {
     if (t > 0 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active());
-    const pRich = count >= 3 && count < 8 ? 0.5 : 0;
-    c?.activate(Math.random() < pRich, count >= 8);
+    const pRich = this.richProbability(count);
+    const isCommunist = count >= 8;
+    c?.activate(Math.random() < pRich, isCommunist);
+  }
+  static richProbability(count) {
+    const divisor = [6, 4, 3, 2, 2][count - 3];
+    return 1 / (divisor ?? Infinity);
   }
   static possiblyEmerge(timeInterval) {
     if (money.taken) return;
@@ -56,7 +61,7 @@ export default class Chipmunk {
       const img = document.createElement('img');
       img.src = `img/${item}.png`;
       if (item !== 'chipmunk') {
-        img.classList.add(item)
+        img.classList.add(item);
         img.classList.add('accessory');
       }
       element.append(img);
