@@ -32,11 +32,12 @@
   }
 }
 
-@media (max-width: 539px) {
+@media (max-width: 549px) {
   :root {
-    --field-size: 360px;
-    --chipmunk-size: 40px;
-    --porch-size: 72px;
+    --field-size: 405px;
+    --chipmunk-size: 45px;
+    --shoo-size: 75px;
+    --porch-size: 150px;
   }
 }
 
@@ -308,21 +309,27 @@ h1 {
   justify-content: space-evenly;
 }
 
-@media (max-width: 959px) {
+@media (max-width: 549px) {
   .gameplay {
     flex-direction: column;
   }
-  .sidebar {
-    width: var(--field-size);
-    justify-content: between;
-    margin-top: 30px;
+  .field {
+    margin: 30px 0;
   }
-  .sidebar .score-area {
+  .side {
+    width: var(--field-size);
+    height: 90px;
+    justify-content: space-between;
+  }
+  .side button {
+    width: 150px;
+  }
+  .side.score-area {
     display: flex;
     flex-direction: row;
-    width: auto;
+    height: auto;
   }
-  .sidebar .score-area > div {
+  .side .score-area > div {
     width: 150px;
   }
 }
