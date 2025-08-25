@@ -412,7 +412,7 @@ div.result .score-area {
 }
 
 .game-over :is(.accessory, .addition) {
-  transition: opacity 2s ease-in 1.5s;
+  transition: opacity 2s ease-in 0.5s;
 }
 .game-over.fading-out :is(.accessory, .addition) {
   transition-timing-function: ease-out;
