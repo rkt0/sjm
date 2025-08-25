@@ -67,6 +67,7 @@ body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+  overflow: hidden;
 }
 
 button {
@@ -140,8 +141,12 @@ h1 {
 
 /* Gameplay section */
 
+.gameplay {
+  flex-direction: row;
+}
+
 .field {
-  position: absolute;
+  position: relative;
   background: url(img/grass.png);
   background-size: cover;
   background-origin: border-box;
@@ -149,6 +154,7 @@ h1 {
   width: var(--field-size);
   overflow: hidden;
   outline: solid 2px var(--bdr);
+  margin: 0 30px;
 }
 
 .porch {
@@ -288,18 +294,14 @@ h1 {
   opacity: 0;
 }
 
-.sidebar {
-  justify-content: space-between;
-  width: 900px;
-}
-.sidebar .half {
+.side {
   width: 150px;
   text-align: center;
 }
-.sidebar button {
+.side button {
   width: 100%;
 }
-.sidebar .score-area {
+.side.score-area {
   height: calc(var(--field-size) / 2);
   display: flex;
   flex-direction: column;
@@ -307,8 +309,8 @@ h1 {
 }
 
 @media (max-width: 959px) {
-  .field {
-    position: relative;
+  .gameplay {
+    flex-direction: column;
   }
   .sidebar {
     width: var(--field-size);
