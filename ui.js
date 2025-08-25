@@ -127,7 +127,9 @@ export default {
       return;
     }
     if (n === 8) {
-      aelo('.game-over', 'ready', () => {
+      const gameOver = qs('.game-over');
+      aelo(gameOver, 'ready', () => {
+        gameOver.classList.add('fading-out');
         for (const addition of qsa('.addition')) {
           addition.classList.remove('active');
         }
@@ -136,6 +138,7 @@ export default {
         const triggerIn = '.game-over .ussr-hat';
         waitForTransition(triggerOut);
         aelo(triggerOut, 'ready', () => {
+          gameOver.classList.remove('fading-out');
           chipmunk.classList.add('communist');
           waitForTransition(triggerIn);
           aelo(triggerIn, 'ready', () => {
