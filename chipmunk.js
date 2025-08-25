@@ -143,9 +143,10 @@ export default class Chipmunk {
     else this.setTarget(money.position);
   }
   move(timeInterval) {
+    const multiplier = this.communist ? 0.6 : 1;
     const delta = geometry.vMult(
       this.velocity,
-      timeInterval,
+      timeInterval * multiplier,
     );
     this.position = geometry.vSum(
       this.position,
