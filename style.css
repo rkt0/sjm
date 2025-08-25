@@ -219,16 +219,22 @@ h1 {
   left: calc(-1 * var(--lr-offset));
   transform: rotate(calc(-1 * var(--rotation)));
 }
-.chipmunk [src*="top-hat"] {
+.chipmunk :is(.top-hat, .ussr-hat) {
   top: calc(-0.084 * var(--chipmunk-size));
   --lr-offset: calc(0.542 * var(--chipmunk-size));
   width: calc(0.417 * var(--chipmunk-size));
   z-index: 3;
 }
-.chipmunk [src*="monocle"] {
+.chipmunk .monocle {
   top: calc(0.174 * var(--chipmunk-size));
   --lr-offset: calc(0.570 * var(--chipmunk-size));
   width: calc(0.250 * var(--chipmunk-size));
+  z-index: 2;
+}
+.chipmunk .ussr-pin {
+  top: calc(0.12 * var(--chipmunk-size));
+  --lr-offset: calc(0.3 * var(--chipmunk-size));
+  width: calc(0.3 * var(--chipmunk-size));
   z-index: 2;
 }
 .chipmunk .accessory {
@@ -239,7 +245,10 @@ h1 {
   left: auto;
   right: var(--lr-offset);
 }
-.chipmunk:not(.rich) .accessory {
+.chipmunk:not(.rich) :is(.top-hat, .monocle) {
+  opacity: 0;
+}
+.chipmunk:not(.communist) :is(.ussr-hat, .ussr-pin) {
   opacity: 0;
 }
 

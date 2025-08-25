@@ -6,12 +6,12 @@ import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
-  speed = 10;
-  fleeSpeed = 10;
-  moneySpeed = 10;
-  // speed = 0.375;
-  // fleeSpeed = 1;
-  // moneySpeed = 0.625;
+  // speed = 10;
+  // fleeSpeed = 10;
+  // moneySpeed = 10;
+  speed = 0.375;
+  fleeSpeed = 1;
+  moneySpeed = 0.625;
 
   static possiblyActivate(timeInterval, count) {
     if (money.taken) return;
@@ -22,9 +22,9 @@ export default class Chipmunk {
     // if (t > 2 && !this.nMoving()) probability = 1;
     if (t > 0 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
-    const pRich = this.richProbability(count);
     const c = this.pool.find((c) => !c.active());
-    c?.activate(Math.random() < pRich);
+    const pRich = count >= 3 ? 0.5 : 0;
+    c?.activate(Math.random() < pRich, count >= 8);
   }
   static possiblyEmerge(timeInterval) {
     if (money.taken) return;
@@ -38,9 +38,6 @@ export default class Chipmunk {
       chipmunk.emerge();
     }
   }
-  static richProbability(count) {
-    return count >= 3 ? 0.5 : 0;
-  }
   static pool = [];
   static nMoving() {
     return this.pool.filter((chipmunk) =>
@@ -52,11 +49,14 @@ export default class Chipmunk {
   static makeElement() {
     const element = document.createElement('div');
     element.classList.add('chipmunk');
-    const items = ['chipmunk', 'top-hat', 'monocle'];
+    const rItems = ['top-hat', 'monocle'];
+    const cItems = ['ussr-hat', 'ussr-pin'];
+    const items = ['chipmunk', ...rItems, ...cItems];
     for (const item of items) {
       const img = document.createElement('img');
       img.src = `img/${item}.png`;
       if (item !== 'chipmunk') {
+        img.classList.add(item)
         img.classList.add('accessory');
       }
       element.append(img);
@@ -104,13 +104,13 @@ export default class Chipmunk {
       this.speed,
     );
   }
-  setRich(isRich) {
-    this.rich = isRich;
-    this.element.classList.toggle('rich', isRich);
-  }
-  activate(isRich) {
+  activate(isRich, isCommunist) {
     this.reset();
-    this.setRich(isRich);
+    this.rich = isRich;
+    this.communist = isCommunist;
+    const { classList } = this.element;
+    classList.toggle('rich', isRich);
+    classList.toggle('communist', isCommunist);
     const vector = geometry.randomUnitSupNormVector();
     this.position = vector;
     this.setTarget(money.position);
