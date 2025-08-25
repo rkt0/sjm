@@ -1,4 +1,2 @@
 difficulty level
-icon
-formatting, layout, sizes
 music and sound effects
