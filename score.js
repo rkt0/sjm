@@ -3,7 +3,7 @@ import { aelo, qs } from './utility.js';
 export default {
   perSecond: 1,
   perChipmunk: 5,
-  multipliers: { rich: 2 },
+  multipliers: { rich: 2, communist: 5 },
   winTarget: 300,
   almostTarget: 200,
   scoreElementGP: qs('.gameplay .score-display'),

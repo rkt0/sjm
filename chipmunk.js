@@ -23,7 +23,7 @@ export default class Chipmunk {
     if (t > 0 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active());
-    const pRich = count >= 3 ? 0.5 : 0;
+    const pRich = count >= 3 && count < 8 ? 0.5 : 0;
     c?.activate(Math.random() < pRich, count >= 8);
   }
   static possiblyEmerge(timeInterval) {

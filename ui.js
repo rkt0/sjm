@@ -132,11 +132,17 @@ export default {
           addition.classList.remove('active');
         }
         chipmunk.classList.remove('rich');
-        waitForTransition(chipmunk);
-        aelo(chipmunk, 'ready', () => {
-          const overlay = qs('.revolution');
-          overlay.style.visibility = 'visible';
-          overlay.classList.add('active');
+        const triggerOut = '.game-over .top-hat';
+        const triggerIn = '.game-over .ussr-hat';
+        waitForTransition(triggerOut);
+        aelo(triggerOut, 'ready', () => {
+          chipmunk.classList.add('communist');
+          waitForTransition(triggerIn);
+          aelo(triggerIn, 'ready', () => {
+            const overlay = qs('.revolution');
+            overlay.style.visibility = 'visible';
+            overlay.classList.add('active');
+          });
         });
         this.showPlayAgainButton('.revolution');
       });

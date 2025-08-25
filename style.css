@@ -203,7 +203,7 @@ h1 {
   width: 100%;
   height: 100%;
 }
-.chipmunk.flipped img {
+.chipmunk.flipped img:not(.ussr-pin) {
   transform: scaleX(-1);
 }
 .chipmunk .money {
