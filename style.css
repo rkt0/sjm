@@ -475,6 +475,9 @@ div.result .score-area {
   top: 0;
   transition-delay: 1s;
 }
+.overlay.revolution.active {
+  transition-delay: 3s;
+}
 .overlay .zone {
   justify-content: space-evenly;
 }

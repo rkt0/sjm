@@ -6,12 +6,12 @@ import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
-  speed = 10;
-  fleeSpeed = 10;
-  moneySpeed = 10;
-  // speed = 0.375;
-  // fleeSpeed = 1;
-  // moneySpeed = 0.625;
+  // speed = 10;
+  // fleeSpeed = 10;
+  // moneySpeed = 10;
+  speed = 0.375;
+  fleeSpeed = 1;
+  moneySpeed = 0.625;
 
   static possiblyActivate(timeInterval, count) {
     if (money.taken) return;

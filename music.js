@@ -79,19 +79,25 @@ music.startRevolution = function () {
   aelo(this.element, 'pause', () => {
     this.revolutionElement.play();
   });
+  // In case revolution audio finishes on its own
+  aelo(this.revolutionElement, 'ended', () => {
+    fadeAudio(this.element);
+  });
 };
 music.endRevolution = function () {
+  if (this.revolutionElement.ended) return;
   fadeAudio(this.revolutionElement);
   fadeAudio(this.element);
 };
 
-function fadeAudio(x, duration = 2000, steps = 10) {
+function fadeAudio(x, duration = 3000, steps = 180) {
   const element = typeof x === 'object' ? x : qs(x);
   const target = +!element.volume;
   const change = (target - element.volume) / steps;
   const levels = [];
   for (let i = 0; i < steps; i++) {
-    levels.push(target - i * change);
+    // Sounds better if nonlinear
+    levels.push((target - i * change) ** 2);
   }
   const timer = setInterval(() => {
     if (!element.volume) element.play();

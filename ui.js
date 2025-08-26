@@ -126,7 +126,7 @@ export default {
       });
       return;
     }
-    if (n === 4) {
+    if (n === 8) {
       const gameOver = qs('.game-over');
       aelo(gameOver, 'ready', () => {
         gameOver.classList.add('fading-out');
