@@ -82,7 +82,7 @@ export default {
     qs('.message')?.remove();
     this.hidePlayAgainButton();
     if (n === 1) {
-      this.showPlayAgainButton();
+      this.showPlayAgain();
       aelo('.game-over', 'gone', () => {
         for (const element of qsa('.first-absent')) {
           element.classList.remove('first-absent');
@@ -99,7 +99,7 @@ export default {
       aelo('.game-over', 'ready', () => {
         message.classList.add('active');
         waitForTransition(message);
-        this.showPlayAgainButton(message);
+        this.showPlayAgain(message);
       });
       return;
     }
@@ -108,7 +108,7 @@ export default {
       aelo('.game-over', 'ready', () => {
         addition.classList.add('active');
         waitForTransition(addition);
-        this.showPlayAgainButton(addition);
+        this.showPlayAgain(addition);
       });
       return;
     }
@@ -122,11 +122,11 @@ export default {
           overlay.style.visibility = 'visible';
           overlay.classList.add('active');
         });
-        this.showPlayAgainButton('.overlay.rich');
+        this.showPlayAgain('.overlay.rich');
       });
       return;
     }
-    if (n === 8) {
+    if (n === 4) {
       const gameOver = qs('.game-over');
       aelo(gameOver, 'ready', () => {
         gameOver.classList.add('fading-out');
@@ -134,24 +134,28 @@ export default {
           addition.classList.remove('active');
         }
         chipmunk.classList.remove('rich');
+        music.startRevolution();
         const triggerOut = '.game-over .top-hat';
         const triggerIn = '.game-over .ussr-hat';
         waitForTransition(triggerOut);
+        const overlay = qs('.overlay.revolution');
         aelo(triggerOut, 'ready', () => {
           gameOver.classList.remove('fading-out');
           chipmunk.classList.add('communist');
           waitForTransition(triggerIn);
           aelo(triggerIn, 'ready', () => {
-            const overlay = qs('.revolution');
             overlay.style.visibility = 'visible';
             overlay.classList.add('active');
           });
         });
-        this.showPlayAgainButton('.revolution');
+        this.showPlayAgain('.overlay.revolution');
+        aelo(overlay, 'ready', () => {
+          music.endRevolution();
+        })
       });
       return;
     }
-    this.showPlayAgainButton();
+    this.showPlayAgain();
   },
   hidePlayAgainButton() {
     const button = qs('.game-over button');
@@ -159,7 +163,7 @@ export default {
     button.disabled = true;
     button.style.display = '';
   },
-  showPlayAgainButton(triggerElement) {
+  showPlayAgain(triggerElement) {
     const trigger = triggerElement ?? '.game-over';
     aelo(trigger, 'ready', () => {
       qs('.game-over button').disabled = false;

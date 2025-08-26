@@ -1,4 +1,4 @@
-import { ael, qs } from './utility.js';
+import { ael, aelo, qs } from './utility.js';
 export { music as default };
 
 class Track {
@@ -12,7 +12,7 @@ class Track {
 
 const music = {
   on: true,
-  element: qs('audio'),
+  element: qs('audio.music'),
   recent: [],
   recentMax: 4,
   daysFresh: 7,
@@ -28,6 +28,8 @@ const music = {
     new Track(1, 'Lively Lumpsucker'),
     new Track(1, 'Merry Go'),
   ],
+  sfxElement: qs('audio.sfx'),
+  revolutionElement: qs('audio.revolution'),
 };
 music.start = function () {
   const rString = localStorage.getItem('recentMusic');
@@ -71,5 +73,32 @@ music.next = function () {
   while (cdf[nextId] < rand) nextId++;
   this.play(nextId);
 };
+music.startRevolution = function () {
+  this.revolutionElement.src = 'audio/ussr.mp3';
+  fadeAudio(this.element);
+  aelo(this.element, 'pause', () => {
+    this.revolutionElement.play();
+  });
+};
+music.endRevolution = function () {
+  fadeAudio(this.revolutionElement);
+  fadeAudio(this.element);
+};
+
+function fadeAudio(x, duration = 2000, steps = 10) {
+  const element = typeof x === 'object' ? x : qs(x);
+  const target = +!element.volume;
+  const change = (target - element.volume) / steps;
+  const levels = [];
+  for (let i = 0; i < steps; i++) {
+    levels.push(target - i * change);
+  }
+  const timer = setInterval(() => {
+    if (!element.volume) element.play();
+    element.volume = levels.pop();
+    if (!element.volume) element.pause();
+    if (!levels.length) clearInterval(timer);
+  }, duration / steps);
+}
 
 ael(music.element, 'ended', () => music.next());

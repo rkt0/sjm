@@ -9,7 +9,7 @@ import shoo from './shoo.js';
 
 const game = {
   paused: false,
-  count: 0,
+  count: 2,
   won: false,
   preAlmost: false,
   postAlmost: false,
