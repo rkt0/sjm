@@ -1,2 +1,6 @@
+score keeps running
+chipmunk text
+width
+chipmunk speed
 difficulty level
 music and sound effects
