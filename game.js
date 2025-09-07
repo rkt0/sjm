@@ -28,7 +28,7 @@ const game = {
     const elapsed = time.advance(timeStamp);
     if (shoo.position) shoo.execute();
     score.update();
-    if (score.checkWin()) game.win();
+    if (!game.won && score.checkWin()) game.win();
     else if (!game.preAlmost && !game.postAlmost) {
       if (score.checkAlmost()) game.almost();
     }
@@ -41,7 +41,7 @@ const game = {
     }
     money.update(elapsed);
     const allGone = !Chipmunk.nMoving();
-    if (game.won && allGone) {
+    if (game.won && allGone && game.complete) {
       ui.win(game.count * money.amount);
     } else if (money.taken && allGone) {
       game.count++;
@@ -86,12 +86,18 @@ const game = {
   },
   win() {
     this.won = true;
+    music.startMower();
+    const mowTime = music.sfxElement.duration;
+    const duration = (mowTime - 1) * 1000;
+    music.fade(music.element, { duration });
+    setTimeout(() => this.complete = true, duration);
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.exit();
     }
   },
   almost() {
     this.preAlmost = true;
+    music.startMower();
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.exit();
     }
@@ -101,8 +107,8 @@ const game = {
       this.postAlmost = true;
       time.lastStamp = null;
       requestAnimationFrame(game.loop);
-    })
-  }
+    });
+  },
 };
 
 game.initialize();

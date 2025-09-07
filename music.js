@@ -73,25 +73,8 @@ music.next = function () {
   while (cdf[nextId] < rand) nextId++;
   this.play(nextId);
 };
-music.startRevolution = function () {
-  this.revolutionElement.src = 'audio/ussr.mp3';
-  fadeAudio(this.element);
-  aelo(this.element, 'pause', () => {
-    this.revolutionElement.play();
-  });
-  // In case revolution audio finishes on its own
-  aelo(this.revolutionElement, 'ended', () => {
-    fadeAudio(this.element);
-  });
-};
-music.endRevolution = function () {
-  if (this.revolutionElement.ended) return;
-  fadeAudio(this.revolutionElement);
-  fadeAudio(this.element);
-};
-
-function fadeAudio(x, duration = 3000, steps = 180) {
-  const element = typeof x === 'object' ? x : qs(x);
+music.fade = function (element = this.element, opts) {
+  const { duration = 3000, steps = 180 } = opts ?? {};
   const target = +!element.volume;
   const change = (target - element.volume) / steps;
   const levels = [];
@@ -105,6 +88,27 @@ function fadeAudio(x, duration = 3000, steps = 180) {
     if (!element.volume) element.pause();
     if (!levels.length) clearInterval(timer);
   }, duration / steps);
-}
+};
+music.startRevolution = function () {
+  this.revolutionElement.src = 'audio/ussr.mp3';
+  this.fade();
+  aelo(this.element, 'pause', () => {
+    this.revolutionElement.play();
+  });
+  // In case revolution audio finishes on its own
+  aelo(this.revolutionElement, 'ended', () => {
+    this.fade();
+  });
+};
+music.endRevolution = function () {
+  if (this.revolutionElement.ended) return;
+  this.fade(this.revolutionElement);
+  this.fade();
+};
+music.startMower = function () {
+  this.sfxElement.src ||= 'audio/mower.mp3';
+  this.sfxElement.currentTime = 0;
+  this.sfxElement.play();
+};
 
 ael(music.element, 'ended', () => music.next());

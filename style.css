@@ -478,6 +478,9 @@ div.result .score-area {
 .overlay.revolution.active {
   transition-delay: 3s;
 }
+.overlay.win.active {
+  transition-delay: 0s;
+}
 .overlay .zone {
   justify-content: space-evenly;
 }
