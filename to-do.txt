@@ -1,5 +1,4 @@
 score keeps running
-chipmunk text
 width
 money effect on win
 difficulty level
