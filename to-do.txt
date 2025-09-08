@@ -1,7 +1,5 @@
-clean audio file metadata
 score keeps running
 chipmunk text
 width
-chipmunk speed
+money effect on win
 difficulty level
-music and sound effects
