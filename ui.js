@@ -173,10 +173,11 @@ export default {
     const span = qs('.overlay.win span');
     span.innerHTML = `$${amount}`;
     const overlay = qs('.overlay.win');
-    // waitForTransition(overlay);
     overlay.style.visibility = 'visible';
     overlay.classList.add('active');
-    aelo(overlay, 'transitionstart', () => music.win());
+    aelo(overlay, 'transitionstart', () => {
+      music.win()
+    });
   },
   almost(target) {
     const span = qs('.overlay.almost span');

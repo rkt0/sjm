@@ -26,7 +26,11 @@ const game = {
   loop(timeStamp) {
     time.stopScore ||= money.taken;
     const elapsed = time.advance(timeStamp);
-    if (shoo.position) shoo.execute();
+    if (shoo.position) {
+      if (money.taken || game.won || game.preAlmost) {
+        shoo.reset();
+      } else shoo.execute();
+    }
     score.update();
     if (!game.won && score.checkWin()) game.win();
     else if (!game.preAlmost && !game.postAlmost) {
@@ -102,10 +106,11 @@ const game = {
       chipmunk.exit();
     }
     ael('.overlay.almost', 'ready', () => {
-      time.stopScore = false;
       this.preAlmost = false;
       this.postAlmost = true;
+      time.stopScore = false;
       time.lastStamp = null;
+      shoo.reset();
       requestAnimationFrame(game.loop);
     });
   },

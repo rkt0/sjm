@@ -69,15 +69,14 @@ export default {
     chipmunk.chase(x0 + Math.random() * (x1 - x0));
   },
   execute() {
-    if (money.taken) {
-      this.position = null;
-      return;
-    }
     this.handleMoney();
     for (const chipmunk of Chipmunk.pool) {
       this.handleChipmunk(chipmunk);
     }
     this.placeIndicator(this.position);
+    this.reset();
+  },
+  reset() {
     this.position = null;
   },
   addListener() {
