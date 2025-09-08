@@ -87,7 +87,7 @@ const game = {
   win() {
     this.won = true;
     music.startMower();
-    const mowTime = music.sfxElement.duration;
+    const mowTime = music.mowerElement.duration;
     const duration = (mowTime - 1) * 1000;
     music.fade(music.element, { duration });
     setTimeout(() => this.complete = true, duration);

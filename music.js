@@ -28,10 +28,12 @@ const music = {
     new Track(1, 'Lively Lumpsucker'),
     new Track(1, 'Merry Go'),
   ],
-  sfxElement: qs('audio.sfx'),
-  revolutionElement: qs('audio.revolution'),
 };
 music.start = function () {
+  for (const x of ['mower', 'win', 'ussr']) {
+    this[`${x}Element`] = qs(`audio.${x}`);
+    this[`${x}Element`].src = `audio/${x}.mp3`;
+  }
   const rString = localStorage.getItem('recentMusic');
   const rFull = JSON.parse(rString) ?? [];
   const msPerDay = 1000 * 60 * 60 * 24;
@@ -90,25 +92,28 @@ music.fade = function (element = this.element, opts) {
   }, duration / steps);
 };
 music.startRevolution = function () {
-  this.revolutionElement.src = 'audio/ussr.mp3';
+  this.ussrElement.src = 'audio/ussr.mp3';
   this.fade();
   aelo(this.element, 'pause', () => {
-    this.revolutionElement.play();
+    this.ussrElement.play();
   });
   // In case revolution audio finishes on its own
-  aelo(this.revolutionElement, 'ended', () => {
+  aelo(this.ussrElement, 'ended', () => {
     this.fade();
   });
 };
 music.endRevolution = function () {
-  if (this.revolutionElement.ended) return;
-  this.fade(this.revolutionElement);
+  if (this.ussrElement.ended) return;
+  this.fade(this.ussrElement);
   this.fade();
 };
 music.startMower = function () {
-  this.sfxElement.src ||= 'audio/mower.mp3';
-  this.sfxElement.currentTime = 0;
-  this.sfxElement.play();
+  this.mowerElement.src ||= 'audio/mower.mp3';
+  this.mowerElement.currentTime = 0;
+  this.mowerElement.play();
+};
+music.win = function () {
+  this.winElement.play();
 };
 
 ael(music.element, 'ended', () => music.next());
