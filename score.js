@@ -31,9 +31,13 @@ export default {
   },
   update(gameplayOnly) {
     const { raw, prior, winTarget } = this;
-    const [result, total] = [raw, prior + raw].map(
-      (x) => Math.min(Math.trunc(x), winTarget),
-    );
+    let result = Math.trunc(raw);
+    let total = Math.trunc(prior + raw);
+    const surplus = total - winTarget;
+    if (surplus > 0) {
+      result -= surplus;
+      total -= surplus;
+    }
     this.scoreElementGP.innerHTML = result;
     this.totalElementGP.innerHTML = total;
     if (gameplayOnly) return;
