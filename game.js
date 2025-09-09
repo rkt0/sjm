@@ -28,7 +28,7 @@ const game = {
     const elapsed = time.advance(timeStamp);
     if (shoo.position) {
       if (money.taken || game.won || game.preAlmost) {
-        shoo.reset();
+        shoo.setPosition();
       } else shoo.execute();
     }
     score.update();
@@ -110,7 +110,7 @@ const game = {
       this.postAlmost = true;
       time.stopScore = false;
       time.lastStamp = null;
-      shoo.reset();
+      shoo.setPosition();
       requestAnimationFrame(game.loop);
     });
   },

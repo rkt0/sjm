@@ -74,10 +74,7 @@ export default {
       this.handleChipmunk(chipmunk);
     }
     this.placeIndicator(this.position);
-    this.reset();
-  },
-  reset() {
-    this.position = null;
+    this.setPosition();
   },
   addListener() {
     ael('.field', ui.eventType, (event) => {
