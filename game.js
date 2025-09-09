@@ -65,6 +65,9 @@ const game = {
     }
   },
   togglePause() {
+    if (time.stopScore || !time.total) return;
+    const gp = qs('section.gameplay');
+    if (!gp.classList.contains('current')) return;
     this.paused = !this.paused;
     const { paused } = this;
     const pauseVerb = ['pause', 'play'];
