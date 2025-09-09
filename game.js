@@ -45,7 +45,7 @@ const game = {
     }
     money.update(elapsed);
     const allGone = !Chipmunk.nMoving();
-    if (game.won && allGone && game.complete) {
+    if (game.won && allGone && music.okWin()) {
       ui.win(game.count * money.amount);
     } else if (money.taken && allGone) {
       game.count++;
@@ -72,6 +72,9 @@ const game = {
     qs('.pause').innerHTML = pauseVerb[0];
     time.lastStamp = null;
     if (music.on) music.element[pauseVerb[1]]();
+    if (music.mowing()) {
+      music.mowerElement[pauseVerb[1]]();
+    }
     if (!paused) {
       shoo.setPosition();
       requestAnimationFrame(game.loop);
@@ -91,10 +94,8 @@ const game = {
   win() {
     this.won = true;
     music.startMower();
-    const mowTime = music.mowerElement.duration;
-    const duration = (mowTime - 1) * 1000;
+    const duration = music.outro * 1000;
     music.fade(music.element, { duration });
-    setTimeout(() => this.complete = true, duration);
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.exit();
     }

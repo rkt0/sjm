@@ -175,9 +175,7 @@ export default {
     const overlay = qs('.overlay.win');
     overlay.style.visibility = 'visible';
     overlay.classList.add('active');
-    aelo(overlay, 'transitionstart', () => {
-      music.win()
-    });
+    music.win()
   },
   almost(target) {
     const span = qs('.overlay.almost span');

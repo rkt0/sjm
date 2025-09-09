@@ -111,9 +111,18 @@ music.startMower = function () {
   this.mowerElement.src ||= 'audio/mower.mp3';
   this.mowerElement.currentTime = 0;
   this.mowerElement.play();
+  this.outro = this.mowerElement.duration - 1;
+};
+music.mowing = function () {
+  const current = this.mowerElement.currentTime;
+  const end = this.mowerElement.duration;
+  return 0 < current && current < end;
 };
 music.win = function () {
   this.winElement.play();
 };
+music.okWin = function () {
+  return this.mowerElement.currentTime > this.outro;
+}
 
 ael(music.element, 'ended', () => music.next());
