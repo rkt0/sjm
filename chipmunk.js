@@ -6,9 +6,6 @@ import money from './money.js';
 
 export default class Chipmunk {
   static totalNumber = 36;
-  // speed = 10;
-  // fleeSpeed = 10;
-  // moneySpeed = 10;
   speed = 0.375;
   fleeSpeed = 1;
   moneySpeed = 0.625;
@@ -19,8 +16,7 @@ export default class Chipmunk {
     if (this.nMoving() > t / 10) return;
     const rate = 0.1 + t * 0.03;
     let probability = rate * timeInterval;
-    // if (t > 2 && !this.nMoving()) probability = 1;
-    if (t > 0 && !this.nMoving()) probability = 1;
+    if (t > 2 && !this.nMoving()) probability = 1;
     if (Math.random() > probability) return;
     const c = this.pool.find((c) => !c.active());
     const pRich = this.richProbability(count);
