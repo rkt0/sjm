@@ -151,7 +151,7 @@ export default {
         this.showPlayAgain('.overlay.revolution');
         aelo(overlay, 'ready', () => {
           music.endRevolution();
-        })
+        });
       });
       return;
     }
@@ -175,7 +175,7 @@ export default {
     const overlay = qs('.overlay.win');
     overlay.style.visibility = 'visible';
     overlay.classList.add('active');
-    music.win()
+    music.win();
   },
   almost(target) {
     const span = qs('.overlay.almost span');

@@ -123,6 +123,6 @@ music.win = function () {
 };
 music.okWin = function () {
   return this.mowerElement.currentTime > this.outro;
-}
+};
 
 ael(music.element, 'ended', () => music.next());
