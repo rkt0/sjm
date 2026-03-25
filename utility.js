@@ -20,5 +20,11 @@ function aelo(x, type, fn) {
   };
   element.addEventListener(type, f, { once: true });
 }
+function warnBeforeReload() {
+  ael(window, 'beforeunload', (event) => {
+    event.preventDefault();
+    event.returnValue = true;
+  });
+}
 
-export { ael, aelo, qs, qsa };
+export { ael, aelo, qs, qsa, warnBeforeReload };

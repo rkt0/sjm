@@ -1,4 +1,6 @@
-import { ael, aelo, qs, qsa } from './utility.js';
+import {
+  ael, aelo, qs, qsa, warnBeforeReload,
+} from './utility.js';
 import music from './music.js';
 
 export default {
@@ -50,6 +52,7 @@ export default {
         div.innerHTML = lastName;
       }
       localStorage.setItem('lastName', lastName);
+      warnBeforeReload();
       changeToSection('title');
     });
     ael('.show-instructions', type, () => {
