@@ -1,5 +1,5 @@
 import {
-  ael, aelo, qs, qsa, warnBeforeReload,
+  ael, aelo, qs, qsa, warnBeforeReload, setAllDisplay,
 } from './utility.js';
 import music from './music.js';
 
@@ -22,11 +22,6 @@ export default {
     aelo(oldElement, 'gone', () => {
       element.classList.add('current');
     });
-  },
-  setDisplayToFlex() {
-    for (const section of qsa('section')) {
-      section.style.display = 'flex';
-    }
   },
   setEventTypes() {
     if (!matchMedia('(hover: none)').matches) return;
@@ -79,7 +74,8 @@ export default {
     this.setEventTypes();
     this.addListeners();
     this.fillName();
-    this.setDisplayToFlex();
+    setAllDisplay('section', 'flex');
+    setAllDisplay('.overlay', 'none');
   },
   embellishGameOver(n) {
     qs('.message')?.remove();

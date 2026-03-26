@@ -1,4 +1,6 @@
-import { ael, aelo, qs, qsa } from './utility.js';
+import {
+  ael, aelo, qs, qsa, setAllDisplay,
+} from './utility.js';
 import music from './music.js';
 import ui from './ui.js';
 import time from './time.js';
@@ -18,6 +20,7 @@ const game = {
     money.start();
     time.start();
     shoo.start();
+    setAllDisplay('.overlay', 'flex');
     ui.changeToSection('gameplay');
     aelo('.gameplay', 'transitionend', () => {
       requestAnimationFrame(this.loop);

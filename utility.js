@@ -20,6 +20,11 @@ function aelo(x, type, fn) {
   };
   element.addEventListener(type, f, { once: true });
 }
+function setAllDisplay(selector, value) {
+  for (const element of qsa(selector)) {
+    element.style.display = value ?? '';
+  }
+}
 function warnBeforeReload() {
   ael(window, 'beforeunload', (event) => {
     event.preventDefault();
@@ -27,4 +32,4 @@ function warnBeforeReload() {
   });
 }
 
-export { ael, aelo, qs, qsa, warnBeforeReload };
+export { ael, aelo, qs, qsa, setAllDisplay, warnBeforeReload };
