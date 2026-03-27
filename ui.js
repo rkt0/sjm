@@ -1,5 +1,5 @@
 import {
-  ael, aelo, qs, qsa, warnBeforeReload, setAllDisplay,
+  ael, aelo, qs, qsa, setAllDisplay, warnBeforeReload,
 } from './utility.js';
 import music from './music.js';
 
@@ -47,7 +47,7 @@ export default {
         div.innerHTML = lastName;
       }
       localStorage.setItem('lastName', lastName);
-      warnBeforeReload();
+      warnBeforeReload.activate();
       changeToSection('title');
     });
     ael('.show-instructions', type, () => {
@@ -63,7 +63,10 @@ export default {
         });
       });
     }
-    ael('.start-over', type, () => location.reload());
+    ael('.start-over', type, () => {
+      warnBeforeReload.deactivate();
+      location.reload();
+    });
   },
   fillName() {
     const lastName = localStorage.getItem('lastName');

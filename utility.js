@@ -25,11 +25,25 @@ function setAllDisplay(selector, value) {
     element.style.display = value ?? '';
   }
 }
-function warnBeforeReload() {
-  ael(window, 'beforeunload', (event) => {
+const warnBeforeReload = {
+  element: window,
+  type: 'beforeunload',
+  handler(event) {
     event.preventDefault();
     event.returnValue = true;
-  });
-}
+  },
+  activate() {
+    this.element.addEventListener(
+      this.type, this.handler,
+    );
+  },
+  deactivate() {
+    this.element.removeEventListener(
+      this.type, this.handler,
+    );
+  },
+};
 
-export { ael, aelo, qs, qsa, setAllDisplay, warnBeforeReload };
+export {
+  ael, aelo, qs, qsa, setAllDisplay, warnBeforeReload,
+};
