@@ -1,4 +1,6 @@
-import { ael, aelo, qs } from './utility.js';
+import {
+  ael, aelo, qs, forcePlay,
+} from './utility.js';
 export { music as default };
 
 class Track {
@@ -29,7 +31,7 @@ const music = {
     new Track(1, 'Merry Go'),
   ],
 };
-music.start = function () {
+music.initialize = function () {
   for (const x of ['mower', 'win', 'ussr']) {
     this[`${x}Element`] = qs(`audio.${x}`);
     this[`${x}Element`].src = `audio/${x}.mp3`;
@@ -39,20 +41,22 @@ music.start = function () {
   const msPerDay = 1000 * 60 * 60 * 24;
   const old = Date.now() - msPerDay * this.daysFresh;
   this.recent = rFull.filter((x) => x.time > old);
+};
+music.start = function () {
   const last = this.recent.shift();
-  if (!last) this.play(this.firstId);
+  if (!last) this.playTrack(this.firstId);
   else {
     const { id, restarts } = last;
     if (restarts >= this.restartsMax) {
       this.recent.unshift(last);
       this.next();
-    } else this.play(id, restarts + 1);
+    } else this.playTrack(id, restarts + 1);
   }
 };
-music.play = function (id, restarts = 0) {
+music.playTrack = function (id, restarts = 0) {
   const { element, recent } = this;
   element.src = this.playlist[id].src;
-  element.play();
+  forcePlay(element);
   recent.unshift({ id, time: Date.now(), restarts });
   if (recent.length > this.recentMax) recent.pop();
   const rString = JSON.stringify(recent);
@@ -73,7 +77,7 @@ music.next = function () {
   const rand = Math.random();
   let nextId = 0;
   while (cdf[nextId] < rand) nextId++;
-  this.play(nextId);
+  this.playTrack(nextId);
 };
 music.fade = function (element = this.element, opts) {
   const { duration = 3000, steps = 180 } = opts ?? {};

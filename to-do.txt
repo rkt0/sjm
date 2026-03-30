@@ -1,2 +1,1 @@
 difficulty level
-music fails after reload on mobile

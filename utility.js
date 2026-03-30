@@ -43,7 +43,15 @@ const warnBeforeReload = {
     );
   },
 };
+function forcePlay(element, delay = 50) {
+  element.play().catch(() => {
+    setTimeout(() => {
+      forcePlay(element, delay)
+    }, delay);
+  });
+}
 
 export {
-  ael, aelo, qs, qsa, setAllDisplay, warnBeforeReload,
+  ael, aelo, qs, qsa,
+  setAllDisplay, warnBeforeReload, forcePlay,
 };

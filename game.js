@@ -88,6 +88,7 @@ const game = {
   },
   initialize() {
     ui.initialize();
+    music.initialize();
     Chipmunk.initialize();
     money.initialize();
     shoo.initialize();
