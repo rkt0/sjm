@@ -1,4 +1,4 @@
-import {ael, aelo, forcePlay, qs} from './utility.js';
+import {ael, aelo, forcePlay} from './utility.js';
 export {music as default};
 
 class Track {
@@ -12,7 +12,7 @@ class Track {
 
 const music = {
   on: true,
-  element: qs('audio.music'),
+  element: new Audio(),
   recent: [],
   recentMax: 4,
   daysFresh: 7,
@@ -43,9 +43,9 @@ const music = {
   initialize() {
     this.load();
     ael(this.element, 'ended', () => this.next());
-    for (const x of ['mower', 'win', 'ussr']) {
-      this[`${x}Element`] = qs(`audio.${x}`);
-      this[`${x}Element`].src = `audio/${x}.mp3`;
+    for (const sound of ['mower', 'win', 'ussr']) {
+      const url = `audio/${sound}.mp3`;
+      this[`${sound}Element`] = new Audio(url);
     }
   },
   start() {
