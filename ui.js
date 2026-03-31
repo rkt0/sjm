@@ -34,7 +34,7 @@ export default {
   },
   addListeners() {
     this.addSectionListeners();
-    const { eventType: type, changeToSection } = this;
+    const {eventType: type, changeToSection} = this;
     ael('input', 'input', function () {
       qs('.enter-name').disabled = !this.value;
     });

@@ -1,4 +1,4 @@
-import { qs } from './utility.js';
+import {qs} from './utility.js';
 
 function cssInt(property, selector = ':root') {
   const s = getComputedStyle(qs(selector));

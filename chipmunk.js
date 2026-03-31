@@ -1,4 +1,4 @@
-import { qs, qsa } from './utility.js';
+import {qs, qsa} from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 import time from './time.js';
@@ -83,7 +83,7 @@ export default class Chipmunk {
     (size.porch + size.chipmunk) / 2;
 
   place() {
-    const { position, element, velocity } = this;
+    const {position, element, velocity} = this;
     const p = position.map((u) => u * size.boundary);
     const xf = `translate(${p[0]}px, ${p[1]}px)`;
     element.style.transform = xf;
@@ -109,7 +109,7 @@ export default class Chipmunk {
     this.reset();
     this.rich = isRich;
     this.communist = isCommunist;
-    const { classList } = this.element;
+    const {classList} = this.element;
     classList.toggle('rich', isRich);
     classList.toggle('communist', isCommunist);
     const vector = geometry.randomUnitSupNormVector();
@@ -164,7 +164,7 @@ export default class Chipmunk {
     this.atPorch = geometry.supNorm(this.position) <
       Chipmunk.porchBoundary / size.boundary;
     this.stayPorch ||= this.atPorch;
-    const { stayPorch, atPorch } = this;
+    const {stayPorch, atPorch} = this;
     if (stayPorch && !atPorch && !money.taken) {
       if (this.fleeing) {
         if (this.rich || !this.willHide) return;
@@ -197,7 +197,7 @@ export default class Chipmunk {
     this.place();
   }
   chase(angle) {
-    const { hasMoney, fleeSpeed, moneySpeed } = this;
+    const {hasMoney, fleeSpeed, moneySpeed} = this;
     const speed = hasMoney ? moneySpeed : fleeSpeed;
     this.velocity[0] = Math.cos(angle) * speed;
     this.velocity[1] = Math.sin(angle) * speed;

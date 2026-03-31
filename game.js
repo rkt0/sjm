@@ -72,7 +72,7 @@ const game = {
     const gp = qs('section.gameplay');
     if (!gp.classList.contains('current')) return;
     this.paused = !this.paused;
-    const { paused } = this;
+    const {paused} = this;
     const pauseVerb = ['pause', 'play'];
     if (paused) pauseVerb.reverse();
     qs('.pause').innerHTML = pauseVerb[0];
@@ -102,7 +102,7 @@ const game = {
     this.won = true;
     music.startMower();
     const duration = music.outro * 1000;
-    music.fade(music.element, { duration });
+    music.fade(music.element, {duration});
     for (const chipmunk of Chipmunk.pool) {
       chipmunk.exit();
     }

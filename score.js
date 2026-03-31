@@ -1,9 +1,9 @@
-import { aelo, qs } from './utility.js';
+import {aelo, qs} from './utility.js';
 
 export default {
   perSecond: 1,
   perChipmunk: 5,
-  multipliers: { rich: 2, communist: 5 },
+  multipliers: {rich: 2, communist: 5},
   winTarget: 100,
   almostTarget: 80,
   scoreElementGP: qs('.gameplay .score-display'),
@@ -30,7 +30,7 @@ export default {
     this.raw += points;
   },
   update(gameplayOnly) {
-    const { raw, prior, winTarget } = this;
+    const {raw, prior, winTarget} = this;
     let result = Math.trunc(raw);
     let total = Math.trunc(prior + raw);
     const surplus = total - winTarget;

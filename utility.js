@@ -18,7 +18,7 @@ function aelo(x, type, fn) {
     e.preventDefault();
     fn.bind(element, e)();
   };
-  element.addEventListener(type, f, { once: true });
+  element.addEventListener(type, f, {once: true});
 }
 function setAllDisplay(selector, value) {
   for (const element of qsa(selector)) {
@@ -46,12 +46,12 @@ const warnBeforeReload = {
 function forcePlay(element, delay = 50) {
   element.play().catch(() => {
     setTimeout(() => {
-      forcePlay(element, delay)
+      forcePlay(element, delay);
     }, delay);
   });
 }
 
 export {
   ael, aelo, qs, qsa,
-  setAllDisplay, warnBeforeReload, forcePlay,
+  forcePlay, setAllDisplay, warnBeforeReload,
 };

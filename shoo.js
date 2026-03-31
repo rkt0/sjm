@@ -1,4 +1,4 @@
-import { ael, qs } from './utility.js';
+import {ael, qs} from './utility.js';
 import geometry from './geometry.js';
 import ui from './ui.js';
 import size from './size.js';
@@ -35,7 +35,7 @@ export default {
   },
   handleChipmunk(chipmunk) {
     if (!chipmunk.active()) return;
-    const { hiding, emerging, fleeing } = chipmunk;
+    const {hiding, emerging, fleeing} = chipmunk;
     if (hiding || emerging || fleeing) return;
     const c = chipmunk.position;
     const s = this.position;
@@ -93,7 +93,7 @@ export default {
       circle.classList.add('shoo-circle');
       ael(circle, 'transitionend', function (e) {
         if (e.propertyName !== 'opacity') return;
-        const { classList } = this.parentElement;
+        const {classList} = this.parentElement;
         if (classList.contains('active')) {
           classList.remove('active');
         } else classList.add('ready');

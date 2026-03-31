@@ -1,4 +1,4 @@
-import { qs, qsa } from './utility.js';
+import {qs, qsa} from './utility.js';
 import geometry from './geometry.js';
 import size from './size.js';
 
@@ -36,7 +36,7 @@ export default {
     this.element.style.transform = null;
   },
   place() {
-    const { position, element } = this;
+    const {position, element} = this;
     const p = position.map((u) => u * size.boundary);
     const xl = `translate(${p[0]}px, ${p[1]}px)`;
     const rot = `rotate(${this.angle}turn)`;
@@ -62,7 +62,7 @@ export default {
   update(timeInterval) {
     if (this.taken) return;
     const porchRatio = size.porch / 2 / size.boundary;
-    const { position: p, velocity: v } = this;
+    const {position: p, velocity: v} = this;
     const delta = geometry.vMult(v, timeInterval);
     this.position = geometry.vSum(p, delta);
     const porchPadding = 0.05;

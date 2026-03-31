@@ -1,7 +1,5 @@
-import {
-  ael, aelo, qs, forcePlay,
-} from './utility.js';
-export { music as default };
+import {ael, aelo, forcePlay, qs} from './utility.js';
+export {music as default};
 
 class Track {
   constructor(weight, title) {
@@ -54,7 +52,7 @@ const music = {
     const last = this.recent.shift();
     if (!last) this.playTrack(this.firstId);
     else {
-      const { id, restarts } = last;
+      const {id, restarts} = last;
       if (restarts >= this.restartsMax) {
         this.recent.unshift(last);
         this.next();
@@ -62,7 +60,7 @@ const music = {
     }
   },
   playTrack(id, restarts = 0) {
-    const { element, recent } = this;
+    const {element, recent} = this;
     element.src = this.playlist[id].src;
     forcePlay(element);
     recent.unshift({id, time: Date.now(), restarts});
@@ -72,7 +70,7 @@ const music = {
   next() {
     const recentIds = this.recent.map((x) => x.id);
     const weights = this.playlist.map(
-      (e, i) => recentIds.includes(i) ? 0 : e.weight
+      (e, i) => recentIds.includes(i) ? 0 : e.weight,
     );
     const n = weights.length;
     const cdf = [];
