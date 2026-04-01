@@ -431,11 +431,11 @@ div.result .score-area {
   z-index: 1;
   width: 200px;
 }
-[src*="lambo"] {
-  top: 95px;
-  left: 85px;
+[src*="porsche"] {
+  top: 75px;
+  left: 150px;
   z-index: 2;
-  width: 300px;
+  width: 231;
 }
 [src*="yacht"] {
   top: -175px;
