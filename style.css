@@ -435,7 +435,7 @@ div.result .score-area {
   top: 75px;
   left: 150px;
   z-index: 2;
-  width: 231;
+  width: 231px;
 }
 [src*="yacht"] {
   top: -175px;
