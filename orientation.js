@@ -9,7 +9,7 @@ export default {
       criteriaAny.push(`(${dimension})`);
     }
     for (const criterion of criteriaAny) {
-      if (window.matchMedia(criterion).matches) {
+      if (globalThis.matchMedia(criterion).matches) {
         return true;
       }
     }

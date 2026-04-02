@@ -26,7 +26,7 @@ function setAllDisplay(selector, value) {
   }
 }
 const warnBeforeReload = {
-  element: window,
+  element: globalThis,
   type: 'beforeunload',
   handler(event) {
     event.preventDefault();
