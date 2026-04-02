@@ -17,8 +17,13 @@ export default {
     }
     let pxOffset = [event.offsetX, event.offsetY];
     if (ui.eventType === 'touchstart') {
-      const t = event.changedTouches[0];
-      const tLoc = [t.clientX, t.clientY];
+      if (!this.fieldLocation) {
+        const field = qs('.field');
+        const rect = field.getBoundingClientRect();
+        this.fieldLocation = [rect.x, rect.y];
+      }
+      const touch = event.changedTouches[0];
+      const tLoc = [touch.clientX, touch.clientY];
       const fLoc = this.fieldLocation;
       pxOffset = [0, 1].map((u) => tLoc[u] - fLoc[u]);
     }
