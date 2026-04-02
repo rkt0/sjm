@@ -2,6 +2,7 @@ import {
   ael, aelo, qs, qsa, setAllDisplay,
 } from './utility.js';
 import music from './music.js';
+import orientation from './orientation.js';
 import ui from './ui.js';
 import time from './time.js';
 import score from './score.js';
@@ -87,6 +88,7 @@ const game = {
     }
   },
   initialize() {
+    orientation.check();
     ui.initialize();
     music.initialize();
     Chipmunk.initialize();
