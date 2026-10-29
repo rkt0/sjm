@@ -35,7 +35,7 @@
 @media (max-width: 899px) {
   :root {
     --field-size: 405px;
-    --chipmunk-size: 45px;
+    --chipmunk-size: 60px;
     --shoo-size: 75px;
     --porch-size: 150px;
   }
