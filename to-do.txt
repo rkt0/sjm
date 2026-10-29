@@ -1,1 +1,2 @@
 difficulty level
+fix chipmunk flee speed inconsistency
