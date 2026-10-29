@@ -7,8 +7,8 @@ import money from './money.js';
 import score from './score.js';
 
 export default {
-  radiusChipmunk: 0.375,
-  radiusMoney: 0.2,
+  radiusChipmunk: 0.25,
+  radiusMoney: 0.25,
   pHide: 0.5,
   setPosition(event) {
     if (!event) {
