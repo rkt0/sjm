@@ -43,11 +43,6 @@
 
 @font-face {
   font-family: NotoSans;
-  src: url(font/notosans-400.ttf);
-  font-weight: 400;
-}
-@font-face {
-  font-family: NotoSans;
   src: url(font/notosans-600.ttf);
   font-weight: 600;
 }
@@ -184,7 +179,7 @@ h1 {
   margin: 0 calc(var(--chipmunk-size) * 0.1);
   border: solid 1px var(--darkest);
   font-size: calc(var(--chipmunk-size) * 0.2);
-  font-weight: 400;
+  font-weight: 600;
   flex-direction: column;
   line-height: 1.1;
 }
